@@ -442,16 +442,16 @@ lmms--gui--PianoRoll {
 	/* Piano keys */
 	qproperty-whiteKeyWidth: 64;
 	qproperty-whiteKeyActiveTextColor: #0b1220;
-	qproperty-whiteKeyActiveTextShadow: rgba(248, 250, 252, 102);
+	qproperty-whiteKeyActiveTextShadow: #ffffff;
 	qproperty-whiteKeyActiveBackground: #60a5fa;
 	qproperty-whiteKeyInactiveTextColor: #0f172a;
-	qproperty-whiteKeyInactiveTextShadow: rgba(248, 250, 252, 102);
-	qproperty-whiteKeyInactiveBackground: #e2e8f0;
-	qproperty-whiteKeyDisabledBackground: #94a3b8;
+	qproperty-whiteKeyInactiveTextShadow: #ffffff;
+	qproperty-whiteKeyInactiveBackground: #ffffff;
+	qproperty-whiteKeyDisabledBackground: #cbd5e1;
 	qproperty-blackKeyWidth: 48;
 	qproperty-blackKeyActiveBackground: #60a5fa;
-	qproperty-blackKeyInactiveBackground: #161e2b;
-	qproperty-blackKeyDisabledBackground: #334155;
+	qproperty-blackKeyInactiveBackground: #060b14;
+	qproperty-blackKeyDisabledBackground: #475569;
 
 	/* Grid colors */
 	qproperty-lineColor: #334155;
@@ -461,7 +461,7 @@ lmms--gui--PianoRoll {
 	/* Text on the white piano keys */
 	qproperty-textColor: #0f172a;
 	qproperty-textColorLight: #60a5fa;
-	qproperty-textShadow: rgba(248, 250, 252, 102);
+	qproperty-textShadow: #ffffff;
 }
 
 lmms--gui--PianoView {
