@@ -1,0 +1,6 @@
+/* Halon — light scheme for GTK 4 and libadwaita. Neutralized Default base. */
+@import url("../shared/base/default4-light.css");
+@import url("../shared/_tokens-light.css");
+@import url("../shared/_adwaita-map.css");
+@import url("../shared/_icons-light.css");
+@import url("../shared/_components.css");
