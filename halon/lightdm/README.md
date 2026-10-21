@@ -48,9 +48,9 @@ using a fingerprint reader or a one-time token relabels the field on its own.
 ## Install
 
 ```nix
-# flake.nix inputs: halon.url = "github:BeatLink/Halon";
+# flake.nix inputs: x-themes.url = "github:x-tech-laboratories/X-Themes";
 services.xserver.displayManager.lightdm.greeters.default.enable = ...;
-environment.systemPackages = [ halon.packages.${system}.halon-lightdm-theme ];
+environment.systemPackages = [ x-themes.packages.${system}.halon-lightdm-theme ];
 ```
 
 The package installs to `share/web-greeter/themes/halon`. web-greeter only scans its own prefix, so

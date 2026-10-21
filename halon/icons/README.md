@@ -49,10 +49,10 @@ automatic, since `halon-icon-theme` propagates it.
 
 ```nix
 {
-  inputs.halon.url = "github:BeatLink/Halon";
+  inputs.x-themes.url = "github:x-tech-laboratories/X-Themes";
 
   # then, with halon in scope — Colloid comes along with it:
-  home.packages = [ halon.packages.${pkgs.system}.halon-icon-theme ];
+  home.packages = [ x-themes.packages.${pkgs.system}.halon-icon-theme ];
 }
 ```
 

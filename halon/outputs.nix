@@ -1,15 +1,14 @@
-{
-  description = "Halon — a slate and blue application theme, its design guide, and a GTK implementation";
-
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
-
-  outputs = { self, nixpkgs, flake-utils }:
+# Halon's packages, apps, dev shell and modules; the flake at the repository root merges them in.
+{ self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+
+        # Every command finds halon/ whether it starts at the repository root or inside halon/.
+        findRoot = ''
+          root="''${HALON_ROOT:-$PWD}"
+          if [ -d "$root/halon/gtk" ]; then root="$root/halon"; fi
+        '';
 
         # The base Halon's own icon theme overlays and inherits: flat, one blue,
         # hairline-compatible geometry. It inherits hicolor and breeze, not Adwaita,
@@ -19,8 +18,8 @@
         # Every preview runs the working tree against a throwaway XDG dir, so testing
         # never depends on what is installed in ~/.themes or disturbs the running desktop.
         gtk3Preamble = ''
-          root="''${HALON_ROOT:-$PWD}"
-          [ -d "$root/gtk/Halon" ] || { echo "run from the repo root, or set HALON_ROOT" >&2; exit 1; }
+          ${findRoot}
+          [ -d "$root/gtk/Halon" ] || { echo "run from the repository root, or set HALON_ROOT" >&2; exit 1; }
           data=$(mktemp -d)
           trap 'rm -rf "$data"' EXIT
           mkdir -p "$data/themes"
@@ -33,8 +32,8 @@
         # libadwaita ignores GTK_THEME by design, so GTK 4 goes through a user stylesheet
         # in a throwaway XDG_CONFIG_HOME — the same mechanism a real install uses.
         gtk4Preamble = ''
-          root="''${HALON_ROOT:-$PWD}"
-          [ -d "$root/gtk/Halon" ] || { echo "run from the repo root, or set HALON_ROOT" >&2; exit 1; }
+          ${findRoot}
+          [ -d "$root/gtk/Halon" ] || { echo "run from the repository root, or set HALON_ROOT" >&2; exit 1; }
           variant="''${1:-light}"
           conf=$(mktemp -d)
           trap 'rm -rf "$conf"' EXIT
@@ -108,8 +107,8 @@
           name = "preview-lightdm";
           runtimeInputs = with pkgs; [ coreutils gnused xdg-utils ];
           text = ''
-            root="''${HALON_ROOT:-$PWD}"
-            [ -d "$root/lightdm" ] || { echo "run from the repo root, or set HALON_ROOT" >&2; exit 1; }
+            ${findRoot}
+            [ -d "$root/lightdm" ] || { echo "run from the repository root, or set HALON_ROOT" >&2; exit 1; }
             work=$(mktemp -d)
             cp -r "$root/lightdm/." "$work/"
             sed -i 's|<!--<script src="preview/mock.js"></script>-->|<script src="preview/mock.js"></script>|' "$work/index.html"
@@ -124,8 +123,8 @@
           name = "preview-lmms";
           runtimeInputs = [ pkgs.lmms pkgs.coreutils ];
           text = ''
-            root="''${HALON_ROOT:-$PWD}"
-            [ -f "$root/lmms/Halon/style.css" ] || { echo "run from the repo root, or set HALON_ROOT" >&2; exit 1; }
+            ${findRoot}
+            [ -f "$root/lmms/Halon/style.css" ] || { echo "run from the repository root, or set HALON_ROOT" >&2; exit 1; }
             export LMMS_THEME_PATH="$root/lmms/Halon"
             echo "LMMS_THEME_PATH=$LMMS_THEME_PATH"
             exec lmms "$@"
@@ -138,7 +137,7 @@
           name = "halon-audit";
           runtimeInputs = [ pkgs.nodejs ];
           text = ''
-            root="''${HALON_ROOT:-$PWD}"
+            ${findRoot}
             exec node "$root/scripts/audit.mjs" "$@"
           '';
         };
@@ -153,7 +152,7 @@
             gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
           ];
           text = ''
-            root="''${HALON_ROOT:-$PWD}"
+            ${findRoot}
             export GST_PLUGIN_SYSTEM_PATH_1_0="${pkgs.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0:${pkgs.gst_all_1.gst-plugins-good}/lib/gstreamer-1.0"
             export XDG_DATA_DIRS="${self.packages.${system}.halon-icon-theme}/share:${iconThemeBase}/share:${pkgs.adwaita-icon-theme}/share:/run/current-system/sw/share:''${XDG_DATA_DIRS:-/usr/share}"
             exec "$root/scripts/screenshot.sh" "$@"
@@ -166,7 +165,7 @@
           name = "halon-shots-lightdm";
           runtimeInputs = with pkgs; [ firefox coreutils gnused ];
           text = ''
-            root="''${HALON_ROOT:-$PWD}"
+            ${findRoot}
             exec "$root/scripts/screenshot-lightdm.sh" "$@"
           '';
         };
@@ -176,7 +175,7 @@
           name = "halon-build";
           runtimeInputs = [ pkgs.nodejs ];
           text = ''
-            root="''${HALON_ROOT:-$PWD}"
+            ${findRoot}
             node "$root/scripts/build-gtk.mjs" "$@"
             node "$root/scripts/build-cinnamon.mjs" "$@"
             node "$root/scripts/build-cinnamon.mjs" --dark "$@"
@@ -196,7 +195,7 @@
           name = "halon-lint";
           runtimeInputs = [ pkgs.nodejs ];
           text = ''
-            root="''${HALON_ROOT:-$PWD}"
+            ${findRoot}
             exec node "$root/scripts/lint-gtk.mjs" "$@"
           '';
         };
@@ -554,8 +553,6 @@
               license = nixpkgs.lib.licenses.gpl3Plus;
             };
           };
-
-          default = self.packages.${system}.halon-theme;
         };
 
         apps = {
@@ -572,7 +569,6 @@
           shots = { type = "app"; program = "${shots}/bin/halon-shots"; };
           shots-lightdm = { type = "app"; program = "${shots-lightdm}/bin/halon-shots-lightdm"; };
           lint = { type = "app"; program = "${lint}/bin/halon-lint"; };
-          default = self.apps.${system}.audit;
         };
 
         devShells.default = pkgs.mkShell {
@@ -611,7 +607,7 @@
           ];
 
           shellHook = ''
-            export HALON_ROOT="$PWD"
+            export HALON_ROOT="$PWD/halon"
             echo "halon dev shell"
             echo
             echo "  preview-gtk3 [dark]     GTK 3 widget factory — every widget, every state"
@@ -630,12 +626,12 @@
             echo "  halon-shots [outdir]    render the GTK theme in Xvfb and screenshot it"
             echo "  halon-shots-lightdm     render the greeter against its mock and screenshot it"
             echo
-            echo "  theme source:  gtk/Halon"
+            echo "  theme source:  halon/gtk/Halon"
             echo "  live session:  reads the installed theme, so a repo edit needs a rebuild"
           '';
         };
       }) // {
-      overlays.default = final: prev: {
+      overlays.halon = final: prev: {
         halon-theme = self.packages.${final.stdenv.hostPlatform.system}.halon-theme;
       };
 
@@ -643,8 +639,8 @@
       # Halon has no stylesheet for reads the palette instead of transcribing it.
       tokens = nixpkgs.lib.importJSON ./tokens.json;
 
-      # NixOS: `imports = [ halon.nixosModules.default ];  themes.halon.enable = true;`
-      nixosModules.default = { config, lib, pkgs, ... }: {
+      # NixOS: `imports = [ x-themes.nixosModules.halon ];  themes.halon.enable = true;`
+      nixosModules.halon = { config, lib, pkgs, ... }: {
         options.themes.halon.enable = lib.mkEnableOption "the Halon GTK and Cinnamon theme";
         config = lib.mkIf config.themes.halon.enable {
           environment.systemPackages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
@@ -654,9 +650,9 @@
         };
       };
 
-      # home-manager: `imports = [ halon.homeManagerModules.default ];  themes.halon.enable = true;`
+      # home-manager: `imports = [ x-themes.homeManagerModules.halon ];  themes.halon.enable = true;`
       # setDefaults additionally selects Halon for GTK, the Cinnamon shell and icons.
-      homeManagerModules.default = { config, lib, pkgs, ... }:
+      homeManagerModules.halon = { config, lib, pkgs, ... }:
         let cfg = config.themes.halon;
             packages = self.packages.${pkgs.stdenv.hostPlatform.system};
             pkg = packages.halon-theme;
@@ -738,5 +734,4 @@
             })
           ];
         };
-    };
-}
+    }

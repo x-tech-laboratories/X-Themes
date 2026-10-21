@@ -17,10 +17,10 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    export HALON_ROOT="$PWD"
+    export HALON_ROOT="$PWD/halon"
     echo "halon dev shell (nix-shell)"
-    echo "  node scripts/audit.mjs      contrast audit over both schemes"
-    echo "  node scripts/lint-gtk.mjs   undefined tokens, stray literals, import order"
+    echo "  node halon/scripts/audit.mjs      contrast audit over both schemes"
+    echo "  node halon/scripts/lint-gtk.mjs   undefined tokens, stray literals, import order"
     echo "  gtk3-widget-factory         with GTK_THEME=Halon"
   '';
 }

@@ -91,10 +91,10 @@ paths to absolute store paths for you:
 
 ```nix
 {
-  inputs.halon.url = "github:BeatLink/Halon";
+  inputs.x-themes.url = "github:x-tech-laboratories/X-Themes";
 
   # then, with halon in scope:
-  home.packages = [ halon.packages.${pkgs.system}.halon-qt-theme ];
+  home.packages = [ x-themes.packages.${pkgs.system}.halon-qt-theme ];
 }
 ```
 

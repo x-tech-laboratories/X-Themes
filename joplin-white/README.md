@@ -20,3 +20,13 @@ The homepage forum can be found here: https://discourse.joplinapp.org/t/joplin-w
 # Installation
 
 - Install "White Theme" from the plugins page in joplin.
+- Or, with home-manager, import `x-themes.homeManagerModules.joplin-white` from the
+  [X-Themes](https://github.com/x-tech-laboratories/X-Themes) flake and set
+  `themes.joplin-white.enable = true;`, which places the plugin in Joplin's plugins folder.
+- Or build the plugin file with `nix build github:x-tech-laboratories/X-Themes#joplin-white-theme`
+  and install `result/share/joplin/plugins/*.jpl` from Joplin's plugin settings.
+
+# Building
+
+`npm install` then `npm run dist` writes the plugin file to `publish/`. Webpack 4 needs
+`NODE_OPTIONS=--openssl-legacy-provider` on Node 17 and later.

@@ -83,10 +83,10 @@ The flake exposes the theme as `packages.<system>.halon-lmms-theme`, installing 
 
 ```nix
 {
-  inputs.halon.url = "github:BeatLink/Halon";
+  inputs.x-themes.url = "github:x-tech-laboratories/X-Themes";
 
   # then, with halon in scope:
-  home.packages = [ halon.packages.${pkgs.system}.halon-lmms-theme ];
+  home.packages = [ x-themes.packages.${pkgs.system}.halon-lmms-theme ];
 }
 ```
 

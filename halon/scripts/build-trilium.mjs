@@ -141,7 +141,7 @@ const header = `/* Halon for Trilium — GENERATED FILE, do not edit.
  *
  * Written by scripts/build-trilium.mjs in the Halon repository from
  * gtk/Halon/shared/_tokens-*.css and trilium/_rules.css:
- * https://github.com/BeatLink/Halon
+ * https://github.com/x-tech-laboratories/X-Themes
  *
  * Paste this into a CSS code note and give the note these labels:
  *

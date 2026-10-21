@@ -32,7 +32,7 @@ npx web-ext@10 build --source-dir firefox --ignore-files README.md userChrome.cs
 
 ## Releasing
 
-[`.github/workflows/firefox-release.yml`](../.github/workflows/firefox-release.yml) lints, packages
+[`.github/workflows/halon-firefox-release.yml`](../../.github/workflows/halon-firefox-release.yml) lints, packages
 and signs the theme, then submits it to [addons.mozilla.org](https://addons.mozilla.org/). It is
 driven by a tag named for this port, because every port here versions independently:
 
@@ -40,7 +40,7 @@ driven by a tag named for this port, because every port here versions independen
 # bump VERSION in scripts/build-firefox.mjs, then
 node scripts/build-firefox.mjs
 git commit -am "Firefox theme 1.0.1"
-git tag firefox-v1.0.1 && git push --tags
+git tag halon-firefox-v1.0.1 && git push --tags
 ```
 
 The workflow refuses to publish if `node scripts/build-firefox.mjs --check` reports the manifest is
@@ -81,10 +81,10 @@ extension under `share/halon/firefox/`:
 
 ```nix
 {
-  inputs.halon.url = "github:BeatLink/Halon";
+  inputs.x-themes.url = "github:x-tech-laboratories/X-Themes";
 
   # then, with halon in scope:
-  home.packages = [ halon.packages.${pkgs.system}.halon-firefox-theme ];
+  home.packages = [ x-themes.packages.${pkgs.system}.halon-firefox-theme ];
 }
 ```
 

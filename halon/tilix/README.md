@@ -20,10 +20,10 @@ The flake exposes the schemes as `packages.<system>.halon-tilix-theme`, installi
 
 ```nix
 {
-  inputs.halon.url = "github:BeatLink/Halon";
+  inputs.x-themes.url = "github:x-tech-laboratories/X-Themes";
 
   # then, with halon in scope:
-  home.packages = [ halon.packages.${pkgs.system}.halon-tilix-theme ];
+  home.packages = [ x-themes.packages.${pkgs.system}.halon-tilix-theme ];
 }
 ```
 
@@ -34,7 +34,7 @@ xdg.configFile."tilix/schemes/Halon.json".source = "${halon}/tilix/Halon.json";
 xdg.configFile."tilix/schemes/Halon-Dark.json".source = "${halon}/tilix/Halon-Dark.json";
 ```
 
-To try it without installing: `nix build github:BeatLink/Halon#halon-tilix-theme` and copy the JSON
+To try it without installing: `nix build github:x-tech-laboratories/X-Themes#halon-tilix-theme` and copy the JSON
 out of `result/share/tilix/schemes/`.
 
 ## Token mapping

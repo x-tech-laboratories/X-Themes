@@ -201,8 +201,8 @@ const skin = () => ({
     version: VERSION,
 
     github: { owner: "BeatLink", repo_name: "Halon" },
-    header_image: "https://raw.githubusercontent.com/BeatLink/Halon/main/screenshots/demo-dark.png",
-    splash_image: "https://raw.githubusercontent.com/BeatLink/Halon/main/screenshots/demo-dark.png",
+    header_image: "https://raw.githubusercontent.com/x-tech-laboratories/X-Themes/main/halon/screenshots/demo-dark.png",
+    splash_image: "https://raw.githubusercontent.com/x-tech-laboratories/X-Themes/main/halon/screenshots/demo-dark.png",
     tags: ["Dark", "Light", "Minimal", "Accessible"],
 
     "Steam-WebKit": "webkit.css",

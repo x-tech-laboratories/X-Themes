@@ -4,10 +4,10 @@
 # "prove it still matches the tokens it claims to come from" — a signed build of
 # a stale manifest is worse than no build, because it looks authoritative.
 #
-# Triggered by a `firefox-v*` tag. Every port in this repository versions
-# independently, so the tag names the port; `firefox-v1.0.1` must match the
-# version in firefox/manifest.json, which comes from VERSION in
-# scripts/build-firefox.mjs.
+# Triggered by a `halon-firefox-v*` tag. Every port in this repository versions
+# independently, so the tag names the port; `halon-firefox-v1.0.1` must match the
+# version in halon/firefox/manifest.json, which comes from VERSION in
+# halon/scripts/build-firefox.mjs.
 #
 # Secrets, both from https://addons.mozilla.org/developers/addon/api/key/:
 #   AMO_JWT_ISSUER   the JWT issuer ("user:12345:67")
@@ -27,7 +27,7 @@ name: Publish Firefox theme
 on:
   push:
     tags:
-      - "firefox-v*"
+      - "halon-firefox-v*"
   workflow_dispatch:
     inputs:
       channel:
@@ -49,6 +49,11 @@ jobs:
     runs-on: ubuntu-latest
     # Signing talks to a service that can stall; fail in minutes, not hours.
     timeout-minutes: 20
+
+    # Halon's paths, scripts and web-ext output all live inside halon/.
+    defaults:
+      run:
+        working-directory: halon
 
     env:
       # A tag run always signs, and always to the public listing; a manual run
@@ -74,7 +79,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           manifest=$(node -p "require('./firefox/manifest.json').version")
-          tag="${GITHUB_REF_NAME#firefox-v}"
+          tag="${GITHUB_REF_NAME#halon-firefox-v}"
           if [ "$manifest" != "$tag" ]; then
             echo "::error::tag $GITHUB_REF_NAME wants version $tag, but firefox/manifest.json says $manifest."
             echo "::error::Bump VERSION in scripts/build-firefox.mjs, rebuild, and commit before tagging."
@@ -132,7 +137,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: halon-firefox-theme
-          path: web-ext-artifacts/*
+          path: halon/web-ext-artifacts/*
           if-no-files-found: error
 
       # A tag run always gets a GitHub release, so the tag is not a dead end for
@@ -144,7 +149,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          version="${GITHUB_REF_NAME#firefox-v}"
+          version="${GITHUB_REF_NAME#halon-firefox-v}"
           note=$(mktemp)
 
           if [ "$CHANNEL" = "listed" ]; then

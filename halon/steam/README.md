@@ -63,10 +63,10 @@ directory under `share/halon/steam/`:
 
 ```nix
 {
-  inputs.halon.url = "github:BeatLink/Halon";
+  inputs.x-themes.url = "github:x-tech-laboratories/X-Themes";
 
   # then, with halon in scope:
-  home.packages = [ halon.packages.${pkgs.system}.halon-steam-theme ];
+  home.packages = [ x-themes.packages.${pkgs.system}.halon-steam-theme ];
 }
 ```
 
