@@ -18,8 +18,12 @@ jobs:
       - name: Build every theme package
         run: nix flake check -L
       # Generated stylesheets are committed, so this fails when they no longer match the tokens.
+      # Cinnamon's sheet is built on the installed Cinnamon's stock sheet, which a runner does not have.
       - name: Halon generated files are current
-        run: nix run .#build -- --check
+        run: |
+          for script in gtk vscode firefox steam qt lmms lightdm trilium tokens; do
+            nix shell nixpkgs#nodejs -c node "halon/scripts/build-$script.mjs" --check
+          done
       - name: Halon contrast audit
         run: nix run .#audit
       - name: Halon lint
