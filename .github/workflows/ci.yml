@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      # Every theme variant is a flake check, so this builds each one.
+      - name: Build every theme package
+        run: nix flake check -L
+      # Generated stylesheets are committed, so this fails when they no longer match the tokens.
+      # Cinnamon's sheet is built on the installed Cinnamon's stock sheet, which a runner does not have.
+      - name: Halon generated files are current
+        run: |
+          for script in gtk vscode firefox steam qt lmms lightdm trilium tokens; do
+            nix shell nixpkgs#nodejs -c node "halon/scripts/build-$script.mjs" --check
+          done
+      - name: Halon contrast audit
+        run: nix run .#audit
+      - name: Halon lint
+        run: nix run .#lint

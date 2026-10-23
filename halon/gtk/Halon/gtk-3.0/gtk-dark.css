@@ -1,0 +1,6 @@
+/* Halon — dark scheme. Same layers, dark base geometry and dark tokens. */
+@import url("../shared/base/adwaita3-dark.css");
+@import url("../shared/_tokens-dark.css");
+@import url("../shared/_gtk3-metrics.css");
+@import url("../shared/_icons-dark.css");
+@import url("../shared/_components.css");

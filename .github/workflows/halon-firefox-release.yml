@@ -1,0 +1,194 @@
+# Signs and publishes the Firefox theme.
+#
+# The theme is a generated artifact, so the first job is not "package it" but
+# "prove it still matches the tokens it claims to come from" — a signed build of
+# a stale manifest is worse than no build, because it looks authoritative.
+#
+# Triggered by a `halon-firefox-v*` tag. Every port in this repository versions
+# independently, so the tag names the port; `halon-firefox-v1.0.1` must match the
+# version in halon/firefox/manifest.json, which comes from VERSION in
+# halon/scripts/build-firefox.mjs.
+#
+# Secrets, both from https://addons.mozilla.org/developers/addon/api/key/:
+#   AMO_JWT_ISSUER   the JWT issuer ("user:12345:67")
+#   AMO_JWT_SECRET   the JWT secret
+# A tag run needs them and fails without them. A manual run defaults to not
+# signing, so a fork with no secrets can still lint and package the theme.
+#
+# A tag run submits to the `listed` channel: the public addons.mozilla.org
+# listing, where the version enters Mozilla's review queue. Review returns no
+# file, so a tag run attaches nothing to the GitHub release and the installable
+# build is the one AMO publishes once it passes. Run the workflow by hand with
+# channel `unlisted` to get a self-hostable signed .xpi attached to the release
+# instead.
+
+name: Publish Firefox theme
+
+on:
+  push:
+    tags:
+      - "halon-firefox-v*"
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: "AMO channel"
+        type: choice
+        default: unlisted
+        options: [unlisted, listed]
+      # A tag run ignores these inputs: it is always a listed, signed release.
+      sign:
+        description: "Sign through AMO (needs the AMO secrets)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # Signing talks to a service that can stall; fail in minutes, not hours.
+    timeout-minutes: 20
+
+    # Halon's paths, scripts and web-ext output all live inside halon/.
+    defaults:
+      run:
+        working-directory: halon
+
+    env:
+      # A tag run always signs, and always to the public listing; a manual run
+      # signs only when asked, and defaults to a self-hostable unlisted build.
+      CHANNEL: ${{ github.event_name == 'push' && 'listed' || inputs.channel }}
+      SIGN: ${{ github.event_name == 'push' || inputs.sign }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The generated files are committed, so CI's job is to catch drift rather
+      # than to produce them. --check fails if the tokens have moved since.
+      - name: Verify the theme is current
+        run: |
+          node scripts/build-firefox.mjs --check
+          node scripts/audit.mjs
+
+      - name: Verify the tag matches the manifest
+        if: github.event_name == 'push'
+        run: |
+          manifest=$(node -p "require('./firefox/manifest.json').version")
+          tag="${GITHUB_REF_NAME#halon-firefox-v}"
+          if [ "$manifest" != "$tag" ]; then
+            echo "::error::tag $GITHUB_REF_NAME wants version $tag, but firefox/manifest.json says $manifest."
+            echo "::error::Bump VERSION in scripts/build-firefox.mjs, rebuild, and commit before tagging."
+            exit 1
+          fi
+          echo "version $manifest"
+
+      # README.md and userChrome.css live beside the manifest for the reader's
+      # benefit; neither belongs inside the packaged extension.
+      - name: Lint the extension
+        run: >
+          npx --yes web-ext@10 lint
+          --source-dir firefox
+          --ignore-files README.md userChrome.css amo-metadata.json
+
+      - name: Build the unsigned package
+        run: >
+          npx --yes web-ext@10 build
+          --source-dir firefox
+          --ignore-files README.md userChrome.css amo-metadata.json
+          --overwrite-dest
+
+      - name: Sign through AMO
+        if: env.SIGN == 'true'
+        env:
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: |
+          if [ -z "$AMO_JWT_ISSUER" ] || [ -z "$AMO_JWT_SECRET" ]; then
+            echo "::error::AMO_JWT_ISSUER and AMO_JWT_SECRET are not set — cannot sign."
+            exit 1
+          fi
+          # A listed channel needs listing metadata — AMO requires a summary,
+          # a category and a license for the first public version, and rejects
+          # the submission without them. Unlisted signing has no listing.
+          #
+          # --approval-timeout 0 stops web-ext waiting for the review to
+          # finish. Mozilla review takes hours to days, and without this the
+          # step sits there until the job hits its own limit and fails a
+          # submission that in fact succeeded.
+          extra=()
+          if [ "$CHANNEL" = "listed" ]; then
+            extra=(--amo-metadata firefox/amo-metadata.json --approval-timeout 0)
+          fi
+          npx --yes web-ext@10 sign \
+            --source-dir firefox \
+            --ignore-files README.md userChrome.css amo-metadata.json \
+            --channel "$CHANNEL" \
+            --api-key "$AMO_JWT_ISSUER" \
+            --api-secret "$AMO_JWT_SECRET" \
+            "${extra[@]}"
+
+      # `build` writes a .zip and `sign` writes the signed .xpi beside it, so an
+      # unsigned run still leaves something installable-by-hand to download.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: halon-firefox-theme
+          path: halon/web-ext-artifacts/*
+          if-no-files-found: error
+
+      # A tag run always gets a GitHub release, so the tag is not a dead end for
+      # anyone who finds it. What goes on it depends on the channel: unlisted
+      # signing returns a self-hostable .xpi, which is the file users install,
+      # while a listed submission is still in review and has no file yet.
+      - name: Publish the release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#halon-firefox-v}"
+          note=$(mktemp)
+
+          if [ "$CHANNEL" = "listed" ]; then
+            {
+              echo "Submitted to addons.mozilla.org and awaiting Mozilla review."
+              echo "Install it from the AMO listing once it is approved — there is no file attached to this release."
+            } > "$note"
+          else
+            echo "Signed for self-hosting. Download the \`.xpi\` below and open it in Firefox to install." > "$note"
+          fi
+
+          # --generate-notes and --notes-file cannot be combined, so the release
+          # is created with the generated changelog and the channel note is
+          # prepended to it afterwards.
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --title "Halon for Firefox $version" \
+              --generate-notes
+          fi
+          # Re-running the workflow must not stack a second copy of the note.
+          current=$(gh release view "$GITHUB_REF_NAME" --json body -q .body)
+          if ! printf '%s' "$current" | grep -qFf "$note"; then
+            body=$(mktemp)
+            { cat "$note"; echo; printf '%s\n' "$current"; } > "$body"
+            gh release edit "$GITHUB_REF_NAME" --notes-file "$body"
+          fi
+          cat "$note" >> "$GITHUB_STEP_SUMMARY"
+
+          # Review has produced no file yet, so there is nothing to attach.
+          if [ "$CHANNEL" = "listed" ]; then
+            exit 0
+          fi
+
+          xpi=""
+          for candidate in web-ext-artifacts/*.xpi; do
+            [ -e "$candidate" ] && xpi="$candidate" && break
+          done
+          if [ -z "$xpi" ]; then
+            echo "::error::unlisted signing produced no .xpi — nothing to attach."
+            exit 1
+          fi
+          gh release upload "$GITHUB_REF_NAME" "$xpi" --clobber
