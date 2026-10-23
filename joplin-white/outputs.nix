@@ -31,7 +31,7 @@
           passthru = { inherit pluginFile; };
           meta = {
             description = "A white theme for Joplin, as a plugin with configurable accent, sizes and fonts";
-            license = nixpkgs.lib.licenses.gpl3Only;
+            license = nixpkgs.lib.licenses.gpl3Plus;
           };
         };
       };
