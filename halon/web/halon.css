@@ -502,6 +502,8 @@ button.card { width: 100%; height: auto; font-weight: 400; line-height: var(--li
 
 /* ── Trees ────────────────────────────────────────────────────────────────── */
 
+/* A long path breaks anywhere rather than widening its column. */
+.path { overflow-wrap: anywhere; }
 .change-summary { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 .tree { display: grid; gap: var(--space-1); font-size: var(--text-control); }
 .tree-folder > summary { cursor: pointer; padding: var(--space-1) 0; }
@@ -723,6 +725,10 @@ th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--text-headin
   font-size: var(--text-control);
 }
 .menu { min-width: 180px; margin: 0; list-style: none; outline: none; }
+/* A native popover is centred by default, so a menu or popover opened at a point drops that and takes its own place. */
+.menu[popover], .popover[popover] { inset: auto; margin: 0; color: var(--text-body); }
+/* An anchored popover hangs below its anchor, flipping above or across where there is no room. */
+.popover.anchored { top: anchor(bottom); left: anchor(left); margin-top: var(--space-2); position-try-fallbacks: flip-block, flip-inline; }
 .popover { padding: var(--space-4); }
 .menu-item {
   display: flex;
