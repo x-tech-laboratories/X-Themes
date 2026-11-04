@@ -21,7 +21,7 @@ jobs:
       # Cinnamon's sheet is built on the installed Cinnamon's stock sheet, which a runner does not have.
       - name: Halon generated files are current
         run: |
-          for script in gtk vscode firefox steam qt lmms lightdm trilium tokens; do
+          for script in gtk vscode firefox steam qt lmms lightdm trilium web tokens; do
             nix shell nixpkgs#nodejs -c node "halon/scripts/build-$script.mjs" --check
           done
       - name: Halon contrast audit

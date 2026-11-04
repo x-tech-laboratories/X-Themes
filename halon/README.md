@@ -42,6 +42,7 @@ nowhere else.
 | Trilium Notes | [trilium/](trilium/) | a CSS note on its `next` base; generated |
 | Tilix | [tilix/](tilix/) | the sixteen-slot terminal palette |
 | LMMS | [lmms/](lmms/) | both schemes; generated |
+| Web pages | [web/](web/) | the X-apps' dashboards; tokens generated, published to npm |
 | LightDM | [lightdm/](lightdm/) | a [web-greeter](https://github.com/JezerM/web-greeter) login screen |
 | Plymouth | [plymouth/](plymouth/) | a boot splash on the dark scheme |
 
