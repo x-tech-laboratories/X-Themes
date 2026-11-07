@@ -28,7 +28,8 @@ import "@x-tech-laboratories/halon/halon-tokens.css";
 import "@x-tech-laboratories/halon/halon.css";
 ```
 
-The dark scheme follows the system, and `data-theme="light"` or `data-theme="dark"` on `<html>` overrides it. The
+The dark scheme follows the system, and `data-theme="light"` or `data-theme="dark"` on `<html>` overrides it. `data-density="compact"`,
+`"normal"` or `"comfortable"` on `<html>` or `.layout` sets the row height and table cell padding. The
 widgets in `@x-tech-laboratories/x-libs` build the markup these rules style.
 
 ## Publish
