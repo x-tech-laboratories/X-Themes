@@ -283,6 +283,8 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
 /* A place you are, not a row you picked: elevation, not fill. */
 .sidebar a.active { background-color: var(--surface-default); color: var(--text-heading); box-shadow: var(--shadow-item); font-weight: 500; }
 .scrim { position: fixed; inset: 0; z-index: calc(var(--layer-sticky) + 1); background-color: var(--surface-overlay); }
+/* The sidebar's grab bar runs down its right edge, and the width it sets reaches the grid through --sidebar-width. */
+.sidebar > .sidebar-resize { position: absolute; top: 0; right: 0; bottom: 0; }
 
 /* The content pane: the one raised surface, inset in the frame. */
 main {
@@ -511,6 +513,52 @@ button.card { width: 100%; height: auto; font-weight: 400; line-height: var(--li
 .tree-file { display: flex; gap: var(--space-4); align-items: baseline; padding: var(--space-1) 0 var(--space-1) var(--space-6); flex-wrap: wrap; }
 .tree-name { font-family: var(--font-family-monospace); font-size: var(--text-caption); overflow-wrap: anywhere; }
 
+/* The tree widget is a list of rows that fold, take a selection and accept dropped rows. */
+ul.tree, ul.tree-children { display: block; margin: 0; padding: 0; list-style: none; }
+ul.tree-children { margin-left: var(--space-5); padding-left: var(--space-2); }
+.tree-item { outline: none; }
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--row-height);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-small);
+  color: var(--text-body);
+  cursor: default;
+  transition: background-color var(--duration-fast), color var(--duration-fast);
+}
+.tree-row:hover { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
+.tree-item:focus-visible > .tree-row { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: -1px; }
+/* A picked row is a solid accent fill, faded while the tree does not have focus. */
+.tree-item[aria-selected="true"] > .tree-row { background-color: color-mix(in srgb, var(--accent) 28%, transparent); color: var(--text-heading); }
+.tree:focus-within .tree-item[aria-selected="true"] > .tree-row { background-color: var(--accent); color: var(--text-on-fill); }
+.tree-item[aria-selected="true"] > .tree-row .tree-toggle { color: inherit; }
+.tree-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tree-extra { display: flex; flex: none; align-items: center; gap: var(--space-2); color: var(--text-tertiary); font-size: var(--text-caption); }
+.tree-item[aria-selected="true"] > .tree-row .tree-extra { color: inherit; }
+.tree-new { padding: var(--space-1) var(--space-2) var(--space-1) var(--space-7); }
+.tree-new input:not([type="checkbox"]):not([type="radio"]) { width: 100%; }
+
+/* A fold arrow, and the empty space of the same width on a row with nothing to fold. */
+.tree-toggle, .tree-spacer {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  vertical-align: middle;
+}
+button.tree-toggle { width: var(--space-6); height: var(--space-6); padding: 0; border: none; background: none; color: var(--text-secondary); font-size: var(--text-caption); }
+button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
+
+/* A dragged row fades, and a line or fill shows where it will land. */
+.tree-row.dragging { opacity: 0.5; }
+.tree-row.drop-before { box-shadow: inset 0 2px 0 var(--accent); }
+.tree-row.drop-after { box-shadow: inset 0 -2px 0 var(--accent); }
+.tree-row.drop-inside { background-color: color-mix(in srgb, var(--accent) 15%, transparent); outline: var(--border-width) solid var(--accent); outline-offset: -1px; }
+
 /* ── Forms and settings ───────────────────────────────────────────────────── */
 
 .form-group > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: var(--space-4); }
@@ -633,6 +681,48 @@ th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--text-headin
 .actions-cell { text-align: right; }
 .row-actions { display: inline-flex; gap: var(--space-1); justify-content: flex-end; flex-wrap: wrap; }
 .pager { display: flex; gap: var(--space-5); align-items: center; justify-content: center; margin-top: var(--space-5); font-size: var(--text-control); }
+.table-tools { display: flex; gap: var(--space-4); align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+
+/* A header cell holds its sort button, a filter button and a grab bar on its right edge. */
+th { position: relative; }
+th[draggable="true"] { cursor: grab; }
+th > .column-resize { position: absolute; top: 0; right: 0; bottom: 0; }
+th.filtered { color: var(--text-heading); }
+.sort-marker { white-space: nowrap; }
+.sort-rank { margin-left: 1px; font-size: 0.8em; line-height: 0; }
+th .filter-button {
+  width: auto;
+  height: auto;
+  margin-left: var(--space-2);
+  padding: var(--space-1);
+  border-color: transparent;
+  color: var(--text-tertiary);
+  vertical-align: middle;
+}
+th .filter-button:hover:not(:disabled) { border-color: var(--border-default); color: var(--text-heading); }
+th .filter-button.active { color: var(--accent); }
+th .filter-button.active:hover:not(:disabled) { border-color: var(--accent); }
+
+/* A dragged column fades, and a line on the near edge of another shows where it will land. */
+th.dragged { opacity: 0.5; }
+th.drop-before { box-shadow: inset 2px 0 0 var(--accent); }
+th.drop-after { box-shadow: inset -2px 0 0 var(--accent); }
+
+/* A tree table indents its first cell by the row's depth. */
+td.tree-cell { padding-inline-start: calc(var(--space-5) + var(--tree-depth, 0) * var(--space-6)); white-space: nowrap; }
+td.tree-cell > .tree-toggle { margin-right: var(--space-2); }
+td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
+.tree-count {
+  display: inline-flex;
+  margin-left: var(--space-3);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-small);
+  background-color: var(--surface-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-label);
+  font-weight: 600;
+  vertical-align: middle;
+}
 
 
 
@@ -743,9 +833,10 @@ th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--text-headin
   font-weight: 400;
   text-align: left;
 }
-.menu-item:hover:not(:disabled), .menu-item:focus-visible { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
+.menu-item:hover:not(:disabled):not([aria-disabled="true"]), .menu-item:focus-visible { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
 .menu-item.danger { color: var(--status-danger); }
 .menu-item[aria-checked="true"] { color: var(--accent); font-weight: 600; }
+.menu-item[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
 .menu-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .menu-hint { flex: none; color: var(--text-tertiary); font-size: var(--text-label); }
 .menu-separator { height: var(--border-width); margin: var(--space-1) var(--space-2); background-color: var(--border-default); }
@@ -801,6 +892,7 @@ body.resizing.vertical { cursor: row-resize; }
     visibility: hidden;
   }
   body.menu-open .sidebar { transform: none; visibility: visible; box-shadow: var(--shadow-floating); }
+  .sidebar > .sidebar-resize { display: none; }
   .account-link { display: none; }
   main { margin-left: var(--space-2); padding: var(--space-6) var(--space-6) var(--space-8); }
   .topbar { height: auto; min-height: var(--frame-height); gap: var(--space-2); padding: var(--space-1) var(--space-2) var(--space-2); flex-wrap: wrap; }
@@ -820,6 +912,8 @@ body.resizing.vertical { cursor: row-resize; }
   table.responsive td::before { content: attr(data-label); color: var(--text-secondary); text-align: left; }
   table.responsive td[data-label=""]::before { content: none; }
   table.responsive td.actions-cell { justify-content: flex-end; }
+  table.responsive td.tree-cell { justify-content: flex-start; gap: var(--space-2); padding-inline-start: 0; white-space: normal; }
+  table.responsive td.tree-cell::before { margin-right: auto; }
   .form-row { grid-template-columns: 1fr; }
   .form-row label { padding-top: 0; }
 }
