@@ -1,0 +1,202 @@
+/* Halon for the web: the token layer's SOURCE. scripts/build-web.mjs writes halon-tokens.css from it.
+ * Each @name is a colour from gtk/Halon/shared/_tokens-*.css, the light one above the media query and the dark one in
+ * and after it; a literal colour here is one the web alone uses, such as a chart series or the info status. */
+
+:root {
+    --font-family-interface:
+        system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Noto Sans", Cantarell, "Helvetica Neue", Arial, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji";
+    --font-family-monospace:
+        ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+        "DejaVu Sans Mono", monospace;
+
+    /* Spacing — a 4px scale. Nothing may use a value that is not on it. */
+    --space-1: 2px;
+    --space-2: 4px;
+    --space-3: 6px;
+    --space-4: 8px;
+    --space-5: 12px;
+    --space-6: 16px;
+    --space-7: 24px;
+    --space-8: 32px;
+
+    /* Geometry — one control height, so everything on a row aligns */
+    --control-height: 32px;
+    --control-padding-x: 14px;
+    --icon-button-size: 32px;
+    --row-height: 28px;
+    --frame-height: 34px;
+    --icon-size-small: 16px;
+    --icon-size-large: 20px;
+    --sidebar-width: 248px;
+    --border-width: 1px;
+    --focus-ring-width: 3px;
+
+    /* Two radii: small for anything you act on, default for any surface that holds them */
+    --radius-small: 4px;
+    --radius-default: 8px;
+
+    --text-label: 11px;
+    --text-caption: 12px;
+    --text-control: 13px;
+    --text-prose: 14px;
+    --text-h3: 15px;
+    --text-h2: 19px;
+    --text-h1: 26px;
+
+    --letter-spacing-caps: .04em;
+    --letter-spacing-display: -.01em;
+
+    --line-height-ui: 16px;
+    --line-height-body: 1.55;
+    --measure: 68ch;
+
+    --layer-sticky: 100;
+    --layer-menu: 200;
+    --layer-modal: 300;
+    --layer-toast: 400;
+    --layer-tooltip: 500;
+
+    --duration-fast: .12s;
+    --duration-slow: .3s;
+
+    /* Surfaces */
+    --surface-root: @surface-root;
+    --surface-default: @surface-default;
+    --surface-secondary: @surface-secondary;
+    --surface-navigation: var(--surface-secondary);
+    --surface-navigation-hover: @surface-navigation-hover;
+    --surface-overlay: @surface-overlay;
+
+    /* Text on surfaces */
+    --text-heading: @text-heading;
+    --text-body: @text-body;
+    --text-secondary: @text-secondary;
+    --text-tertiary: @text-tertiary;
+    --text-on-navigation: @text-on-navigation;
+
+    /* Text on fills */
+    --text-on-fill: @text-on-fill;
+    --text-on-light: @text-on-light;
+
+    /* Lines */
+    --border-default: @border-default;
+    --border-hover: @border-hover;
+    --border-control: @border-control;
+    --border-focus: var(--accent);
+
+    /* Interaction */
+    --accent: @accent;
+    --focus-ring: @focus-ring;
+
+    /* Data series — the lines of one chart, told apart by lightness as well as hue */
+    --series-1: var(--accent);
+    --series-2: #7c3aed;
+    --series-3: #64748b;
+
+    /* Status */
+    --status-success: @status-success;
+    --status-info: #0369a1;
+    --status-warning: @status-warning;
+    --status-warning-text: @status-warning-text;
+    --status-danger: @status-danger;
+    --badge-experimental: @badge-experimental;
+
+    /* Solid fills that keep their lightness in both schemes, for Quasar's fixed white or black text. */
+    --fill-accent: #2563eb;
+    --fill-success: #047857;
+    --fill-danger: #dc2626;
+    --fill-warning: #f59e0b;
+
+    /* Elevation — slate-900 at low alpha, never neutral black */
+    --shadow-item: 0 1px 2px @shadow-item;
+    --shadow-card: 0 1px 3px @shadow-card, 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow-tab: 0 1px 3px @shadow-tab;
+    --shadow-floating: 0 2px 8px @shadow-floating;
+    --shadow-modal: 0 8px 32px @shadow-modal;
+
+    color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --surface-root: @surface-root;
+        --surface-default: @surface-default;
+        --surface-secondary: @surface-secondary;
+        --surface-navigation-hover: @surface-navigation-hover;
+        --surface-overlay: @surface-overlay;
+
+        --text-heading: @text-heading;
+        --text-body: @text-body;
+        --text-secondary: @text-secondary;
+        --text-tertiary: @text-tertiary;
+        --text-on-navigation: @text-on-navigation;
+
+        --text-on-fill: @text-on-fill;
+
+        --border-default: @border-default;
+        --border-hover: @border-hover;
+        --border-control: @border-control;
+
+        --accent: @accent;
+        --focus-ring: @focus-ring;
+
+        --series-2: #c4b5fd;
+        --series-3: #94a3b8;
+
+        --status-success: @status-success;
+        --status-info: #38bdf8;
+        --status-warning-text: @status-warning-text;
+        --status-danger: @status-danger;
+        --badge-experimental: @badge-experimental;
+
+        --shadow-item: 0 1px 2px @shadow-item;
+        --shadow-card: 0 1px 3px @shadow-card, 0 1px 2px rgba(15, 23, 42, 0.20);
+        --shadow-tab: 0 1px 3px @shadow-tab;
+        --shadow-floating: 0 2px 8px @shadow-floating;
+        --shadow-modal: 0 8px 32px @shadow-modal;
+
+        color-scheme: dark;
+    }
+}
+
+:root[data-theme="dark"] {
+    --surface-root: @surface-root;
+    --surface-default: @surface-default;
+    --surface-secondary: @surface-secondary;
+    --surface-navigation-hover: @surface-navigation-hover;
+    --surface-overlay: @surface-overlay;
+
+    --text-heading: @text-heading;
+    --text-body: @text-body;
+    --text-secondary: @text-secondary;
+    --text-tertiary: @text-tertiary;
+    --text-on-navigation: @text-on-navigation;
+
+    --text-on-fill: @text-on-fill;
+
+    --border-default: @border-default;
+    --border-hover: @border-hover;
+    --border-control: @border-control;
+
+    --accent: @accent;
+    --focus-ring: @focus-ring;
+
+    --series-2: #c4b5fd;
+    --series-3: #94a3b8;
+
+    --status-success: @status-success;
+    --status-info: #38bdf8;
+    --status-warning-text: @status-warning-text;
+    --status-danger: @status-danger;
+    --badge-experimental: @badge-experimental;
+
+    --shadow-item: 0 1px 2px @shadow-item;
+    --shadow-card: 0 1px 3px @shadow-card, 0 1px 2px rgba(15, 23, 42, 0.20);
+    --shadow-tab: 0 1px 3px @shadow-tab;
+    --shadow-floating: 0 2px 8px @shadow-floating;
+    --shadow-modal: 0 8px 32px @shadow-modal;
+
+    color-scheme: dark;
+}

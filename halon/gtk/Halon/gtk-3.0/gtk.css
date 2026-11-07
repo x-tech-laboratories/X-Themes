@@ -1,0 +1,11 @@
+/* Halon — light scheme.
+ *
+ * The base is Adwaita with its entire palette stripped at build time
+ * (scripts/build-gtk.mjs): geometry only, zero colour literals. Halon's
+ * tokens and component layer are the only paint that can reach the screen.
+ */
+@import url("../shared/base/adwaita3-light.css");
+@import url("../shared/_tokens-light.css");
+@import url("../shared/_gtk3-metrics.css");
+@import url("../shared/_icons-light.css");
+@import url("../shared/_components.css");

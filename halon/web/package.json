@@ -1,0 +1,20 @@
+{
+  "name": "@x-tech-laboratories/halon",
+  "version": "0.2.0",
+  "description": "Halon for the web: the token sheet and the component styles the X-apps' pages are drawn with",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/x-tech-laboratories/X-Themes.git",
+    "directory": "halon/web"
+  },
+  "files": [
+    "halon-tokens.css",
+    "halon.css"
+  ],
+  "exports": {
+    "./halon-tokens.css": "./halon-tokens.css",
+    "./halon.css": "./halon.css"
+  },
+  "style": "./halon.css"
+}

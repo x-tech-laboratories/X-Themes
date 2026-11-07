@@ -1,0 +1,60 @@
+/* Layer 1 — theme tokens, light scheme. The only place literal colors appear.
+   Mirrors §3.1 of THEME-DESIGN-GUIDE.md exactly; GTK has no var() or light-dark(),
+   so the two schemes are two files rather than one file and a media query. */
+
+/* Surfaces */
+@define-color surface-root             #f1f5f9;
+@define-color surface-default          #ffffff;
+@define-color surface-secondary        #f1f5f9;
+@define-color surface-navigation       @surface-secondary;
+@define-color surface-navigation-hover #e2e8f0;
+@define-color surface-overlay          rgba(15, 23, 42, 0.45);
+
+/* Shell chrome — the same quiet gray as the frame in this scheme */
+@define-color surface-shell            @surface-secondary;
+@define-color surface-shell-hover      #e2e8f0;
+@define-color surface-shell-card       @surface-default;
+
+/* Text on surfaces */
+@define-color text-heading             #0f172a;
+@define-color text-body                #1a1a2e;
+@define-color text-secondary           #475569;
+@define-color text-tertiary            #64748b;
+@define-color text-on-navigation       #475569;
+
+/* Text on fills — one token per class of fill, see §3.5 */
+@define-color text-on-fill             #ffffff;
+@define-color text-on-light            #0f172a;
+
+/* Lines */
+@define-color border-default           #e2e8f0;
+@define-color border-hover             #cbd5e1;
+@define-color border-control           #8792a3;
+
+/* Interaction */
+@define-color accent                   #2563eb;
+@define-color focus-ring               rgba(37, 99, 235, 0.15);
+
+/* Defined after @accent: GTK resolves references in source order. */
+@define-color border-focus             @accent;
+
+/* Syntax — code only, per §3.7. Not status: an editor is full of these. */
+@define-color syntax-type              #0e7490;
+@define-color syntax-string            #15803d;
+@define-color syntax-number            #a16207;
+
+/* Status */
+@define-color status-success           #047857;
+@define-color status-warning           #f59e0b;
+@define-color status-warning-text      #c2410c;
+@define-color status-danger            #dc2626;
+@define-color badge-experimental       #7c3aed;
+
+/* Elevation — slate-900 in both schemes, §5; GTK has no opacity multiplier,
+   so the shadows are spelled out rather than derived from @shadow-base */
+@define-color shadow-base              #0f172a;
+@define-color shadow-item              rgba(15, 23, 42, 0.12);
+@define-color shadow-card              rgba(15, 23, 42, 0.08);
+@define-color shadow-tab               rgba(15, 23, 42, 0.15);
+@define-color shadow-floating          rgba(15, 23, 42, 0.20);
+@define-color shadow-modal             rgba(15, 23, 42, 0.25);
