@@ -24,8 +24,8 @@
     --control-padding-x: 14px;
     --icon-button-size: 32px;
     --row-height: 28px;
-    --cell-padding-y: 9px;
-    --frame-height: 34px;
+    --cell-padding-y: var(--space-3);
+    --frame-height: 49px;
     --icon-size-small: 16px;
     --icon-size-large: 20px;
     --sidebar-width: 248px;
@@ -88,7 +88,7 @@
     /* Interaction */
     --accent: #2563eb;
     --focus-ring: rgba(37, 99, 235, 0.15);
-    --row-selected: color-mix(in srgb, var(--accent) 22%, transparent);
+    --row-selected: var(--surface-navigation-hover);
 
     /* Data series — the lines of one chart, told apart by lightness as well as hue */
     --series-1: var(--accent);
