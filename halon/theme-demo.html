@@ -595,13 +595,13 @@ thead th, tbody td {
     display: grid;
     place-items: center;
     width: var(--icon-button-size); height: var(--icon-button-size);
-    border: var(--border-width) solid transparent;
+    border: var(--border-width) solid var(--border-default);
     border-radius: var(--radius-small);
     background: transparent;
     color: var(--text-secondary);
     cursor: pointer;
 }
-.icon-button:hover { background: var(--surface-secondary); color: var(--text-heading); }
+.icon-button:hover { border-color: var(--accent); color: var(--text-heading); }
 
 .keyboard-shortcut {
     font-family: var(--font-family-code);

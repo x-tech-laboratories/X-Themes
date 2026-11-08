@@ -32,6 +32,10 @@ The dark scheme follows the system, and `data-theme="light"` or `data-theme="dar
 `"normal"` or `"comfortable"` on `<html>` or `.layout` sets the row height and table cell padding. The
 widgets in `@x-tech-laboratories/x-libs` build the markup these rules style.
 
+`follows-host-theme` on `<html>` swaps the tokens for the colours a host page hands over as `--sidebar-*`
+variables, such as the Linux sidebar. An item's own colour, such as a tag's, reaches `.chip.has-color`,
+`.has-tint` and `.color-dot` through `--item-color`.
+
 ## Publish
 
 ```sh
