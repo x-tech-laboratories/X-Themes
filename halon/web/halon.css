@@ -1301,6 +1301,22 @@ button.menu-trigger:hover:not(:disabled) { border-color: var(--border-default); 
 .markdown hr { margin: var(--space-6) 0; border: 0; border-top: var(--border-width) solid var(--border-default); }
 .markdown img { max-width: 100%; height: auto; border-radius: var(--radius-small); }
 
+/* A rich text field is one field-like box: the formatting toolbar on top, the prose below, the accent ring while editing. */
+.rich-text { display: flex; flex-direction: column; min-height: 0; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-small); background-color: var(--surface-default); transition: border-color var(--duration-fast); }
+.rich-text:hover { border-color: var(--border-focus); }
+.rich-text:focus-within { border-color: var(--border-focus); outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: 0; }
+.rich-text-toolbar { display: flex; flex: none; flex-wrap: wrap; gap: var(--space-1); padding: var(--space-1); border-bottom: var(--border-width) solid var(--border-default); }
+.rich-text-toolbar button.icon { width: calc(var(--row-height) - var(--space-2)); height: calc(var(--row-height) - var(--space-2)); font-size: var(--text-control); }
+.rich-text-toolbar button.icon[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.rich-text-frame { display: grid; flex: 1; min-height: 0; overflow: auto; }
+.rich-text-body { padding: 7px 11px; outline: none; color: var(--text-body); }
+.rich-text-body p.is-editor-empty:first-child::before { content: attr(data-placeholder); float: left; height: 0; color: var(--text-tertiary); pointer-events: none; }
+.rich-text-body ul[data-type="taskList"] { padding-left: var(--space-2); list-style: none; }
+.rich-text-body ul[data-type="taskList"] li { display: flex; gap: var(--space-3); align-items: baseline; }
+.rich-text-body ul[data-type="taskList"] li > label { flex: none; }
+.rich-text-body ul[data-type="taskList"] li > div { flex: 1; min-width: 0; }
+.rich-text-body ul[data-type="taskList"] li[data-checked="true"] > div { color: var(--text-tertiary); text-decoration: line-through; }
+
 /* A handle is a thin grab bar that lights with the accent while hovered, focused or dragged. */
 .resize-handle { position: relative; flex: none; width: 7px; cursor: col-resize; touch-action: none; }
 .resize-handle.vertical { width: auto; height: 7px; cursor: row-resize; }
