@@ -897,8 +897,8 @@ hierarchy; the accent is spent only at the top of it.
 | Weight | Rest | Hover | Use |
 | ------ | ---- | ----- | --- |
 | **Filled** | `--accent` fill, `--text-on-fill` | opacity `.85` | The one primary action on a view |
-| **Default** | transparent, `--border-default` hairline, `--text-body` | border to `--accent` | Ordinary actions |
-| **Flat** | transparent, no border, `--text-secondary` | hairline appears, text to `--text-heading` | Toolbars, list rows, anything repeated |
+| **Default** | transparent, `--border-default` hairline, `--text-body` | border to `--accent` | Ordinary actions, icon buttons, and every button in the frame or a floating bar |
+| **Flat** | transparent, no border, `--text-secondary` | hairline appears, text to `--text-heading` | Worded actions repeated down a list or table row |
 
 ```css
 .button {
@@ -924,6 +924,18 @@ hierarchy; the accent is spent only at the top of it.
 non-primary button an accent border and accent text. In a toolbar with eight buttons that produces
 eight blue rectangles, and the accent stops meaning "this is the action" — it just means "this is a
 button," which the shape already said. Neutral borders return the accent to signalling something.
+
+**Why icon and frame buttons take the Default weight.** A flat glyph on the recessed frame or on a
+floating selection bar reads as a label, not a control: nothing at rest says it can be pressed. The
+hairline costs nothing in the accent budget, since it is neutral, and it gives every button that
+stands alone the same shape. Flat stays for the one case it was made for, a row of actions repeated
+on every line of a list, where a bordered word on each would stripe the whole table. An icon
+button in such a row is still bordered: it is small enough that the hairline marks it without
+striping anything.
+
+**A pressed toggle takes the accent on its border and text,** such as a filter that is on. It is
+the Default button with its hover colour held, which §6.8 already allows for locked-on controls; a
+joined switch shows its pressed member with the solid fill instead.
 
 **Why flat buttons grow a border rather than a background.** Reserving hover for a border keeps §6.1's
 original hazard closed: a background-swap hover on a control with an independently coloured icon can
@@ -1010,6 +1022,11 @@ is the same at every level, so it does not matter much where you draw the line:
 | Active tab             | `--surface-default` fill, `--text-heading` text, `--accent` icon, `--shadow-tab` |
 | Inactive tab           | transparent,`--text-on-navigation` text, `--surface-navigation-hover` on hover               |
 | Tab close hover        | `--status-danger` fill, `--text-on-fill` glyph                                             |
+| Buttons                | Default weight (§6.1) on `--surface-default`, border to `--accent` on hover                    |
+
+**The app's name sits over the sidebar.** Where a top bar runs above a sidebar, the name fills the
+bar's cell above the sidebar, exactly the sidebar's width and ruled off from the rest by a
+`--border-default` hairline, so the bar's tools start in line with the content pane below them.
 
 **A desktop shell is the exception.** Its panel, tooltips, OSD and notifications float over the
 wallpaper rather than sitting inside a window, so the frame's near-black reads there as a hole
@@ -1053,7 +1070,23 @@ the same job — one step off the content surface:
   and no softened variant of it, so a selected row and a link are the same blue by construction.
 - Inactive or unfocused selection is the same fill at 25–30% alpha, not a different color.
 - Row action buttons: `--surface-default` fill with a `--text-secondary` glyph, going `--accent` on
-  hover, shadowless.
+  hover, shadowless. They wait for the pointer or keyboard focus on their row; one that would push
+  a count out of line takes no room until then. On a touch screen they always show.
+- Links above the tree, such as a list of views, are rows of the same height ruled off from it by a
+  `--border-default` hairline, and the sidebar's foot, such as Settings, sits at its bottom however
+  few rows are above. Both select by elevation, like any navigation item.
+- A heading row over a group of items, such as a tag group, is a small caps label in
+  `--text-secondary`, the same treatment as a field label.
+- A side pane docked against the content, such as a picked item's details, is edged with
+  `--border-hover` rather than `--border-default`: it sits on `--surface-secondary` beside a pane of
+  `--surface-default`, and the stronger line keeps the two from reading as one. Its header stays put
+  while its body scrolls, and may move into the top bar above the pane, keeping that edge and fill.
+
+**Item colours.** Where the user gives an item a colour, such as a tag, the colour tints rather than
+fills: a chip takes it at 18% over `--surface-default` with a hairline in the full colour, a row at
+12% (20% on hover), and a dot before the name shows it whole. Text on a tint stays `--text-body`.
+A row picked for a bulk action takes `--accent` at 16% and a 3px accent bar on its leading edge,
+never a tick, because a tick reads as done.
 
 ### 6.6 Menus, modals, toasts, tooltips
 
@@ -1095,7 +1128,9 @@ change what is legible on it.
 
 ### 6.8 Scrollbars, gutters, selection
 
-- Scrollbar track transparent; thumb `--border-hover`, `--text-tertiary` on hover.
+- Scrollbar track transparent; thumb `--border-hover`, `--text-tertiary` on hover. On the web,
+  Chromium drops its styled bar for the system's own whenever the standard `scrollbar-width` or
+  `scrollbar-color` is set, so set those only where the webkit bar is not supported.
 - Resize gutters transparent at rest, `--accent` on hover — invisible until grabbed. Find-match
   highlights and locked-on controls take the accent too, at an alpha where they read as marks.
 - Text selection uses `--focus-ring`, the same translucent accent as focus outlines, so selection and
