@@ -18,11 +18,11 @@ body {
 
 a { color: var(--accent); text-decoration-color: var(--accent); }
 h1, h2, h3, h4, h5 { color: var(--text-heading); margin: 0; }
-h1 { font-size: var(--text-h1); font-weight: 700; line-height: 1.25; letter-spacing: var(--letter-spacing-display); }
+h1 { font-size: var(--text-h1); font-weight: 600; letter-spacing: var(--letter-spacing-display); }
 h2 { font-size: var(--text-h3); font-weight: 600; line-height: var(--line-height-ui); }
 code, pre { font-family: var(--font-family-monospace); font-size: var(--text-caption); }
 ::selection { background: var(--focus-ring); color: var(--text-heading); }
-:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: 1px; }
+:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: 0; }
 
 .muted { color: var(--text-secondary); }
 .small { font-size: var(--text-caption); }
@@ -65,7 +65,7 @@ code, pre { font-family: var(--font-family-monospace); font-size: var(--text-cap
 
 /* ── Buttons — three weights, the accent is the scarcest (§6.1) ───────────── */
 
-/* Default weight: a neutral bordered ghost. */
+/* Default weight: a neutral bordered button on the raised surface, so it stands out on the recessed frame too. */
 button, .button {
   display: inline-flex;
   align-items: center;
@@ -74,7 +74,7 @@ button, .button {
   padding: 7px var(--control-padding-x);
   border: var(--border-width) solid var(--border-default);
   border-radius: var(--radius-small);
-  background-color: transparent;
+  background-color: var(--surface-default);
   color: var(--text-body);
   font-family: inherit;
   font-size: var(--text-control);
@@ -86,8 +86,8 @@ button, .button {
   transition: border-color var(--duration-fast), color var(--duration-fast), opacity var(--duration-fast);
 }
 button:hover:not(:disabled), .button:hover { border-color: var(--accent); }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
-.button[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+button:disabled { cursor: default; }
+.button[aria-disabled="true"] { cursor: default; pointer-events: none; }
 
 /* Filled weight: the one primary action on a view, hovering by opacity only. */
 button.accent.solid, .button.accent.solid {
@@ -98,12 +98,13 @@ button.accent.solid, .button.accent.solid {
 button.accent.solid:hover:not(:disabled), .button.accent.solid:hover { border-color: var(--accent); opacity: 0.85; }
 
 /* Destructive actions take the danger color at whichever weight they sit. */
-button.danger { border-color: var(--status-danger); color: var(--status-danger); }
-button.danger:hover:not(:disabled) { border-color: var(--status-danger); opacity: 0.85; }
-button.danger.solid { background-color: var(--status-danger); color: var(--text-on-fill); }
+button.danger { color: var(--status-danger); }
+button.danger:hover:not(:disabled) { border-color: var(--status-danger); }
+button.danger.solid { border-color: var(--status-danger); background-color: var(--status-danger); color: var(--text-on-fill); }
+button.danger.solid:hover:not(:disabled) { opacity: 0.85; }
 
 /* Flat weight: repeated row actions, with no border until hover. */
-.row-actions button, .row-actions .button, .toast button {
+.row-actions button, .row-actions .button {
   height: var(--row-height);
   padding: var(--space-3) var(--space-4);
   border-color: transparent;
@@ -124,13 +125,21 @@ button.link {
   text-underline-offset: 2px;
 }
 
-/* An icon button is a square control holding a glyph. */
+/* An icon button is a flat row-high square holding a glyph, bordered only while pointed at. */
 button.icon {
   justify-content: center;
-  width: var(--icon-button-size);
+  width: var(--row-height);
+  height: var(--row-height);
   padding: 0;
-  font-size: var(--icon-size-small);
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: 18px;
+  line-height: 1;
 }
+button.icon:hover:not(:disabled) { border-color: var(--border-default); color: var(--text-heading); }
+/* A close, clear or remove button turns the danger color while pointed at. */
+button.icon.remove:hover:not(:disabled) { color: var(--status-danger); }
 
 /* ── Fields — hairline at rest, accent on interaction (§6.2) ──────────────── */
 
@@ -153,7 +162,8 @@ input:not([type="checkbox"]):not([type="radio"]):focus, textarea:focus {
   outline-offset: 0;
 }
 input::placeholder, textarea::placeholder { color: var(--text-tertiary); opacity: 1; }
-input[type="checkbox"], input[type="radio"] { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+input[type="checkbox"], input[type="radio"] { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+input[type="search"]::-webkit-search-cancel-button { appearance: none; }
 input.filter { min-width: 220px; }
 /* A search box is a form with its field and submit button side by side, filling the room it is given. */
 .search-box { display: flex; flex: 1; align-items: center; gap: var(--space-2); min-width: 0; margin: 0; }
@@ -165,7 +175,6 @@ input.filter { min-width: 220px; }
 input[readonly] { background-color: var(--surface-secondary); color: var(--text-secondary); }
 textarea {
   height: auto;
-  min-height: 80px;
   line-height: var(--line-height-body);
   resize: none;
 }
@@ -173,11 +182,11 @@ textarea {
 /* A select is a field like a text input, with the accent on its border while pointed at or open. */
 select { padding: 0 var(--space-4); cursor: pointer; }
 select:hover { border-color: var(--border-focus); }
-select:focus-visible { border-color: var(--border-focus); outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: 0; }
+select:focus { border-color: var(--border-focus); outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: 0; }
 select option { background-color: var(--surface-default); color: var(--text-body); }
 
 .field { display: inline-flex; flex-direction: column; gap: var(--space-2); }
-.field-label { font-size: var(--text-caption); font-weight: 500; color: var(--text-secondary); line-height: var(--line-height-ui); }
+.field-label { color: var(--text-secondary); font-size: var(--text-label); font-weight: 600; line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; }
 .check { display: inline-flex; align-items: center; gap: var(--space-3); font-size: var(--text-control); }
 
 /* A seek or volume slider is a thin track filled with the accent up to a ringed knob. */
@@ -237,10 +246,14 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
 /* Frame buttons hover with the frame's own fill and keep no border. */
 .topbar button {
   border-color: transparent;
-  color: var(--text-on-navigation);
+  background-color: transparent;
+  color: var(--text-body);
   transition: background-color var(--duration-fast), color var(--duration-fast);
 }
 .topbar button:hover:not(:disabled) { border-color: transparent; background-color: var(--surface-navigation-hover); color: var(--text-heading); }
+/* A button in the top bar's own form, such as the search bar's, keeps the default bordered look in quiet text. */
+.topbar form > button { border-color: var(--border-default); background-color: var(--surface-default); color: var(--text-secondary); font-size: var(--text-caption); }
+.topbar form > button:hover:not(:disabled) { border-color: var(--accent); background-color: var(--surface-default); color: var(--text-secondary); }
 
 .menu-button { display: none; }
 #theme { margin-left: auto; }
@@ -264,10 +277,12 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
   flex-direction: column;
   gap: var(--border-width);
   height: calc(100vh - var(--frame-height));
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-6) var(--space-4) 0;
   border-right: var(--border-width) solid var(--border-default);
   background-color: var(--surface-navigation);
 }
+/* The app's name heads the sidebar when the top bar is given over to its tools. */
+.sidebar-brand { flex: none; margin-bottom: var(--space-5); padding: 0 var(--space-4); color: var(--text-heading); font-size: var(--text-h3); font-weight: 600; line-height: var(--line-height-ui); text-decoration: none; }
 .sidebar > a {
   min-height: var(--row-height);
   padding: var(--space-3) var(--space-4);
@@ -286,7 +301,9 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
 /* The sidebar's grab bar runs down its right edge, and the width it sets reaches the grid through --sidebar-width. */
 .sidebar > .sidebar-resize { position: absolute; top: 0; right: 0; bottom: 0; }
 /* The sidebar's own content, in place of its section links, scrolls by itself and keeps its own look. */
-.sidebar-content { display: flex; flex: 1; flex-direction: column; gap: var(--space-4); min-height: 0; overflow: auto; }
+.sidebar-content { display: flex; flex: 1; flex-direction: column; gap: var(--space-5); min-height: 0; overflow: auto; }
+/* A tree in the sidebar holds its sections at the top level, each set off from the one above by a rule. */
+.sidebar ul.tree > .tree-item + .tree-item { margin-top: var(--space-5); padding-top: var(--space-5); border-top: var(--border-width) solid var(--border-default); }
 
 /* The content pane: the one raised surface, flush against the frame. */
 main {
@@ -298,6 +315,37 @@ main {
   outline: none;
 }
 .page { max-width: 1280px; margin: 0 auto; display: grid; gap: var(--space-6); }
+
+/* A main pane with a side pane docked to the window's right edge, such as a picked item's details; each scrolls by itself. */
+main.with-side-pane { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) var(--side-pane-width, 360px); padding: 0; }
+main.with-side-pane > .main-pane { min-width: 0; padding: 28px var(--space-8) 80px; }
+.side-pane {
+  position: sticky;
+  top: var(--frame-height);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+  height: calc(100vh - var(--frame-height));
+  padding: var(--space-6);
+  overflow-y: auto;
+  border-left: var(--border-width) solid var(--border-default);
+  background-color: var(--surface-secondary);
+}
+/* The side pane's grab bar runs down its left edge. */
+.side-pane > .resize-handle { position: absolute; top: 0; bottom: 0; left: 0; }
+
+/* A contained page keeps the window still: only main, or its panes beside a side pane, scroll. */
+body.contained { height: 100vh; overflow: hidden; }
+body.contained .layout { grid-template-rows: minmax(0, 1fr); height: calc(100vh - var(--frame-height)); min-height: 0; }
+body.contained .sidebar { position: static; height: auto; }
+body.contained main { min-height: 0; overflow-y: auto; }
+body.contained main.with-side-pane { grid-template-rows: minmax(0, 1fr); overflow: hidden; }
+body.contained main.with-side-pane > .main-pane { overflow-y: auto; }
+body.contained .side-pane { position: relative; top: auto; align-self: stretch; height: auto; }
+body.contained .table-wrap.sticky-head thead th, body.contained .table-wrap.sticky-head > .table-tools { top: 0; }
+body.contained.has-status-bar .layout { height: calc(100vh - var(--frame-height) - var(--row-height)); }
 
 /* The status bar is one frame row along the foot of the window, and the frame above makes room for it. */
 .status-bar {
@@ -515,10 +563,12 @@ a.tile:hover { border-top-color: var(--border-hover); border-right-color: var(--
 
 .plain-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
 
-/* A dragged list row's landing place is a line above or below the row under it, or a tint when it drops inside. */
-.drop-before:not(tr, th) { box-shadow: inset 0 2px 0 var(--accent); }
-.drop-after:not(tr, th) { box-shadow: inset 0 -2px 0 var(--accent); }
-.drop-inside:not(tr, th) { background-color: color-mix(in srgb, var(--accent) 15%, transparent); outline: var(--border-width) solid var(--accent); outline-offset: -1px; }
+/* A dragged list row's landing place is a line above or below the row under it, or a ring when it drops inside; the line is its own layer, so no row fill or bar hides it. */
+:is(.drop-before, .drop-after):not(tr, th) { position: relative; }
+:is(.drop-before, .drop-after):not(tr, th)::after { content: ""; position: absolute; right: 0; left: 0; z-index: 1; height: 2px; background-color: var(--accent); pointer-events: none; }
+.drop-before:not(tr, th)::after { top: 0; }
+.drop-after:not(tr, th)::after { bottom: 0; }
+.drop-inside:not(tr, th) { outline: 2px solid var(--accent); outline-offset: -2px; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-5); }
 .card {
@@ -632,7 +682,7 @@ button.card { width: 100%; height: auto; font-weight: 400; line-height: var(--li
 
 /* The tree widget is a list of rows that fold, take a selection and accept dropped rows. */
 ul.tree, ul.tree-children { display: block; margin: 0; padding: 0; list-style: none; }
-ul.tree-children { margin-left: var(--space-5); padding-left: var(--space-2); }
+ul.tree-children { margin-left: var(--space-5); padding-left: var(--space-2); border-left: 0; }
 .tree-item { outline: none; }
 .tree-row {
   display: flex;
@@ -647,10 +697,11 @@ ul.tree-children { margin-left: var(--space-5); padding-left: var(--space-2); }
 }
 .tree-row:hover { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
 .tree-item:focus-visible > .tree-row { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: -1px; }
-/* A picked row is a raised card, and a solid accent fill while the tree has focus. */
+/* A picked row is a raised card. */
 .tree-item[aria-selected="true"] > .tree-row { background-color: var(--surface-default); color: var(--text-heading); box-shadow: var(--shadow-item); font-weight: 500; }
-.tree:focus-within .tree-item[aria-selected="true"] > .tree-row { background-color: var(--accent); color: var(--text-on-fill); box-shadow: none; }
 .tree-item[aria-selected="true"] > .tree-row .tree-toggle { color: inherit; }
+/* A row's own buttons fit inside it, so they never make the row taller. */
+.tree-row button.icon { width: calc(var(--row-height) - var(--space-2)); height: calc(var(--row-height) - var(--space-2)); font-size: var(--icon-size-small); }
 .tree-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tree-extra { display: flex; flex: none; align-items: center; gap: var(--space-2); color: var(--text-tertiary); font-size: var(--text-caption); }
 .tree-item[aria-selected="true"] > .tree-row .tree-extra { color: inherit; }
@@ -672,9 +723,6 @@ button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
 
 /* A dragged row fades, and a line or fill shows where it will land. */
 .tree-row.dragging { opacity: 0.5; }
-.tree-row.drop-before { box-shadow: inset 0 2px 0 var(--accent); }
-.tree-row.drop-after { box-shadow: inset 0 -2px 0 var(--accent); }
-.tree-row.drop-inside { background-color: color-mix(in srgb, var(--accent) 15%, transparent); outline: var(--border-width) solid var(--accent); outline-offset: -1px; }
 
 /* The badge a drag shows under the pointer, drawn off screen where the browser takes its picture. */
 .drag-badge {
@@ -683,7 +731,7 @@ button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
   left: 0;
   z-index: var(--layer-tooltip);
   padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-small);
+  border-radius: var(--radius-default);
   background-color: var(--accent);
   color: var(--text-on-fill);
   font-size: var(--text-control);
@@ -754,7 +802,8 @@ button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
 label.setting-row { cursor: pointer; }
 .setting-text { display: flex; flex: 1; flex-direction: column; gap: var(--space-1); min-width: 0; }
 .setting-label { color: var(--text-heading); font-size: var(--text-control); font-weight: 500; }
-.setting-hint { color: var(--text-tertiary); font-size: var(--text-caption); }
+.setting-hint { margin: 0; color: var(--text-tertiary); font-size: var(--text-caption); }
+.setting-text .path { font-family: var(--font-family-monospace); }
 .setting-row > button, .setting-row > select, .setting-row > .segmented { flex: none; }
 .setting-row > .row-actions { flex: none; flex-wrap: nowrap; }
 
@@ -762,26 +811,27 @@ label.setting-row { cursor: pointer; }
 .date-time-field { max-width: 100%; }
 .date-time-inputs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 .date-time-inputs > input { flex: 1 1 120px; min-width: 0; }
+.date-time-inputs > input[type="time"] { flex: 0 0 96px; }
 .date-time-inputs > button { flex: none; }
 
 /* Colour swatches are round radios ringed when picked, beside the system chooser for any other colour. */
 .color-picker { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 .color-swatch {
-  width: calc(var(--icon-size-small) + 2 * var(--space-2));
-  height: calc(var(--icon-size-small) + 2 * var(--space-2));
-  padding: var(--space-1);
+  width: 22px;
+  height: 22px;
+  padding: 0;
   border: 2px solid transparent;
   border-radius: 50%;
   background-color: var(--swatch-color);
   background-clip: content-box;
 }
 .color-swatch:hover:not(:disabled) { border-color: var(--border-hover); }
-.color-swatch.none { border-color: var(--border-control); background-image: linear-gradient(135deg, transparent 44%, var(--border-control) 44%, var(--border-control) 56%, transparent 56%); }
+.color-swatch.none { border-color: var(--border-control); background-image: linear-gradient(135deg, transparent 45%, var(--border-control) 45%, var(--border-control) 55%, transparent 55%); }
 .color-swatch[aria-checked="true"], .color-swatch[aria-checked="true"]:hover:not(:disabled) { border-color: var(--text-heading); }
 .color-picker > input.color-custom[type="color"] {
-  width: calc(var(--icon-size-small) + 2 * var(--space-2) + var(--space-4));
-  height: calc(var(--icon-size-small) + 2 * var(--space-2));
-  padding: var(--space-1);
+  width: 30px;
+  height: 24px;
+  padding: 0 var(--space-1);
   border: 2px solid transparent;
   border-radius: var(--radius-small);
   background-color: transparent;
@@ -793,9 +843,31 @@ label.setting-row { cursor: pointer; }
 .color-custom::-webkit-color-swatch-wrapper { padding: 0; }
 .color-custom::-webkit-color-swatch { border: none; border-radius: 2px; }
 
-/* A tree select shows each choice's whole path on hover, so its closed face only shortens a long name. */
+/* A tree select opens a card of indented rows, and its closed face shows the picked choice's whole path. */
 select.tree-select { min-width: 0; max-width: 100%; text-overflow: ellipsis; }
 select.tree-select option:disabled { color: var(--text-tertiary); }
+select.tree-select, select.tree-select::picker(select) { appearance: base-select; }
+select.tree-select { display: flex; align-items: center; }
+select.tree-select > button { display: contents; }
+select.tree-select::picker-icon { margin-left: auto; color: var(--text-tertiary); }
+select.tree-select::picker(select) {
+  max-height: 320px;
+  padding: var(--space-1);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-default);
+  background-color: var(--surface-default);
+  box-shadow: var(--shadow-card);
+}
+select.tree-select option {
+  min-height: var(--row-height);
+  padding: 0 var(--space-4) 0 calc(var(--space-4) + var(--depth, 0) * var(--space-6));
+  border-radius: var(--radius-small);
+  color: var(--text-body);
+}
+select.tree-select option:hover, select.tree-select option:focus-visible { background-color: var(--surface-navigation-hover); color: var(--text-heading); outline: none; }
+select.tree-select option:checked { color: var(--accent); font-weight: 600; }
+select.tree-select option .tree-option-path, select.tree-select selectedcontent .tree-option-name { display: none; }
+select.tree-select selectedcontent .tree-option-path { display: inline; }
 
 /* ── Check lists, output and events ───────────────────────────────────────── */
 
@@ -829,6 +901,8 @@ select.tree-select option:disabled { color: var(--text-tertiary); }
 /* A scrolling or virtual table scrolls inside its own box under headings that stay put, and a virtual one's spacer rows stay blank. */
 .table-wrap:is(.scroll, .virtual) { min-height: 0; overflow: auto; }
 .table-wrap:is(.scroll, .virtual) thead th { position: sticky; top: 0; z-index: 1; }
+/* The vertical scrollbar starts below the headings instead of running up beside them. */
+.table-wrap:is(.scroll, .virtual)::-webkit-scrollbar-track:vertical { margin-top: var(--table-header-height); }
 /* A table that scrolls with the page keeps its headings under the top bar. */
 .table-wrap.sticky-head { overflow: visible; }
 .table-wrap.sticky-head thead th { position: sticky; top: var(--frame-height); z-index: 1; }
@@ -843,6 +917,10 @@ th {
   line-height: var(--line-height-ui);
   white-space: nowrap;
 }
+/* Column headings sit in one band with a line between each, and every row is tall enough for its row button. */
+thead th { height: var(--table-header-height); border-bottom: none; }
+thead th:not(:last-child) { border-right: var(--border-width) solid var(--border-default); }
+tbody td { height: calc(var(--row-height) + 2 * var(--cell-padding-y)); }
 tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover td { background-color: var(--surface-secondary); }
 th .sort {
@@ -853,60 +931,84 @@ th .sort {
   color: inherit;
   font: inherit;
 }
-th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--text-heading); }
+th .sort:hover, th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--text-heading); }
 .number { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .actions-cell { text-align: right; }
 .row-actions { display: inline-flex; gap: var(--space-1); justify-content: flex-end; flex-wrap: wrap; }
 /* While rows are picked, a bar floats at the foot of the page with their count and actions. */
 .selection-bar {
   position: fixed;
-  bottom: var(--space-6);
+  bottom: var(--space-5);
   left: 50%;
   z-index: var(--layer-sticky);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
+  width: max-content;
   max-width: calc(100vw - 2 * var(--space-6));
   padding: var(--space-2);
-  border: var(--border-width) solid var(--border-default);
+  border: var(--border-width) solid var(--accent);
   border-radius: var(--radius-default);
   background-color: var(--surface-default);
-  box-shadow: var(--shadow-floating);
+  box-shadow: var(--shadow-card);
   font-size: var(--text-control);
   transform: translateX(-50%);
 }
-.selection-count { padding: 0 var(--space-4) 0 var(--space-2); color: var(--text-heading); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.selection-divider { align-self: stretch; width: var(--border-width); margin: var(--space-2) var(--space-1); background-color: var(--border-default); }
-body.has-status-bar .selection-bar { bottom: calc(var(--row-height) + var(--space-6)); }
-body:has(.selection-bar) .toasts { bottom: calc(2 * var(--space-6) + var(--control-height) + var(--space-4)); }
-body.has-status-bar .toasts { bottom: calc(var(--row-height) + var(--space-6)); }
-body.has-status-bar:has(.selection-bar) .toasts { bottom: calc(var(--row-height) + 2 * var(--space-6) + var(--control-height) + var(--space-4)); }
+/* The bar's actions are flat until pointed at, the danger one in its color only. */
+.selection-bar button { border-color: transparent; }
+.selection-bar button:hover:not(:disabled) { border-color: transparent; background-color: var(--surface-navigation-hover); }
+.selection-bar button.danger, .selection-bar button.danger:hover:not(:disabled) { border-color: transparent; color: var(--status-danger); }
+.selection-count { padding: 0 var(--space-4) 0 var(--space-2); color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; cursor: help; }
+.selection-divider { align-self: stretch; width: var(--border-width); margin: var(--space-2); background-color: var(--border-default); }
+body.has-status-bar .selection-bar { bottom: calc(var(--row-height) + var(--space-5)); }
+body:has(.selection-bar) .toasts { bottom: calc(var(--space-5) + var(--control-height) + var(--space-6)); }
+body.has-status-bar .toasts { bottom: calc(var(--row-height) + var(--space-5)); }
+body.has-status-bar:has(.selection-bar) .toasts { bottom: calc(var(--row-height) + var(--space-5) + var(--control-height) + var(--space-6)); }
 .pager { display: flex; gap: var(--space-5); align-items: center; justify-content: center; margin-top: var(--space-5); font-size: var(--text-control); }
-.table-tools { display: flex; gap: var(--space-4); align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+/* The Columns and Clear buttons sit over the heading band's right end and stay there while the table scrolls sideways. */
+.table-wrap > .table-tools { position: sticky; top: 0; left: 0; z-index: 2; display: flex; justify-content: flex-end; height: 0; pointer-events: none; }
+.table-wrap.sticky-head > .table-tools { top: var(--frame-height); }
+.table-tools-inner {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--table-header-height);
+  padding: 0 var(--space-5) 0 var(--space-2);
+  border-top-right-radius: var(--radius-default);
+  background-color: var(--surface-secondary);
+  pointer-events: auto;
+}
+.table-tools-inner button { height: 22px; padding: 0 var(--space-4); font-size: var(--text-label); }
+.table-tools-inner button.icon { width: 20px; height: 20px; padding: 0; color: var(--text-secondary); }
+.table-tools-inner svg { fill: currentColor; }
 
 /* A header cell holds its sort button, a filter button and a grab bar on its right edge. */
 th { position: relative; }
 th[draggable="true"] { cursor: grab; }
 th > .column-resize { position: absolute; top: 0; right: 0; bottom: 0; }
-th.filtered { color: var(--text-heading); }
-.sort-marker { white-space: nowrap; }
-.sort-rank { margin-left: 1px; font-size: 0.8em; line-height: 0; }
+.sort-marker { font-size: 9px; white-space: nowrap; }
+.sort-rank { margin-left: 1px; font-size: 9px; line-height: 0; }
+/* A column's filter button waits for the pointer, and stays while the column is filtered or its filter is open. */
 th .filter-button {
-  width: auto;
-  height: auto;
+  width: 20px;
+  height: 20px;
   margin-left: var(--space-2);
-  padding: var(--space-1);
-  border-color: transparent;
+  padding: 0;
+  border: 0;
   color: var(--text-tertiary);
   vertical-align: middle;
+  visibility: hidden;
 }
-th .filter-button:hover:not(:disabled) { border-color: var(--border-default); color: var(--text-heading); }
-th .filter-button.active { color: var(--accent); }
-th .filter-button.active:hover:not(:disabled) { border-color: var(--accent); }
+th .filter-button:hover:not(:disabled) { color: var(--text-heading); }
+th:hover .filter-button, th .filter-button:focus-visible, th .filter-button[aria-expanded="true"], th .filter-button.active { visibility: visible; }
+th .filter-button.active, th .filter-button.active:hover:not(:disabled) { color: var(--accent); }
+@media (hover: none) { th .filter-button { visibility: visible; } }
 
 /* A dragged column fades, and a line on the near edge of another shows where it will land. */
-th.dragged { opacity: 0.5; }
+th.dragged { opacity: 0.4; }
 th.drop-before { box-shadow: inset 2px 0 0 var(--accent); }
 th.drop-after { box-shadow: inset -2px 0 0 var(--accent); }
 
@@ -920,10 +1022,10 @@ tbody tr.group-row > th {
   font-size: var(--text-control);
 }
 
-/* A dragged row's landing place is a line above or below it, or a tint when it drops inside. */
+/* A dragged row's landing place is a line above or below it, or a ring when it drops inside. */
 tbody tr.drop-before > td { box-shadow: inset 0 2px 0 var(--accent); }
 tbody tr.drop-after > td { box-shadow: inset 0 -2px 0 var(--accent); }
-tbody tr.drop-inside > td { background-color: color-mix(in srgb, var(--accent) 15%, transparent); }
+tbody tr.drop-inside { outline: 2px solid var(--accent); outline-offset: -2px; }
 
 /* A row's extra line, such as its notes, sits under it as one entry and lights with it. */
 tbody tr:has(+ tr.row-extra) > td { border-bottom: none; }
@@ -934,10 +1036,8 @@ tbody tr:hover + tr.row-extra > td, tbody tr:has(+ tr.row-extra:hover) > td { ba
 tbody tr.now-playing > td { background-color: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--text-heading); font-weight: 600; }
 tbody tr.now-playing > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 
-/* A picked row is one step darker than a hovered one, and filled with the accent while its table has focus. */
+/* A picked row is one step darker than a hovered one. */
 tbody tr[aria-selected="true"] > td { background-color: var(--row-selected); color: var(--text-heading); }
-table:focus-within tbody tr[aria-selected="true"] > td { background-color: var(--accent); color: var(--text-on-fill); }
-table:focus-within tbody tr[aria-selected="true"] > td :is(.muted, a, .rating .star, .row-actions button) { color: inherit; }
 
 /* A star rating lights its stars with the accent, and hovering previews the rating up to the pointer. */
 .rating { display: inline-flex; align-items: center; gap: var(--border-width); vertical-align: middle; }
@@ -960,14 +1060,14 @@ table:focus-within tbody tr[aria-selected="true"] > td :is(.muted, a, .rating .s
 .rating.read-only .star { cursor: default; }
 .rating.read-only .star:disabled { opacity: 1; }
 
-td.tree-cell { padding-inline-start: calc(var(--space-5) + var(--tree-depth, 0) * var(--space-6)); white-space: nowrap; }
-td.tree-cell > .tree-toggle, td.tree-cell > .tree-spacer { margin-right: var(--space-2); vertical-align: middle; }
+td.tree-cell { padding-inline-start: calc(var(--space-5) + var(--tree-depth, 0) * (var(--space-7) + var(--space-2))); white-space: nowrap; }
+td.tree-cell > .tree-toggle, td.tree-cell > .tree-spacer { width: var(--space-7); height: var(--space-7); margin-right: var(--space-2); vertical-align: middle; }
 /* An app's block wrapping the cell's words stays on the arrow's line and shortens instead of wrapping under it. */
-td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-items: center; min-width: 0; max-width: calc(100% - var(--space-6) - var(--space-2)); overflow: hidden; vertical-align: middle; }
+td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-items: center; min-width: 0; max-width: calc(100% - var(--space-7) - var(--space-2)); overflow: hidden; vertical-align: middle; }
 .tree-count {
   display: inline-flex;
   margin-left: var(--space-3);
-  padding: 0 var(--space-3);
+  padding: var(--space-1) var(--space-4);
   border-radius: var(--radius-small);
   background-color: var(--surface-secondary);
   color: var(--text-secondary);
@@ -985,7 +1085,7 @@ td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-it
 .skeleton-line { height: 14px; border-radius: var(--radius-small); background-color: var(--border-default); animation: pulse 1.4s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: 0.45; } }
 
-.empty { padding: var(--space-7) var(--space-4); text-align: center; font-size: var(--text-control); }
+.empty { color: var(--text-tertiary); text-align: center; font-size: var(--text-control); }
 .empty p { margin: var(--space-2) 0; }
 .empty-title { font-weight: 600; color: var(--text-heading); }
 /* A pending region has not been asked for anything yet, so it waits quietly where its content will be. */
@@ -1020,8 +1120,8 @@ td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-it
 }
 .dialog.wide { width: min(900px, calc(100vw - 2 * var(--space-6))); }
 .dialog::backdrop { background-color: var(--surface-overlay); }
-/* Only the dialog's own title takes the header band, never a heading inside its body. */
-.dialog > h2, .dialog-header { padding: var(--space-5) var(--space-7); border-bottom: var(--border-width) solid var(--border-default); }
+/* A dialog is one card: its title, body and buttons share the card's padding with no bands between them. */
+.dialog > h2, .dialog-header { padding: var(--space-7) var(--space-7) 0; }
 .dialog-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); }
 .dialog-heading { display: grid; gap: var(--space-1); min-width: 0; }
 .dialog-heading h2 { overflow-wrap: anywhere; }
@@ -1032,7 +1132,9 @@ td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-it
 .dialog.full { width: calc(100vw - 2 * var(--space-7)); max-width: none; height: calc(100vh - 2 * var(--space-7)); max-height: none; }
 .dialog.full[open] { display: flex; flex-direction: column; }
 .dialog.full > .dialog-body, .dialog.full > .dialog-form > .dialog-body { flex: 1; min-height: 0; overflow: auto; }
-.dialog-body { padding: var(--space-7); }
+.dialog-body { padding: var(--space-5) var(--space-7) 0; }
+.dialog-body:first-child, .dialog-form:first-child > .dialog-body { padding-top: var(--space-7); }
+.dialog-body:last-child { padding-bottom: var(--space-7); }
 /* A tab strip at the top of a full dialog's body runs edge to edge and stays put while the body scrolls. */
 .dialog.full .dialog-body:has(> .tabs:first-child) { padding-top: 0; }
 .dialog.full .dialog-body > .tabs:first-child { position: sticky; top: 0; z-index: var(--layer-sticky); display: flex; margin: 0 calc(-1 * var(--space-7)) var(--space-5); padding: var(--space-5) var(--space-7) var(--space-4); background-color: var(--surface-default); }
@@ -1045,8 +1147,7 @@ td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-it
   display: flex;
   gap: var(--space-4);
   justify-content: flex-end;
-  padding: var(--space-5) var(--space-7);
-  border-top: var(--border-width) solid var(--border-default);
+  padding: var(--space-6) var(--space-7) var(--space-7);
 }
 .type-confirm { display: grid; gap: var(--space-3); margin-top: var(--space-5); }
 
@@ -1061,34 +1162,33 @@ td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-it
 .list-picker-new input { flex: 1; min-width: 0; }
 
 /* Transient overlays belong to the frame and float above the page. */
-.toasts { position: fixed; right: var(--space-6); bottom: var(--space-6); z-index: var(--layer-toast); display: grid; gap: var(--space-4); max-width: min(420px, calc(100vw - 2 * var(--space-6))); }
+/* Toasts sit at the foot of the window, centred, until they are acted on or time out. */
+.toasts { position: fixed; bottom: var(--space-5); left: 50%; z-index: var(--layer-toast); display: grid; justify-items: center; gap: var(--space-4); max-width: calc(100vw - 2 * var(--space-6)); transform: translateX(-50%); }
 .toast {
   display: flex;
-  gap: var(--space-5);
+  gap: var(--space-4);
   align-items: center;
-  padding: var(--space-5);
-  border-left: 3px solid var(--status-info);
+  max-width: 100%;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border: var(--border-width) solid var(--border-default);
   border-radius: var(--radius-default);
-  background-color: var(--surface-navigation);
-  color: var(--text-heading);
-  box-shadow: var(--shadow-floating);
+  background-color: var(--surface-default);
+  color: var(--text-body);
+  box-shadow: var(--shadow-card);
   font-size: var(--text-control);
-  animation: toast-in var(--duration-slow) ease-out;
 }
-@keyframes toast-in { from { opacity: 0; transform: translateY(6px); } }
-.toast span { flex: 1; overflow-wrap: anywhere; }
-.toast.tone-good { border-left-color: var(--status-success); }
-.toast.tone-warn { border-left-color: var(--status-warning); }
-.toast.tone-bad { border-left-color: var(--status-danger); }
-.toast button.icon { width: var(--row-height); padding: 0; color: inherit; }
-.toast button.toast-action { flex: none; color: var(--accent); font-weight: 600; }
+.toast span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toast.tone-good { border-left: 3px solid var(--status-success); }
+.toast.tone-warn { border-left: 3px solid var(--status-warning); }
+.toast.tone-bad { border-left: 3px solid var(--status-danger); }
+.toast button.toast-action { flex: none; color: var(--accent); }
 
 /* ── Menus and popovers ───────────────────────────────────────────────────── */
 
 .menu, .popover {
   position: fixed;
   z-index: var(--layer-menu);
-  max-height: calc(100vh - 2 * var(--space-4));
+  max-height: calc(100vh - var(--space-4));
   overflow-y: auto;
   padding: var(--space-1);
   border: var(--border-width) solid var(--border-default);
@@ -1097,7 +1197,7 @@ td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-it
   box-shadow: var(--shadow-card);
   font-size: var(--text-control);
 }
-.menu { min-width: 180px; margin: 0; list-style: none; outline: none; }
+.menu { min-width: 160px; margin: 0; list-style: none; outline: none; }
 /* A native popover is centred by default, so a menu or popover opened at a point drops that and takes its own place. */
 .menu[popover], .popover[popover] { inset: auto; margin: 0; color: var(--text-body); }
 /* An anchored popover hangs below its anchor, flipping above or across where there is no room. */
@@ -1229,27 +1329,33 @@ body.resizing.vertical { cursor: row-resize; }
   .columns { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 768px) {
-  .menu-button { display: inline-flex; }
-  .layout { grid-template-columns: minmax(0, 1fr); }
+/* On a phone the sidebar slides out under the top bar as a drawer, and a side pane covers the whole screen. */
+@media (max-width: 700px) {
+  .topbar .menu-button { display: inline-flex; flex: none; width: auto; padding: 0 var(--space-4); border-color: var(--border-default); background-color: var(--surface-default); color: var(--text-body); font-size: 18px; }
+  .layout { position: relative; grid-template-columns: minmax(0, 1fr); }
   .sidebar {
     position: fixed;
-    top: 0;
+    top: var(--frame-height);
     left: 0;
     bottom: 0;
     z-index: var(--layer-menu);
-    width: var(--sidebar-width);
-    height: 100vh;
+    width: min(85vw, 320px);
+    height: auto;
     transform: translateX(-100%);
-    transition: transform var(--duration-slow) ease-out;
+    transition: transform var(--duration-fast);
     visibility: hidden;
   }
-  body.menu-open .sidebar { transform: none; visibility: visible; box-shadow: var(--shadow-floating); }
-  .sidebar > .sidebar-resize { display: none; }
-  body.has-status-bar .sidebar { height: 100vh; }
+  body.menu-open .sidebar { transform: none; visibility: visible; box-shadow: var(--shadow-card); }
+  .scrim { top: var(--frame-height); }
+  .sidebar > .sidebar-resize, .side-pane > .resize-handle { display: none; }
+  body.has-status-bar .sidebar { height: auto; }
+  body.contained .sidebar { position: fixed; height: auto; }
   .account-link { display: none; }
-  main { padding: var(--space-6) var(--space-6) var(--space-8); }
-  .topbar { height: auto; min-height: var(--frame-height); gap: var(--space-2); padding: var(--space-2) var(--space-4); flex-wrap: wrap; }
+  main { padding: var(--space-6) var(--space-5) 80px; }
+  main.with-side-pane { grid-template-columns: minmax(0, 1fr); }
+  main.with-side-pane > .main-pane { padding: var(--space-6) var(--space-5) 80px; }
+  .side-pane, body.contained .side-pane { position: absolute; inset: 0; z-index: var(--layer-sticky); height: auto; border-left: 0; }
+  .topbar { height: auto; min-height: var(--frame-height); gap: var(--space-4); padding: var(--space-4); flex-wrap: wrap; }
   .brand { padding: 0 var(--space-4); }
   #theme { margin-left: auto; }
 }
@@ -1261,7 +1367,7 @@ body.resizing.vertical { cursor: row-resize; }
   table.responsive, table.responsive tbody, table.responsive tr, table.responsive td { display: block; width: 100%; }
   table.responsive tr { padding: var(--space-4) var(--space-5); border-bottom: var(--border-width) solid var(--border-default); }
   table.responsive tr:last-child { border-bottom: none; }
-  table.responsive td { display: flex; justify-content: space-between; gap: var(--space-5); padding: var(--space-1) 0; border: none; text-align: right; }
+  table.responsive td { display: flex; justify-content: space-between; gap: var(--space-5); height: auto; padding: var(--space-1) 0; border: none; text-align: right; }
   table.responsive tbody tr:hover td { background-color: transparent; }
   table.responsive td::before { content: attr(data-label); color: var(--text-secondary); text-align: left; }
   table.responsive td[data-label=""]::before { content: none; }
@@ -1277,13 +1383,10 @@ body.resizing.vertical { cursor: row-resize; }
   table.responsive tr:is(.drop-before, .drop-after, .now-playing) > td { box-shadow: none; }
   table.responsive tr.drop-before { box-shadow: inset 0 2px 0 var(--accent); }
   table.responsive tr.drop-after { box-shadow: inset 0 -2px 0 var(--accent); }
-  table.responsive tr:is(.drop-inside, .now-playing) > td { background-color: transparent; }
-  table.responsive tr.drop-inside { background-color: color-mix(in srgb, var(--accent) 15%, transparent); }
+  table.responsive tr.now-playing > td { background-color: transparent; }
   table.responsive tr.now-playing { background-color: color-mix(in srgb, var(--accent) 15%, transparent); box-shadow: inset 3px 0 0 var(--accent); }
-  table.responsive tr[aria-selected="true"] > td, table.responsive:focus-within tr[aria-selected="true"] > td { background-color: transparent; }
+  table.responsive tr[aria-selected="true"] > td { background-color: transparent; }
   table.responsive tr[aria-selected="true"] { background-color: var(--row-selected); }
-  table.responsive:focus-within tr[aria-selected="true"] { background-color: var(--accent); }
-  table.responsive:focus-within tr[aria-selected="true"] > td::before { color: inherit; }
   .dialog.full { width: 100vw; height: 100vh; border: none; border-radius: 0; }
   .form-row { grid-template-columns: 1fr; }
   .form-row label { padding-top: 0; }
