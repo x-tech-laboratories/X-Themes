@@ -90,6 +90,7 @@
     /* Interaction */
     --accent: @accent;
     --focus-ring: @focus-ring;
+    --row-selected: color-mix(in srgb, var(--accent) 22%, transparent);
 
     /* Data series — the lines of one chart, told apart by lightness as well as hue */
     --series-1: var(--accent);

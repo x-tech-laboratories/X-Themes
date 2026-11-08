@@ -88,6 +88,7 @@
     /* Interaction */
     --accent: #2563eb;
     --focus-ring: rgba(37, 99, 235, 0.15);
+    --row-selected: color-mix(in srgb, var(--accent) 22%, transparent);
 
     /* Data series — the lines of one chart, told apart by lightness as well as hue */
     --series-1: var(--accent);
