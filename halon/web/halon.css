@@ -559,6 +559,82 @@ button.card { width: 100%; height: auto; font-weight: 400; line-height: var(--li
 .card dt { color: var(--text-secondary); }
 .card dd { margin: 0; }
 
+/* ── Avatars and media tiles ──────────────────────────────────────────────── */
+
+/* An avatar is a round picture, or the name's first letter on a quiet disc when there is none. */
+.avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--surface-secondary);
+  font-size: var(--text-control);
+  object-fit: cover;
+  vertical-align: middle;
+}
+.avatar-small { width: 24px; height: 24px; font-size: var(--text-label); }
+.avatar-large { width: 72px; height: 72px; font-size: var(--text-h2); }
+.avatar-initial { color: var(--accent); font-weight: 700; line-height: 1; }
+
+/* Tiles fill the width in columns, each a picture with its title and lines under it. */
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: var(--space-7) var(--space-6); }
+.media-tile { position: relative; display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; transition: opacity var(--duration-fast); }
+/* A dimmed tile, such as one already watched, fades until it is pointed at or focused. */
+.media-tile.dimmed { opacity: 0.45; }
+.media-tile.dimmed:hover, .media-tile.dimmed:focus-within { opacity: 1; }
+/* The picture is wide by default, and a page sets --media-aspect for square covers. */
+.media-picture {
+  position: relative;
+  display: block;
+  aspect-ratio: var(--media-aspect, 16 / 9);
+  overflow: hidden;
+  border-radius: var(--radius-default);
+  background-color: var(--surface-secondary);
+}
+.media-picture img, .media-blank { display: block; width: 100%; height: 100%; object-fit: cover; }
+.media-corner {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-small);
+  background-color: color-mix(in srgb, var(--surface-navigation) 85%, transparent);
+  color: var(--text-heading);
+  font-size: var(--text-label);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-ui);
+}
+/* The words leave room on the right for the tile's buttons. */
+.media-text { display: grid; gap: var(--space-1); min-width: 0; }
+.media-tile:has(> .media-actions) > .media-text { padding-right: calc(var(--icon-button-size) + var(--space-2)); }
+.media-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--text-heading);
+  font-weight: 500;
+  line-height: var(--line-height-ui);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.media-title:hover { color: var(--accent); }
+.media-line { overflow: hidden; color: var(--text-secondary); font-size: var(--text-caption); text-overflow: ellipsis; white-space: nowrap; }
+.media-line a { color: inherit; text-decoration: none; }
+.media-line a:hover { color: var(--accent); }
+.media-actions { position: absolute; right: 0; bottom: 0; display: flex; gap: var(--space-1); }
+.media-lead { flex: none; min-width: 2ch; color: var(--text-secondary); font-size: var(--text-caption); font-variant-numeric: tabular-nums; text-align: right; }
+/* As rows, each tile is a line with its picture on the left and its words and buttons beside it. */
+.media-grid.media-rows { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+.media-rows .media-tile { flex-direction: row; align-items: center; gap: var(--space-5); }
+.media-rows .media-picture { flex: none; width: min(240px, 40%); }
+.media-rows .media-tile > .media-text { flex: 1; align-content: start; padding-right: 0; }
+.media-rows .media-actions { position: static; flex: none; }
+
 /* ── Trees ────────────────────────────────────────────────────────────────── */
 
 /* A long path breaks anywhere rather than widening its column. */
@@ -877,6 +953,11 @@ tbody tr:hover + tr.row-extra > td, tbody tr:has(+ tr.row-extra:hover) > td { ba
 tbody tr.now-playing > td { background-color: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--text-heading); font-weight: 600; }
 tbody tr.now-playing > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 
+/* A picked row is tinted with the accent, and filled with it while its table has focus. */
+tbody tr[aria-selected="true"] > td { background-color: color-mix(in srgb, var(--accent) 28%, transparent); color: var(--text-heading); }
+table:focus-within tbody tr[aria-selected="true"] > td { background-color: var(--accent); color: var(--text-on-fill); }
+table:focus-within tbody tr[aria-selected="true"] > td :is(.muted, a, .rating .star, .row-actions button) { color: inherit; }
+
 /* A star rating lights its stars with the accent, and hovering previews the rating up to the pointer. */
 .rating { display: inline-flex; align-items: center; gap: var(--border-width); vertical-align: middle; }
 .rating .star {
@@ -977,6 +1058,16 @@ td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
 }
 .type-confirm { display: grid; gap: var(--space-3); margin-top: var(--space-5); }
 
+/* The add-to-list dialog lists each list as a full-width button ticked once it holds the thing. */
+.list-picker-lists { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); margin-bottom: var(--space-6); }
+.list-picker-item { justify-content: flex-start; gap: var(--space-4); width: 100%; }
+.list-picker-item[aria-pressed="true"] { border-color: var(--status-success); color: var(--text-heading); }
+.list-picker-item[aria-pressed="true"]:disabled { opacity: 1; cursor: default; }
+.list-picker-tick { flex: none; width: 1ch; color: var(--status-success); font-weight: 700; }
+.list-picker-name { flex: 1; min-width: 0; overflow: hidden; text-align: left; text-overflow: ellipsis; }
+.list-picker-new { display: flex; gap: var(--space-4); }
+.list-picker-new input { flex: 1; min-width: 0; }
+
 /* Transient overlays belong to the frame and float above the page. */
 .toasts { position: fixed; right: var(--space-6); bottom: var(--space-6); z-index: var(--layer-toast); display: grid; gap: var(--space-4); max-width: min(420px, calc(100vw - 2 * var(--space-6))); }
 .toast {
@@ -1040,6 +1131,10 @@ td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
 .menu-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .menu-hint { flex: none; color: var(--text-tertiary); font-size: var(--text-label); }
 .menu-separator { height: var(--border-width); margin: var(--space-1) var(--space-2); background-color: var(--border-default); }
+
+/* A menu button over a card or link is flat on the page's fill until pointed at, like a row action. */
+button.menu-trigger { flex: none; border-color: transparent; background-color: var(--surface-default); color: var(--text-secondary); }
+button.menu-trigger:hover:not(:disabled) { border-color: var(--border-default); color: var(--text-heading); }
 
 /* ── Resize handles and splits ────────────────────────────────────────────── */
 
@@ -1127,6 +1222,10 @@ body.resizing.vertical { cursor: row-resize; }
   table.responsive tr:is(.drop-inside, .now-playing) > td { background-color: transparent; }
   table.responsive tr.drop-inside { background-color: color-mix(in srgb, var(--accent) 15%, transparent); }
   table.responsive tr.now-playing { background-color: color-mix(in srgb, var(--accent) 15%, transparent); box-shadow: inset 3px 0 0 var(--accent); }
+  table.responsive tr[aria-selected="true"] > td, table.responsive:focus-within tr[aria-selected="true"] > td { background-color: transparent; }
+  table.responsive tr[aria-selected="true"] { background-color: color-mix(in srgb, var(--accent) 28%, transparent); }
+  table.responsive:focus-within tr[aria-selected="true"] { background-color: var(--accent); }
+  table.responsive:focus-within tr[aria-selected="true"] > td::before { color: inherit; }
   .dialog.full { width: 100vw; height: 100vh; border: none; border-radius: 0; }
   .form-row { grid-template-columns: 1fr; }
   .form-row label { padding-top: 0; }
