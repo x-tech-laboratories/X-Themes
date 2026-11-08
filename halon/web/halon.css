@@ -27,12 +27,18 @@ code, pre { font-family: var(--font-family-monospace); font-size: var(--text-cap
 .muted { color: var(--text-secondary); }
 .small { font-size: var(--text-caption); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Scrollbars are thin rounded thumbs on a clear track. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background-color: transparent; }
+::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 5px; background: var(--border-hover) padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--text-tertiary); }
+
 /* A lone control in a grid or a column keeps its own width instead of stretching across. */
 .fit-content { justify-self: start; width: fit-content; }
 
 /* Density moves row heights and cell padding only, never the type or the controls (§4.4). */
 :root[data-density="compact"], .layout[data-density="compact"] { --row-height: 24px; --cell-padding-y: var(--space-2); }
-:root[data-density="normal"], .layout[data-density="normal"] { --row-height: 28px; --cell-padding-y: 9px; }
+:root[data-density="normal"], .layout[data-density="normal"] { --row-height: 28px; --cell-padding-y: var(--space-3); }
 :root[data-density="comfortable"], .layout[data-density="comfortable"] { --row-height: 36px; --cell-padding-y: var(--space-5); }
 
 .skip {
@@ -160,22 +166,15 @@ input[readonly] { background-color: var(--surface-secondary); color: var(--text-
 textarea {
   height: auto;
   min-height: 80px;
-  font-family: var(--font-family-monospace);
   line-height: var(--line-height-body);
-  resize: vertical;
+  resize: none;
 }
 
-/* A closed select is an action, so it reads as a ghost with accent text (§6.3). */
-select {
-  padding: 7px var(--space-4) 7px var(--space-5);
-  background-color: transparent;
-  color: var(--accent);
-  font-weight: 500;
-  cursor: pointer;
-}
-select:hover { opacity: 0.85; }
-select:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: 0; }
-select option { background-color: var(--surface-default); color: var(--text-body); font-weight: 400; }
+/* A select is a field like a text input, with the accent on its border while pointed at or open. */
+select { padding: 0 var(--space-4); cursor: pointer; }
+select:hover { border-color: var(--border-focus); }
+select:focus-visible { border-color: var(--border-focus); outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: 0; }
+select option { background-color: var(--surface-default); color: var(--text-body); }
 
 .field { display: inline-flex; flex-direction: column; gap: var(--space-2); }
 .field-label { font-size: var(--text-caption); font-weight: 500; color: var(--text-secondary); line-height: var(--line-height-ui); }
@@ -205,52 +204,13 @@ input[type="range"].seek::-webkit-slider-runnable-track {
 }
 input[type="range"].seek::-webkit-slider-thumb { width: 12px; height: 12px; margin-top: -3px; border: 2px solid var(--accent); border-radius: 50%; background-color: var(--surface-default); box-shadow: var(--shadow-item); appearance: none; }
 
-/* A segmented switch: the group owns the border and the chosen segment takes the accent. */
-.segmented {
-  display: inline-flex;
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-small);
-  overflow: hidden;
-}
-.segmented button {
-  height: calc(var(--control-height) - 2 * var(--border-width));
-  border: none;
-  border-radius: 0;
-  color: var(--text-secondary);
-}
-.segmented button:hover:not(:disabled) { color: var(--text-heading); }
-.segmented button + button { border-left: var(--border-width) solid var(--border-default); }
-.segmented button[aria-pressed="true"], .segmented button[aria-checked="true"] { background-color: var(--accent); color: var(--text-on-fill); }
+/* A segmented switch takes the joined-button shape it shares with the tab strip, under Headings. */
 
-/* A switch is a checkbox drawn as a track whose knob slides to the accent side when on. */
-input[type="checkbox"][role="switch"] {
-  position: relative;
-  flex: none;
-  width: 32px;
-  height: 18px;
-  border: var(--border-width) solid var(--border-control);
-  border-radius: 9px;
-  background-color: var(--surface-secondary);
-  appearance: none;
-  cursor: pointer;
-  transition: background-color var(--duration-fast), border-color var(--duration-fast);
-}
-input[type="checkbox"][role="switch"]::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: var(--border-control);
-  transition: transform var(--duration-fast), background-color var(--duration-fast);
-}
-input[type="checkbox"][role="switch"]:checked { border-color: var(--accent); background-color: var(--accent); }
-input[type="checkbox"][role="switch"]:checked::before { transform: translateX(14px); background-color: var(--text-on-fill); }
+/* A switch is the plain 16px checkbox, so a settings row reads the same whichever control it holds. */
+input[type="checkbox"][role="switch"] { flex: none; cursor: pointer; }
 input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── The frame (§6.4): top bar and sidebar are one recessed surface ───────── */
+/* ── The frame (§6.4): top bar and sidebar are one recessed surface with hairline edges ── */
 
 .topbar {
   position: sticky;
@@ -260,7 +220,8 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
   align-items: center;
   gap: var(--space-4);
   height: var(--frame-height);
-  padding: 0 var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: var(--border-width) solid var(--border-default);
   background-color: var(--surface-navigation);
   color: var(--text-on-navigation);
 }
@@ -303,7 +264,8 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
   flex-direction: column;
   gap: var(--border-width);
   height: calc(100vh - var(--frame-height));
-  padding: var(--space-4);
+  padding: var(--space-6) var(--space-4);
+  border-right: var(--border-width) solid var(--border-default);
   background-color: var(--surface-navigation);
 }
 .sidebar > a {
@@ -326,13 +288,12 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
 /* The sidebar's own content, in place of its section links, scrolls by itself and keeps its own look. */
 .sidebar-content { display: flex; flex: 1; flex-direction: column; gap: var(--space-4); min-height: 0; overflow: auto; }
 
-/* The content pane: the one raised surface, inset in the frame. */
+/* The content pane: the one raised surface, flush against the frame. */
 main {
   min-width: 0;
-  min-height: calc(100vh - var(--frame-height) - var(--space-2));
-  margin: 0 var(--space-2) var(--space-2) 0;
+  min-height: calc(100vh - var(--frame-height));
+  margin: 0;
   padding: 28px var(--space-8) 80px;
-  border-radius: var(--radius-default);
   background-color: var(--surface-default);
   outline: none;
 }
@@ -357,7 +318,7 @@ main {
 }
 body.has-status-bar .layout { min-height: calc(100vh - var(--frame-height) - var(--row-height)); }
 body.has-status-bar .sidebar { height: calc(100vh - var(--frame-height) - var(--row-height)); }
-body.has-status-bar main { min-height: calc(100vh - var(--frame-height) - var(--row-height) - var(--space-2)); }
+body.has-status-bar main { min-height: calc(100vh - var(--frame-height) - var(--row-height)); }
 
 body.logged-out .topbar > :not(.brand), body.logged-out .sidebar { display: none; }
 body.logged-out .layout { grid-template-columns: minmax(0, 1fr); }
@@ -406,39 +367,45 @@ body.logged-out main { margin-left: var(--space-2); }
 
 .crumbs { font-size: var(--text-control); color: var(--text-secondary); overflow-wrap: anywhere; }
 
-/* A frame tab bar: the strip is recessed and the open tab is a raised card with an accent line. */
-.tabs {
-  display: flex;
+/* Tabs and joined buttons are one shape: regular buttons sharing their borders, rounded only at the ends, the chosen one solid accent. */
+.tabs, .segmented {
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  height: var(--frame-height);
-  padding: 0 var(--space-2);
-  border-radius: var(--radius-default);
-  background-color: var(--surface-navigation);
+  max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
 }
-.tabs::-webkit-scrollbar { display: none; }
-.tab {
-  display: flex;
+.tabs::-webkit-scrollbar, .segmented::-webkit-scrollbar { display: none; }
+.tab, .segmented > button, .segmented > .button {
+  position: relative;
+  display: inline-flex;
+  flex: none;
   align-items: center;
-  height: var(--row-height);
-  padding: var(--space-3) 10px;
-  border-radius: var(--radius-default);
-  color: var(--text-on-navigation);
+  gap: var(--space-2);
+  height: var(--control-height);
+  padding: 7px var(--control-padding-x);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--text-body);
   font-size: var(--text-control);
+  font-weight: 500;
   line-height: var(--line-height-ui);
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color var(--duration-fast), color var(--duration-fast);
+  cursor: pointer;
+  transition: border-color var(--duration-fast), color var(--duration-fast), background-color var(--duration-fast);
 }
-/* A tab that switches in place rather than linking takes the tab's look, not a button's. */
-button.tab { border: none; background-color: transparent; font-weight: 400; }
-.tab:hover { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
-.tab.active { background-color: var(--surface-default); color: var(--text-heading); box-shadow: inset 0 -2px 0 var(--accent), var(--shadow-tab); font-weight: 500; }
+:is(.tabs, .segmented) > :not(:first-child) { margin-left: calc(-1 * var(--border-width)); }
+:is(.tabs, .segmented) > :first-child { border-top-left-radius: var(--radius-small); border-bottom-left-radius: var(--radius-small); }
+:is(.tabs, .segmented) > :last-child { border-top-right-radius: var(--radius-small); border-bottom-right-radius: var(--radius-small); }
+/* A hovered or chosen member rises over its neighbours so its whole border shows. */
+.tab:hover, .segmented > button:hover:not(:disabled), .segmented > .button:hover { z-index: 1; border-color: var(--accent); color: var(--text-body); }
+.tab.active, .segmented > button:is([aria-pressed="true"], [aria-checked="true"]) { z-index: 1; border-color: var(--accent); background-color: var(--accent); color: var(--text-on-fill); }
+.tab.active:hover, .segmented > button:is([aria-pressed="true"], [aria-checked="true"]):hover:not(:disabled) { border-color: var(--accent); color: var(--text-on-fill); }
 /* A tab row puts tools on the right of the strip, on their own line when the room runs out. */
 .tab-row { display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; }
-.tab-row > .tabs { flex: 1; min-width: 0; }
+.tab-row > .tabs { flex: 1; min-width: 0; display: flex; }
 .tab-row > :is(.toolbar, .panel-tools, .head-actions) { margin-left: auto; align-items: center; }
 
 .toolbar { display: flex; gap: var(--space-5); align-items: end; flex-wrap: wrap; }
@@ -479,14 +446,13 @@ button.tab { border: none; background-color: transparent; font-weight: 400; }
 .badge, .chip {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-1) var(--space-4);
+  padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-small);
   background-color: var(--surface-secondary);
   color: var(--text-secondary);
-  font-size: var(--text-label);
-  font-weight: 600;
+  font-size: var(--text-caption);
+  font-weight: 400;
   line-height: var(--line-height-ui);
-  letter-spacing: var(--letter-spacing-caps);
   white-space: nowrap;
 }
 .badge.tone-good { background-color: var(--status-success); color: var(--text-on-fill); }
@@ -681,9 +647,9 @@ ul.tree-children { margin-left: var(--space-5); padding-left: var(--space-2); }
 }
 .tree-row:hover { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
 .tree-item:focus-visible > .tree-row { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: -1px; }
-/* A picked row is a solid accent fill, faded while the tree does not have focus. */
-.tree-item[aria-selected="true"] > .tree-row { background-color: var(--row-selected); color: var(--text-heading); }
-.tree:focus-within .tree-item[aria-selected="true"] > .tree-row { background-color: var(--accent); color: var(--text-on-fill); }
+/* A picked row is a raised card, and a solid accent fill while the tree has focus. */
+.tree-item[aria-selected="true"] > .tree-row { background-color: var(--surface-default); color: var(--text-heading); box-shadow: var(--shadow-item); font-weight: 500; }
+.tree:focus-within .tree-item[aria-selected="true"] > .tree-row { background-color: var(--accent); color: var(--text-on-fill); box-shadow: none; }
 .tree-item[aria-selected="true"] > .tree-row .tree-toggle { color: inherit; }
 .tree-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tree-extra { display: flex; flex: none; align-items: center; gap: var(--space-2); color: var(--text-tertiary); font-size: var(--text-caption); }
@@ -859,7 +825,7 @@ select.tree-select option:disabled { color: var(--text-tertiary); }
 
 /* ── Tables ───────────────────────────────────────────────────────────────── */
 
-.table-wrap { overflow-x: auto; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-default); }
+.table-wrap { overflow-x: auto; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-default); box-shadow: var(--shadow-card); }
 /* A scrolling or virtual table scrolls inside its own box under headings that stay put, and a virtual one's spacer rows stay blank. */
 .table-wrap:is(.scroll, .virtual) { min-height: 0; overflow: auto; }
 .table-wrap:is(.scroll, .virtual) thead th { position: sticky; top: 0; z-index: 1; }
@@ -875,8 +841,6 @@ th {
   font-size: var(--text-label);
   font-weight: 600;
   line-height: var(--line-height-ui);
-  letter-spacing: var(--letter-spacing-caps);
-  text-transform: uppercase;
   white-space: nowrap;
 }
 tbody tr:last-child td { border-bottom: none; }
@@ -888,8 +852,6 @@ th .sort {
   background: none;
   color: inherit;
   font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
 }
 th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--text-heading); }
 .number { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -956,8 +918,6 @@ tbody tr.group-row > th {
   background-color: var(--surface-default);
   color: inherit;
   font-size: var(--text-control);
-  letter-spacing: normal;
-  text-transform: none;
 }
 
 /* A dragged row's landing place is a line above or below it, or a tint when it drops inside. */
@@ -974,7 +934,7 @@ tbody tr:hover + tr.row-extra > td, tbody tr:has(+ tr.row-extra:hover) > td { ba
 tbody tr.now-playing > td { background-color: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--text-heading); font-weight: 600; }
 tbody tr.now-playing > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 
-/* A picked row is tinted with the accent, and filled with it while its table has focus. */
+/* A picked row is one step darker than a hovered one, and filled with the accent while its table has focus. */
 tbody tr[aria-selected="true"] > td { background-color: var(--row-selected); color: var(--text-heading); }
 table:focus-within tbody tr[aria-selected="true"] > td { background-color: var(--accent); color: var(--text-on-fill); }
 table:focus-within tbody tr[aria-selected="true"] > td :is(.muted, a, .rating .star, .row-actions button) { color: inherit; }
@@ -996,11 +956,14 @@ table:focus-within tbody tr[aria-selected="true"] > td :is(.muted, a, .rating .s
 }
 .rating .star.on { color: var(--accent); }
 .rating:hover button.star:not(:disabled) { color: var(--accent); }
-.rating button.star:hover ~ button.star { color: var(--border-control); }
+.rating button.star:not(:disabled):hover ~ button.star { color: var(--border-control); }
+.rating.read-only .star { cursor: default; }
+.rating.read-only .star:disabled { opacity: 1; }
 
 td.tree-cell { padding-inline-start: calc(var(--space-5) + var(--tree-depth, 0) * var(--space-6)); white-space: nowrap; }
-td.tree-cell > .tree-toggle { margin-right: var(--space-2); }
-td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
+td.tree-cell > .tree-toggle, td.tree-cell > .tree-spacer { margin-right: var(--space-2); vertical-align: middle; }
+/* An app's block wrapping the cell's words stays on the arrow's line and shortens instead of wrapping under it. */
+td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-items: center; min-width: 0; max-width: calc(100% - var(--space-6) - var(--space-2)); overflow: hidden; vertical-align: middle; }
 .tree-count {
   display: inline-flex;
   margin-left: var(--space-3);
@@ -1052,13 +1015,13 @@ td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
   border-radius: var(--radius-default);
   background-color: var(--surface-default);
   color: var(--text-body);
-  box-shadow: var(--shadow-modal);
+  box-shadow: var(--shadow-card);
   font-size: var(--text-control);
 }
 .dialog.wide { width: min(900px, calc(100vw - 2 * var(--space-6))); }
 .dialog::backdrop { background-color: var(--surface-overlay); }
 /* Only the dialog's own title takes the header band, never a heading inside its body. */
-.dialog > h2, .dialog-header { padding: var(--space-5) var(--space-6); border-bottom: var(--border-width) solid var(--border-default); }
+.dialog > h2, .dialog-header { padding: var(--space-5) var(--space-7); border-bottom: var(--border-width) solid var(--border-default); }
 .dialog-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); }
 .dialog-heading { display: grid; gap: var(--space-1); min-width: 0; }
 .dialog-heading h2 { overflow-wrap: anywhere; }
@@ -1069,10 +1032,12 @@ td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
 .dialog.full { width: calc(100vw - 2 * var(--space-7)); max-width: none; height: calc(100vh - 2 * var(--space-7)); max-height: none; }
 .dialog.full[open] { display: flex; flex-direction: column; }
 .dialog.full > .dialog-body, .dialog.full > .dialog-form > .dialog-body { flex: 1; min-height: 0; overflow: auto; }
-.dialog-body { padding: var(--space-6); }
+.dialog-body { padding: var(--space-7); }
 /* A tab strip at the top of a full dialog's body runs edge to edge and stays put while the body scrolls. */
 .dialog.full .dialog-body:has(> .tabs:first-child) { padding-top: 0; }
-.dialog.full .dialog-body > .tabs:first-child { position: sticky; top: 0; z-index: var(--layer-sticky); margin: 0 calc(-1 * var(--space-6)) var(--space-5); padding: 0 var(--space-6); border-radius: 0; }
+.dialog.full .dialog-body > .tabs:first-child { position: sticky; top: 0; z-index: var(--layer-sticky); display: flex; margin: 0 calc(-1 * var(--space-7)) var(--space-5); padding: var(--space-5) var(--space-7) var(--space-4); background-color: var(--surface-default); }
+/* A page view is a full dialog read as a page: its sections stack with the page gap. */
+.dialog.page-view > .dialog-body, .dialog.page-view > .dialog-form > .dialog-body { display: grid; gap: var(--space-6); align-content: start; }
 /* The form around a dialog's body and buttons lays them out as if it were not there. */
 .dialog-form { display: contents; }
 .dialog-body p { margin: 0 0 var(--space-4); }
@@ -1080,9 +1045,8 @@ td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
   display: flex;
   gap: var(--space-4);
   justify-content: flex-end;
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-5) var(--space-7);
   border-top: var(--border-width) solid var(--border-default);
-  background-color: var(--surface-secondary);
 }
 .type-confirm { display: grid; gap: var(--space-3); margin-top: var(--space-5); }
 
@@ -1130,7 +1094,7 @@ td.tree-cell > .tree-spacer { margin-right: var(--space-2); }
   border: var(--border-width) solid var(--border-default);
   border-radius: var(--radius-default);
   background-color: var(--surface-default);
-  box-shadow: var(--shadow-floating);
+  box-shadow: var(--shadow-card);
   font-size: var(--text-control);
 }
 .menu { min-width: 180px; margin: 0; list-style: none; outline: none; }
@@ -1165,6 +1129,72 @@ button.menu-trigger { flex: none; border-color: transparent; background-color: v
 button.menu-trigger:hover:not(:disabled) { border-color: var(--border-default); color: var(--text-heading); }
 
 /* ── Resize handles and splits ────────────────────────────────────────────── */
+
+/* ── Progress, status, streamed output and prose ──────────────────────────── */
+
+/* A progress row: the track fills to --progress, or slides while the amount is unknown. */
+.progress { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
+.progress-bar { position: relative; flex: 1; height: var(--space-3); min-width: 80px; overflow: hidden; border-radius: var(--radius-small); background-color: var(--border-default); }
+.progress-fill { width: var(--progress, 0%); height: 100%; border-radius: inherit; background-color: var(--accent); transition: width var(--duration-slow); }
+.progress-bar.indeterminate .progress-fill { width: 40%; animation: progress-slide 1.2s ease-in-out infinite; }
+@keyframes progress-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+.progress-detail { flex: none; font-size: var(--text-caption); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* A status pill is a state dot and its words, pulsing while work is under way. */
+.status-pill { display: inline-flex; align-items: center; gap: var(--space-3); white-space: nowrap; }
+.status-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background-color: var(--text-tertiary); }
+.status-dot.tone-good { background-color: var(--status-success); }
+.status-dot.tone-warn { background-color: var(--status-warning); }
+.status-dot.tone-bad { background-color: var(--status-danger); }
+.status-dot.tone-info { background-color: var(--status-info); }
+.status-dot.tone-none { background-color: var(--text-tertiary); }
+.status-dot.busy { animation: pulse 1.4s ease-in-out infinite; }
+.status-text { color: var(--text-secondary); }
+
+/* The volume button opens a row with the mute button, the slider and the amount. */
+.volume-button[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+.volume-popover { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2); }
+.volume-percent { min-width: 4ch; color: var(--text-secondary); font-size: var(--text-caption); font-variant-numeric: tabular-nums; text-align: right; }
+
+/* Streamed output in a box of fixed height, with the Follow switch and any tools above it. */
+.following { display: grid; gap: var(--space-3); min-width: 0; }
+.following-tools { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); flex-wrap: wrap; }
+.following-output { height: 320px; max-height: none; overflow: auto; }
+.follow-toggle { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--text-secondary); font-size: var(--text-control); cursor: pointer; }
+.follow-toggle:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
+
+/* A path field with its Browse button beside it. */
+.path-row { display: flex; gap: var(--space-3); min-width: 0; }
+.path-row input:not([type="checkbox"]):not([type="radio"]) { flex: 1; min-width: 0; }
+.path-row button { flex: none; }
+
+/* Suggestions drop from their field as a menu, the pointed or keyed one lit like a menu item. */
+.suggest-wrap { position: relative; display: grid; min-width: 0; }
+.suggest-wrap > :is(input, textarea) { width: 100%; }
+.menu.suggestions { position: absolute; top: 100%; left: 0; z-index: var(--layer-menu); min-width: min(320px, 100%); max-width: 100%; margin: var(--space-2) 0 0; }
+.suggestions .menu-item { display: grid; gap: var(--space-1); height: auto; padding: var(--space-3) var(--space-4); cursor: pointer; }
+.suggestions .menu-item[aria-selected="true"] { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
+.suggestion-main, .suggestion-detail { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Rendered Markdown reads as prose: its own headings, lists, code, quotes and tables. */
+.markdown { font-size: var(--text-prose); line-height: var(--line-height-body); overflow-wrap: anywhere; }
+.markdown > :first-child { margin-top: 0; }
+.markdown > :last-child { margin-bottom: 0; }
+.markdown :is(h1, h2, h3, h4, h5, h6) { margin: var(--space-6) 0 var(--space-3); line-height: 1.3; }
+.markdown h1 { font-size: var(--text-h2); font-weight: 700; letter-spacing: var(--letter-spacing-display); }
+.markdown h2 { font-size: var(--text-h3); }
+.markdown :is(h3, h4, h5, h6) { font-size: var(--text-prose); font-weight: 600; }
+.markdown :is(p, ul, ol, pre, blockquote, table) { margin: 0 0 var(--space-4); }
+.markdown :is(ul, ol) { padding-left: var(--space-7); }
+.markdown li + li { margin-top: var(--space-1); }
+.markdown code { padding: 1px var(--space-2); border-radius: var(--radius-small); background-color: var(--surface-secondary); }
+.markdown pre { padding: var(--space-5); overflow: auto; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-default); background-color: var(--surface-secondary); }
+.markdown pre code { padding: 0; background-color: transparent; }
+.markdown blockquote { padding: var(--space-2) var(--space-5); border-left: 3px solid var(--border-hover); color: var(--text-secondary); }
+.markdown table { width: auto; }
+.markdown :is(th, td) { padding: var(--space-2) var(--space-4); }
+.markdown hr { margin: var(--space-6) 0; border: 0; border-top: var(--border-width) solid var(--border-default); }
+.markdown img { max-width: 100%; height: auto; border-radius: var(--radius-small); }
 
 /* A handle is a thin grab bar that lights with the accent while hovered, focused or dragged. */
 .resize-handle { position: relative; flex: none; width: 7px; cursor: col-resize; touch-action: none; }
@@ -1218,8 +1248,8 @@ body.resizing.vertical { cursor: row-resize; }
   .sidebar > .sidebar-resize { display: none; }
   body.has-status-bar .sidebar { height: 100vh; }
   .account-link { display: none; }
-  main { margin-left: var(--space-2); padding: var(--space-6) var(--space-6) var(--space-8); }
-  .topbar { height: auto; min-height: var(--frame-height); gap: var(--space-2); padding: var(--space-1) var(--space-2) var(--space-2); flex-wrap: wrap; }
+  main { padding: var(--space-6) var(--space-6) var(--space-8); }
+  .topbar { height: auto; min-height: var(--frame-height); gap: var(--space-2); padding: var(--space-2) var(--space-4); flex-wrap: wrap; }
   .brand { padding: 0 var(--space-4); }
   #theme { margin-left: auto; }
 }
