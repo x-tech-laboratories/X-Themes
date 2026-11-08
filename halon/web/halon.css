@@ -149,8 +149,8 @@ input:not([type="checkbox"]):not([type="radio"]):focus, textarea:focus {
 input::placeholder, textarea::placeholder { color: var(--text-tertiary); opacity: 1; }
 input[type="checkbox"], input[type="radio"] { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
 input.filter { min-width: 220px; }
-/* A search box is a field with its button beside it, filling the room it is given. */
-.search-box { display: flex; flex: 1; align-items: center; gap: var(--space-2); min-width: 0; }
+/* A search box is a form with its field and submit button side by side, filling the room it is given. */
+.search-box { display: flex; flex: 1; align-items: center; gap: var(--space-2); min-width: 0; margin: 0; }
 .search-box input { flex: 1; min-width: 0; }
 .topbar .search-box { max-width: 640px; }
 /* Width presets for short entries such as a count or a number of minutes, winning over a form row's full width. */
@@ -601,8 +601,8 @@ button.card { width: 100%; height: auto; font-weight: 400; line-height: var(--li
 .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: var(--space-7) var(--space-6); }
 .media-tile { position: relative; display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; transition: opacity var(--duration-fast); }
 /* A dimmed tile, such as one already watched, fades until it is pointed at or focused. */
-.media-tile.dimmed { opacity: 0.45; }
-.media-tile.dimmed:hover, .media-tile.dimmed:focus-within { opacity: 1; }
+.media-tile:is(.dimmed, .media-dimmed) { opacity: 0.45; }
+.media-tile:is(.dimmed, .media-dimmed):is(:hover, :focus-within) { opacity: 1; }
 /* The picture is wide by default, and a page sets --media-aspect for square covers. */
 .media-picture {
   position: relative;
