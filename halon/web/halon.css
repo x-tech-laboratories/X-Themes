@@ -235,6 +235,9 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
   color: var(--text-on-navigation);
 }
 .brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
   padding: 0 var(--space-6);
   color: var(--text-heading);
   font-size: var(--text-h3);
@@ -282,7 +285,9 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
   background-color: var(--surface-navigation);
 }
 /* The app's name heads the sidebar when the top bar is given over to its tools. */
-.sidebar-brand { flex: none; margin-bottom: var(--space-5); padding: 0 var(--space-4); color: var(--text-heading); font-size: var(--text-h3); font-weight: 600; line-height: var(--line-height-ui); text-decoration: none; }
+.sidebar-brand { display: flex; align-items: center; gap: var(--space-3); flex: none; margin-bottom: var(--space-5); padding: 0 var(--space-4); color: var(--text-heading); font-size: var(--text-h3); font-weight: 600; line-height: var(--line-height-ui); text-decoration: none; }
+/* The app's icon, set before the brand. */
+.brand-icon { flex: none; width: 1.5em; height: 1.5em; }
 .sidebar > a {
   min-height: var(--row-height);
   padding: var(--space-3) var(--space-4);
