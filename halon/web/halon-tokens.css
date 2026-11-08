@@ -26,6 +26,7 @@
     --row-height: 28px;
     --cell-padding-y: var(--space-3);
     --frame-height: 49px;
+    --table-header-height: 34px;
     --icon-size-small: 16px;
     --icon-size-large: 20px;
     --sidebar-width: 248px;
@@ -66,7 +67,7 @@
     --surface-secondary: #f1f5f9;
     --surface-navigation: var(--surface-secondary);
     --surface-navigation-hover: #e2e8f0;
-    --surface-overlay: rgba(15, 23, 42, 0.45);
+    --surface-overlay: rgba(15, 23, 42, 0.4);
 
     /* Text on surfaces */
     --text-heading: #0f172a;
@@ -125,7 +126,7 @@
         --surface-default: #16213a;
         --surface-secondary: #060b14;
         --surface-navigation-hover: #101b2d;
-        --surface-overlay: rgba(0, 0, 0, 0.6);
+        --surface-overlay: rgba(15, 23, 42, 0.4);
 
         --text-heading: #f8fafc;
         --text-body: #e2e8f0;
@@ -166,7 +167,7 @@
     --surface-default: #16213a;
     --surface-secondary: #060b14;
     --surface-navigation-hover: #101b2d;
-    --surface-overlay: rgba(0, 0, 0, 0.6);
+    --surface-overlay: rgba(15, 23, 42, 0.4);
 
     --text-heading: #f8fafc;
     --text-body: #e2e8f0;

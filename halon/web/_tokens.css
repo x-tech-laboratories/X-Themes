@@ -28,6 +28,7 @@
     --row-height: 28px;
     --cell-padding-y: var(--space-3);
     --frame-height: 49px;
+    --table-header-height: 34px;
     --icon-size-small: 16px;
     --icon-size-large: 20px;
     --sidebar-width: 248px;
@@ -68,7 +69,7 @@
     --surface-secondary: @surface-secondary;
     --surface-navigation: var(--surface-secondary);
     --surface-navigation-hover: @surface-navigation-hover;
-    --surface-overlay: @surface-overlay;
+    --surface-overlay: rgba(15, 23, 42, 0.4);
 
     /* Text on surfaces */
     --text-heading: @text-heading;
@@ -127,7 +128,7 @@
         --surface-default: @surface-default;
         --surface-secondary: @surface-secondary;
         --surface-navigation-hover: @surface-navigation-hover;
-        --surface-overlay: @surface-overlay;
+        --surface-overlay: rgba(15, 23, 42, 0.4);
 
         --text-heading: @text-heading;
         --text-body: @text-body;
@@ -168,7 +169,7 @@
     --surface-default: @surface-default;
     --surface-secondary: @surface-secondary;
     --surface-navigation-hover: @surface-navigation-hover;
-    --surface-overlay: @surface-overlay;
+    --surface-overlay: rgba(15, 23, 42, 0.4);
 
     --text-heading: @text-heading;
     --text-body: @text-body;
