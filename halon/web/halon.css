@@ -1281,6 +1281,16 @@ button.menu-trigger:hover:not(:disabled) { border-color: var(--border-default); 
 .suggestions .menu-item[aria-selected="true"] { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
 .suggestion-main, .suggestion-detail { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* A tree picker's list hangs below its search field, indented by depth, with the parents of matches greyed. */
+.tree-picker { display: grid; min-width: 0; }
+.tree-picker-field { width: 100%; min-width: 0; text-overflow: ellipsis; }
+.menu.tree-picker-list { top: anchor(bottom); left: anchor(left); width: anchor-size(width); min-width: min(320px, calc(100vw - 2 * var(--space-4))); max-height: 320px; margin-top: var(--space-2); position-try-fallbacks: flip-block, flip-inline; }
+.tree-picker-list .menu-item { display: block; padding-left: calc(var(--space-4) + var(--depth, 0) * var(--space-6)); overflow: hidden; line-height: var(--row-height); text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+.tree-picker-list .menu-item[aria-selected="true"] { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
+.tree-picker-list .menu-item.chosen { color: var(--accent); font-weight: 600; }
+.tree-picker-list .menu-item[aria-disabled="true"] { opacity: 1; color: var(--text-tertiary); cursor: default; }
+.tree-picker-empty { padding: var(--space-3) var(--space-4); color: var(--text-tertiary); }
+
 /* Rendered Markdown reads as prose: its own headings, lists, code, quotes and tables. */
 .markdown { font-size: var(--text-prose); line-height: var(--line-height-body); overflow-wrap: anywhere; }
 .markdown > :first-child { margin-top: 0; }
