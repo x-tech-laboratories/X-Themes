@@ -942,6 +942,33 @@ label.setting-row { cursor: pointer; }
 .color-custom::-webkit-color-swatch-wrapper { padding: 0; }
 .color-custom::-webkit-color-swatch { border: none; border-radius: 2px; }
 
+/* An emoji field shows the chosen emoji on a button that opens the picker, beside a clear button. */
+.emoji-field { display: flex; align-items: center; gap: var(--space-2); }
+.emoji-field-button { justify-content: center; min-width: var(--control-height); padding: 0 var(--space-3); font-size: 18px; font-weight: 400; }
+.emoji-field-button.empty { color: var(--text-tertiary); font-size: var(--text-control); }
+
+/* The emoji picker is a search field over a scrolling grid of emoji under sticky group names. */
+.emoji-picker { display: flex; flex-direction: column; gap: var(--space-3); width: min(336px, calc(100vw - 2 * var(--space-6))); height: 360px; }
+.emoji-picker-search { flex: none; width: 100%; }
+.emoji-picker-viewport { flex: 1; min-height: 0; outline: none; }
+.emoji-picker-group { padding: var(--space-2) var(--space-1); background-color: var(--surface-default); color: var(--text-tertiary); font-size: var(--text-caption); font-weight: 500; }
+.emoji-picker-emoji, .emoji-picker-emoji:hover:not(:disabled) {
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-color: transparent;
+  background-color: transparent;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+}
+.emoji-picker-emoji[data-active], .emoji-picker-emoji[data-active]:hover:not(:disabled) { background-color: var(--surface-navigation-hover); }
+.emoji-picker-note { display: block; padding: var(--space-6); color: var(--text-tertiary); text-align: center; }
+/* Where the picker fits neither below nor above its button, it rests on the window's bottom edge. */
+@position-try --rest-on-bottom { top: auto; bottom: var(--space-2); margin-top: 0; }
+.popover.anchored:has(> .emoji-picker) { position-try-fallbacks: flip-block, flip-inline, --rest-on-bottom; }
+
 /* A tree select opens a card of indented rows, and its closed face shows the picked choice's whole path. */
 select.tree-select { min-width: 0; max-width: 100%; text-overflow: ellipsis; }
 select.tree-select option:disabled { color: var(--text-tertiary); }
