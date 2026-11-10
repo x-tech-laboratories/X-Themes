@@ -901,6 +901,13 @@ label.setting-row { cursor: pointer; }
 .setting-text .path { font-family: var(--font-family-monospace); }
 .setting-row > button, .setting-row > select, .setting-row > .segmented { flex: none; }
 .setting-row > .row-actions { flex: none; flex-wrap: nowrap; }
+.setting-label, .setting-hint { overflow-wrap: anywhere; }
+/* On a phone a setting's control goes under its text, so a long label or a pair of buttons never widens the page. */
+@media (max-width: 700px) {
+  .setting-row { flex-wrap: wrap; }
+  .setting-row > .setting-text { flex-basis: 100%; }
+  .setting-row > .row-actions { flex-wrap: wrap; }
+}
 
 /* A date, its optional time and its clear button make one joined control, shaped like a segmented switch. */
 .date-time-field { max-width: 100%; }
