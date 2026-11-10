@@ -1440,9 +1440,17 @@ button.menu-trigger { flex: none; background-color: var(--surface-default); colo
 .suggest-wrap { position: relative; display: grid; min-width: 0; }
 .suggest-wrap > :is(input, textarea) { width: 100%; }
 .menu.suggestions { position: absolute; top: 100%; left: 0; z-index: var(--layer-menu); min-width: min(320px, 100%); max-width: 100%; margin: var(--space-2) 0 0; }
+/* A field that lists every known value at once scrolls its list rather than running off the page. */
+.menu.suggestions.list-all { max-height: 320px; }
 .suggestions .menu-item { display: grid; gap: var(--space-1); height: auto; padding: var(--space-3) var(--space-4); cursor: pointer; }
 .suggestions .menu-item[aria-selected="true"] { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
 .suggestion-main, .suggestion-detail { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* A chip field: the chips picked, then a suggesting field with its Add button beside it. */
+.chip-field { display: grid; gap: var(--space-4); min-width: 0; }
+.chip-field-add { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.chip-field-add > .suggest-wrap { flex: 1; max-width: 560px; }
+.chip-field-add > button { flex: none; }
 
 /* A tree picker's list hangs below its search field, indented by depth, with the parents of matches greyed. */
 .tree-picker { display: grid; min-width: 0; }
