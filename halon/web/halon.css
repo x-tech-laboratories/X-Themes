@@ -904,6 +904,15 @@ label.setting-row { cursor: pointer; }
 
 /* A date, its optional time and its clear button make one joined control, shaped like a segmented switch. */
 .date-time-field { max-width: 100%; }
+/* A number with a step button each side, joined like the date and time inputs. */
+.number-field-inputs { display: inline-flex; align-items: center; }
+.number-field-inputs > input { flex: 0 1 auto; width: 6em; min-width: 0; text-align: center; font-variant-numeric: tabular-nums; border-radius: 0; }
+.number-field-inputs > button { flex: none; min-width: var(--control-height); height: var(--control-height); border-radius: 0; }
+.number-field-inputs > .unit { flex: none; padding: 0 var(--space-2); color: var(--text-secondary); }
+.number-field-inputs > :not(:first-child) { margin-left: calc(-1 * var(--border-width)); }
+.number-field-inputs > :first-child { border-top-left-radius: var(--radius-small); border-bottom-left-radius: var(--radius-small); }
+.number-field-inputs > :is(input, button):last-of-type { border-top-right-radius: var(--radius-small); border-bottom-right-radius: var(--radius-small); }
+.number-field-inputs > :is(input, button):is(:hover, :focus) { position: relative; z-index: 1; }
 .date-time-inputs { display: flex; align-items: center; }
 .date-time-inputs > input { flex: 1 1 auto; min-width: 9.5em; border-radius: 0; }
 .date-time-inputs > input[type="time"] { min-width: 7.5em; }
