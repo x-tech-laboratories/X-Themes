@@ -95,6 +95,9 @@
     --series-1: var(--accent);
     --series-2: #7c3aed;
     --series-3: #64748b;
+    --series-4: #0f766e;
+    --series-5: #c2410c;
+    --series-6: #be185d;
 
     /* Status */
     --status-success: #047857;
@@ -145,6 +148,9 @@
 
         --series-2: #c4b5fd;
         --series-3: #94a3b8;
+        --series-4: #5eead4;
+        --series-5: #fdba74;
+        --series-6: #f9a8d4;
 
         --status-success: #10b981;
         --status-info: #38bdf8;
@@ -186,6 +192,9 @@
 
     --series-2: #c4b5fd;
     --series-3: #94a3b8;
+    --series-4: #5eead4;
+    --series-5: #fdba74;
+    --series-6: #f9a8d4;
 
     --status-success: #10b981;
     --status-info: #38bdf8;
