@@ -1073,8 +1073,11 @@ the same job — one step off the content surface:
   hover, shadowless. They wait for the pointer or keyboard focus on their row; one that would push
   a count out of line takes no room until then. On a touch screen they always show.
 - Links above the tree, such as a list of views, are rows of the same height ruled off from it by a
-  `--border-default` hairline, and the sidebar's foot, such as Settings, sits at its bottom however
-  few rows are above. Both select by elevation, like any navigation item.
+  `--border-default` hairline. Both select by elevation, like any navigation item.
+- The sidebar's foot is pinned to its bottom and ruled off by the same hairline, however few or
+  many rows are above; only the rows above it scroll. It holds the app's own rows, such as sync
+  state, then the theme, then the signed-in user's name, linked to their account, with Sign out
+  beside it, and Settings last. Every app keeps these in this one place, never in the top bar.
 - A heading row over a group of items, such as a tag group, is a small caps label in
   `--text-secondary`, the same treatment as a field label.
 - A side pane docked against the content, such as a picked item's details, is edged with
