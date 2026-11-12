@@ -282,15 +282,6 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
 .menu-button { display: none; }
 #theme { margin-left: auto; }
 
-.account-link {
-  padding: 0 var(--space-4);
-  color: var(--text-on-navigation);
-  font-size: var(--text-control);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color var(--duration-fast);
-}
-.account-link:hover { color: var(--text-heading); }
 
 .layout { display: grid; grid-template-columns: var(--sidebar-width) minmax(0, 1fr); min-height: calc(100vh - var(--frame-height)); }
 .sidebar {
@@ -309,7 +300,9 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
 .sidebar-brand { display: flex; align-items: center; gap: var(--space-3); flex: none; margin-bottom: var(--space-5); padding: 0 var(--space-4); color: var(--text-heading); font-size: var(--text-h3); font-weight: 600; line-height: var(--line-height-ui); text-decoration: none; }
 /* The app's icon, set before the brand. */
 .brand-icon { flex: none; width: 1.5em; height: 1.5em; }
-.sidebar > a {
+/* The section links fill the sidebar above its foot and scroll there. */
+.sidebar-links { display: flex; flex: 1; flex-direction: column; gap: var(--border-width); min-height: 0; overflow: auto; }
+:is(.sidebar, .sidebar-links) > a {
   min-height: var(--row-height);
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-small);
@@ -319,10 +312,10 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
   text-decoration: none;
   transition: background-color var(--duration-fast), color var(--duration-fast);
 }
-.sidebar > a:hover { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
+:is(.sidebar, .sidebar-links) > a:hover { background-color: var(--surface-navigation-hover); color: var(--text-heading); }
 
 /* A place you are, not a row you picked: elevation, not fill. */
-.sidebar > a.active { background-color: var(--surface-default); color: var(--text-heading); box-shadow: var(--shadow-item); font-weight: 500; }
+:is(.sidebar, .sidebar-links) > a.active { background-color: var(--surface-default); color: var(--text-heading); box-shadow: var(--shadow-item); font-weight: 500; }
 .scrim { position: fixed; inset: 0; z-index: calc(var(--layer-sticky) + 1); background-color: var(--surface-overlay); }
 /* The sidebar's grab bar runs down its right edge, and the width it sets reaches the grid through --sidebar-width. */
 .sidebar > .sidebar-resize { position: absolute; top: 0; right: 0; bottom: 0; }
@@ -332,8 +325,13 @@ input[type="checkbox"][role="switch"]:disabled { opacity: 0.5; cursor: not-allow
 .sidebar ul.tree > .tree-item + .tree-item { margin-top: var(--space-5); padding-top: var(--space-5); border-top: var(--border-width) solid var(--border-default); }
 /* Links above the sidebar's tree, such as its views, are tree rows ruled off from it; the open one is raised like a section link. */
 .sidebar-nav { display: flex; flex: none; flex-direction: column; gap: var(--space-1); padding-bottom: var(--space-5); border-bottom: var(--border-width) solid var(--border-default); }
-/* The sidebar's foot, such as its settings link, stays at the bottom however few rows sit above it. */
-.sidebar-foot { display: flex; flex: none; flex-direction: column; gap: var(--space-1); margin-top: auto; padding: var(--space-4) 0; }
+/* The sidebar's foot stays at the bottom however few or many rows sit above it, ruled off from them: the app's own rows,
+   then the theme, the account and Settings, last. */
+.sidebar-foot { display: flex; flex: none; flex-direction: column; gap: var(--space-1); margin-top: auto; padding: var(--space-4) 0; border-top: var(--border-width) solid var(--border-default); }
+/* The signed-in user: their name, linked to their account, with Sign out beside it. */
+.sidebar-account { display: flex; align-items: center; gap: var(--space-1); }
+.sidebar-account > .tree-row { flex: 1; min-width: 0; }
+.sidebar-account > button.tree-row { flex: none; width: auto; color: var(--text-secondary); font-size: var(--text-caption); }
 :is(.sidebar-nav, .sidebar-foot) .tree-row { padding: 0 var(--space-2) 0 var(--space-4); }
 .sidebar a.tree-row { text-decoration: none; cursor: pointer; }
 .sidebar a.tree-row:is(.active, [aria-current="page"]) { background-color: var(--surface-default); color: var(--text-heading); box-shadow: var(--shadow-item); font-weight: 500; }
@@ -383,7 +381,7 @@ body.contained { height: 100vh; overflow: hidden; }
 body.contained .layout { grid-template-rows: minmax(0, 1fr); height: calc(100vh - var(--frame-height)); min-height: 0; }
 /* A contained sidebar fills its row and scrolls its content flush with its edge, its foot staying at the bottom. */
 body.contained .sidebar { align-self: stretch; height: auto; min-height: 0; padding-right: 0; padding-left: 0; overflow: hidden; }
-body.contained .sidebar > :is(.sidebar-content, .sidebar-foot) { padding-right: var(--space-2); padding-left: var(--space-4); }
+body.contained .sidebar > :is(.sidebar-links, .sidebar-content, .sidebar-foot) { padding-right: var(--space-2); padding-left: var(--space-4); }
 body.contained .sidebar > :is(a, .sidebar-brand) { margin-right: var(--space-2); margin-left: var(--space-4); }
 @media (min-width: 701px) {
   body.contained .sidebar { position: relative; top: auto; }
@@ -1609,7 +1607,6 @@ body.resizing.vertical { cursor: row-resize; }
   .sidebar > .sidebar-resize, .side-pane > .resize-handle { display: none; }
   body.has-status-bar .sidebar { height: auto; }
   body.contained .sidebar { position: fixed; height: auto; }
-  .account-link { display: none; }
   main { padding: var(--space-6) var(--space-5) 80px; }
   main.with-side-pane { grid-template-columns: minmax(0, 1fr); }
   main.with-side-pane > .main-pane { padding: var(--space-6) var(--space-5) 80px; }
