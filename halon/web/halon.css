@@ -189,6 +189,8 @@ input.filter { min-width: 220px; }
 .search-box { display: flex; flex: 1; align-items: center; gap: var(--space-2); min-width: 0; margin: 0; }
 .search-box input { flex: 1; min-width: 0; }
 .topbar .search-box { max-width: 640px; }
+/* A search box with no submit button is a bare filter field; in the top bar it fills the room the same way. */
+.topbar > input.filter { flex: 1; max-width: 640px; }
 /* Width presets for short entries such as a count or a number of minutes, winning over a form row's full width. */
 .input-xs { flex: none; width: 72px !important; }
 .input-sm { flex: none; width: 120px !important; }
@@ -419,7 +421,9 @@ body.logged-out .layout { grid-template-columns: minmax(0, 1fr); }
 body.logged-out main { margin-left: var(--space-2); }
 
 .login { max-width: 320px; margin: calc(2 * var(--space-8)) auto; display: grid; gap: var(--space-5); }
-.login .field, .login input { width: 100%; }
+/* The fields fill the form; a checkbox keeps its own size beside its label. */
+.login .field, .login input:not([type="checkbox"], [type="radio"]) { width: 100%; }
+.login .check { justify-self: start; }
 .login button, .login .button { justify-content: center; }
 .login-brand { display: grid; justify-items: center; gap: var(--space-4); }
 .login-brand img { width: 96px; height: 96px; }
@@ -1619,6 +1623,11 @@ body.resizing.vertical { cursor: row-resize; }
 @media (max-width: 640px) {
   input.filter { min-width: 0; width: 100%; }
   .toolbar > * { flex: 1 1 140px; }
+  /* A strip of choices takes a whole row, so none of it scrolls out of sight, and an icon button stays its own size. */
+  .toolbar > .segmented { flex-basis: 100%; }
+  .toolbar > :is(button, .button).icon { flex: none; }
+  /* A search being typed into takes the brand's room in the top bar. */
+  .topbar:has(.search-box:focus-within, > input.filter:focus) > .brand { display: none; }
   table.responsive thead { display: none; }
   table.responsive, table.responsive tbody, table.responsive tr, table.responsive td { display: block; width: 100%; }
   table.responsive tr { padding: var(--space-4) var(--space-5); border-bottom: var(--border-width) solid var(--border-default); }
@@ -1627,7 +1636,9 @@ body.resizing.vertical { cursor: row-resize; }
   table.responsive tbody tr:hover td { background-color: transparent; }
   table.responsive td::before { content: attr(data-label); color: var(--text-secondary); text-align: left; }
   table.responsive td[data-label=""]::before { content: none; }
+  /* A row's buttons say what they do, so their column's label is left out. */
   table.responsive td.actions-cell { justify-content: flex-end; }
+  table.responsive td.actions-cell::before { content: none; }
   table.responsive td.tree-cell { justify-content: flex-start; gap: var(--space-2); padding-inline-start: 0; white-space: normal; }
   table.responsive td.tree-cell::before { margin-right: auto; }
   table.responsive tr.group-row { padding: var(--space-6) var(--space-5) var(--space-2); background-color: var(--surface-secondary); }
