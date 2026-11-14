@@ -42,11 +42,11 @@ function fill(block, resolve) {
 // A colour literal in the component sheet would be a second palette beside the tokens.
 const literal = /#[0-9a-fA-F]{3,8}\b|(?<![-\w])rgba?\(|(?<![-\w])hsla?\(/;
 
-function audit_components(source) {
+function audit_components(name) {
   let problems = 0;
-  source.split("\n").forEach((line, index) => {
+  readFileSync(join(root, `web/${name}`), "utf8").split("\n").forEach((line, index) => {
     if (!literal.test(line)) return;
-    console.error(`web/halon.css:${index + 1}: colour literal outside the token layer`);
+    console.error(`web/${name}:${index + 1}: colour literal outside the token layer`);
     console.error(`   ${line.trim().slice(0, 110)}`);
     problems += 1;
   });
@@ -66,7 +66,7 @@ const body = source.slice(source.indexOf("*/") + 2);
 const body_dark_start = body.indexOf("@media");
 const contents = `${header}${fill(body.slice(0, body_dark_start), load_tokens("light"))}${fill(body.slice(body_dark_start), load_tokens("dark"))}`;
 
-let problems = audit_components(readFileSync(join(root, "web/halon.css"), "utf8"));
+let problems = audit_components("halon.css") + audit_components("starlight.css");
 const output_path = join(root, "web/halon-tokens.css");
 
 if (check) {
