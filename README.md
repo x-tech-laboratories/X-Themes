@@ -1,5 +1,7 @@
 # X-Themes
 
+<a href="https://liberapay.com/BeatLink/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
+
 The X-Tech Laboratories themes, in one repository with one Nix flake.
 
 | Theme | Folder | What it covers |
