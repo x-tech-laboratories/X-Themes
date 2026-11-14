@@ -8,11 +8,12 @@ web/
   _tokens.css        Layer 1 — SOURCE. The token sheet, naming GTK's colours as @name.
   halon-tokens.css   GENERATED. _tokens.css with every @name filled in, light and dark.
   halon.css          Layer 2 — SOURCE. Every component rule. No colours.
+  starlight.css      SOURCE. Maps the tokens onto Astro Starlight's variables, for the X-apps' documentation sites. No colours.
 ```
 
 `halon-tokens.css` is written by `scripts/build-web.mjs` from `_tokens.css` and the same
 `gtk/Halon/shared/_tokens-*.css` that drives the other ports. The build also fails if a colour literal appears in
-`halon.css`.
+`halon.css` or `starlight.css`.
 
 ```sh
 node scripts/build-web.mjs           # regenerate halon-tokens.css
@@ -35,6 +36,22 @@ widgets in `@x-tech-laboratories/x-libs` build the markup these rules style.
 `follows-host-theme` on `<html>` swaps the tokens for the colours a host page hands over as `--sidebar-*`
 variables, such as the Linux sidebar. An item's own colour, such as a tag's, reaches `.chip.has-color`,
 `.has-tint` and `.color-dot` through `--item-color`.
+
+## Use with Starlight
+
+An [Astro Starlight](https://starlight.astro.build) site takes the tokens and the Starlight sheet, not `halon.css`:
+
+```js
+starlight({
+  customCss: [
+    "@x-tech-laboratories/halon/halon-tokens.css",
+    "@x-tech-laboratories/halon/starlight.css",
+  ],
+});
+```
+
+The header and sidebar are the recessed frame, the page is the raised content, and the page you are on is a raised card
+in the sidebar. Starlight's theme picker drives the scheme through the same `data-theme` attribute.
 
 ## Publish
 

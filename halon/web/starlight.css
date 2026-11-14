@@ -1,0 +1,93 @@
+/* Halon for Starlight: maps halon-tokens.css onto Starlight's variables, so load that sheet first and add both to customCss.
+ * Starlight sets data-theme on <html> to the scheme in use, which is what halon-tokens.css switches on. */
+
+/* ── Colours ──────────────────────────────────────────────────────────────── */
+
+/* The light-theme selector is listed so these win over Starlight's own light values however it orders its layers. */
+:root,
+:root[data-theme='light'],
+::backdrop {
+  --sl-color-white: var(--text-heading);
+  --sl-color-gray-1: var(--text-body);
+  --sl-color-gray-2: var(--text-secondary);
+  --sl-color-gray-3: var(--text-tertiary);
+  --sl-color-gray-4: var(--border-control);
+  --sl-color-gray-5: var(--border-hover);
+  --sl-color-gray-6: var(--border-default);
+  --sl-color-gray-7: var(--surface-secondary);
+  --sl-color-black: var(--surface-default);
+
+  --sl-color-accent: var(--accent);
+  --sl-color-accent-high: var(--accent);
+  --sl-color-accent-low: color-mix(in srgb, var(--accent) 16%, var(--surface-default));
+
+  /* Asides and badges: a status fill for the mark, a 15% tint for the region it sits in. */
+  --sl-color-blue: var(--status-info);
+  --sl-color-blue-high: var(--status-info);
+  --sl-color-blue-low: color-mix(in srgb, var(--status-info) 15%, var(--surface-default));
+  --sl-color-green: var(--status-success);
+  --sl-color-green-high: var(--status-success);
+  --sl-color-green-low: color-mix(in srgb, var(--status-success) 15%, var(--surface-default));
+  --sl-color-orange: var(--status-warning);
+  --sl-color-orange-high: var(--status-warning-text);
+  --sl-color-orange-low: color-mix(in srgb, var(--status-warning) 15%, var(--surface-default));
+  --sl-color-red: var(--status-danger);
+  --sl-color-red-high: var(--status-danger);
+  --sl-color-red-low: color-mix(in srgb, var(--status-danger) 15%, var(--surface-default));
+  --sl-color-purple: var(--badge-experimental);
+  --sl-color-purple-high: var(--badge-experimental);
+  --sl-color-purple-low: color-mix(in srgb, var(--badge-experimental) 15%, var(--surface-default));
+
+  --sl-color-text: var(--text-body);
+  --sl-color-text-accent: var(--accent);
+  --sl-color-text-invert: var(--text-on-fill);
+  --sl-color-bg: var(--surface-default);
+  --sl-color-bg-nav: var(--surface-navigation);
+  --sl-color-bg-sidebar: var(--surface-navigation);
+  --sl-color-bg-inline-code: var(--surface-secondary);
+  --sl-color-bg-accent: var(--accent);
+  --sl-color-hairline-light: var(--border-default);
+  --sl-color-hairline: var(--border-default);
+  --sl-color-hairline-shade: var(--border-default);
+  --sl-color-backdrop-overlay: var(--surface-overlay);
+
+  --sl-shadow-sm: var(--shadow-item);
+  --sl-shadow-md: var(--shadow-floating);
+  --sl-shadow-lg: var(--shadow-modal);
+
+  --sl-font: var(--font-family-interface);
+  --sl-font-mono: var(--font-family-monospace);
+}
+
+::selection { background: var(--focus-ring); color: var(--text-heading); }
+
+/* ── Sidebar ──────────────────────────────────────────────────────────────── */
+
+.sidebar-content a:hover,
+.sidebar-content a:focus-visible,
+.sidebar-content summary:hover {
+  background-color: var(--surface-navigation-hover);
+  color: var(--text-heading);
+}
+
+/* The page you are on is a raised card, not an accent fill. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus-visible {
+  background-color: var(--surface-default);
+  color: var(--text-heading);
+  box-shadow: var(--shadow-item);
+}
+
+.sidebar-content summary { border-radius: var(--radius-small); }
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.sl-link-button { border-radius: var(--radius-default); }
+
+.sl-link-button.primary,
+.sl-link-button.primary:hover { color: var(--text-on-fill); }
+.sl-link-button.primary:hover { opacity: .85; }
+
+.sl-link-button.secondary { border-color: var(--border-default); color: var(--text-body); }
+.sl-link-button.secondary:hover { border-color: var(--accent); }
