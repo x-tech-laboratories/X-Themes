@@ -37,13 +37,13 @@ colour scheme, because the `next` base it sits on does.
 
 ## Install as an addon
 
-The theme is packaged for the [Trilium Addon Manager](https://github.com/BeatLink/trilium-scripts)
+The theme is packaged for the [Trilium Addon Manager](https://github.com/Trilium-Community/trilium-scripts)
 as `halon@beatlink`. That manifest does not vendor a copy — its stylesheet note points at this
 file's raw URL in this repository, pinned to a commit, so the addon and the theme cannot drift
 apart. Bumping the pin is a command in that repository:
 
 ```sh
-node resources/scripts/tamhelper.js bump-halon        # move the pin to Halon's current main
+node resources/scripts/tamhelper.js bump-halon        # move the pin to X-Themes' current main
 node resources/scripts/tamhelper.js bump-halon --check # fail if the pin has fallen behind
 ```
 
