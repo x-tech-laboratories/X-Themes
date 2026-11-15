@@ -876,6 +876,17 @@ button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
   .settings-outline-category { display: flex; flex-wrap: wrap; align-items: center; }
 }
 
+/* An outline of a page's sections, such as an article's headings, marks the one being read with the accent edge the
+   settings outline uses; a deeper heading sits indented under its parent. */
+.outline { display: grid; gap: var(--space-5); }
+.outline-category { display: grid; }
+.outline-heading { padding: 0 var(--space-4) var(--space-2); color: var(--text-secondary); font-size: var(--text-label); font-weight: 600; letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; }
+.outline-link { padding: var(--space-1) var(--space-4); border-left: 2px solid var(--border-default); color: var(--text-body); font-size: var(--text-control); line-height: var(--line-height-ui); text-decoration: none; }
+.outline-link[data-level="3"] { padding-left: calc(var(--space-4) + var(--space-5)); }
+.outline-link[data-level="4"] { padding-left: calc(var(--space-4) + 2 * var(--space-5)); }
+.outline-link:hover { color: var(--text-heading); }
+.outline-link[aria-current] { border-left-color: var(--accent); color: var(--accent); font-weight: 500; }
+
 .settings-group { display: grid; gap: var(--space-4); }
 .settings-heading {
   margin: 0;
@@ -1312,6 +1323,29 @@ td.tree-cell > :not(.tree-toggle, .tree-spacer) { display: inline-flex; align-it
 /* A page view is a full dialog read as a page: its sections stack with the page gap. */
 .dialog.page-view > .dialog-body, .dialog.page-view > .dialog-form > .dialog-body { display: grid; gap: var(--space-6); align-content: start; }
 /* The form around a dialog's body and buttons lays them out as if it were not there. */
+/* A search dialog: its field across the top, then the pages found, each page's matching sections indented under it,
+   the one the arrow keys reached raised like a picked row. */
+.search-dialog { width: min(680px, calc(100vw - 2 * var(--space-6))); }
+.search-dialog .dialog-body { display: grid; gap: var(--space-5); }
+.search-dialog-field { width: 100%; }
+.search-dialog-results { max-height: min(60vh, 560px); overflow-y: auto; }
+.search-dialog-results > p { margin: 0; }
+.search-dialog-list { display: grid; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+.search-dialog-hit > a { display: grid; gap: var(--space-1); padding: var(--space-4) var(--space-5); border: var(--border-width) solid transparent; border-radius: var(--radius-small); color: var(--text-body); text-decoration: none; }
+.search-dialog-hit.part > a { margin-left: var(--space-7); padding-top: var(--space-3); padding-bottom: var(--space-3); border-left-color: var(--border-default); border-radius: 0 var(--radius-small) var(--radius-small) 0; }
+.search-dialog-hit[aria-selected="true"] > a { border-color: var(--border-default); background-color: var(--surface-secondary); }
+.search-dialog-hit.part[aria-selected="true"] > a { border-left-color: var(--accent); }
+.search-dialog-title { color: var(--text-heading); font-size: var(--text-control); font-weight: 600; }
+.search-dialog-hit.part .search-dialog-title { font-weight: 500; }
+.search-dialog-excerpt { color: var(--text-secondary); font-size: var(--text-caption); }
+.search-dialog-excerpt mark { background-color: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--text-heading); }
+
+/* A button that opens a search, drawn as a field holding its label and its shortcut. */
+.search-button { justify-content: flex-start; gap: var(--space-4); min-width: 0; color: var(--text-secondary); font-weight: 400; }
+.search-button .line-icon { flex: none; }
+.search-button-label { flex: 1; overflow: hidden; text-align: left; text-overflow: ellipsis; }
+.search-button-keys, kbd { padding: 0 var(--space-2); border: var(--border-width) solid var(--border-default); border-radius: var(--radius-small); background-color: var(--surface-secondary); color: var(--text-secondary); font-family: var(--font-family-monospace); font-size: var(--text-label); }
+
 .dialog-form { display: contents; }
 .dialog-body p { margin: 0 0 var(--space-4); }
 .dialog-buttons {
