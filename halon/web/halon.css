@@ -1584,6 +1584,12 @@ body.resizing.vertical { cursor: row-resize; }
 .donut-value { fill: var(--text-heading); font-size: 20px; font-weight: 700; }
 .donut-legend { display: grid; flex: 1; gap: var(--space-2); min-width: 160px; margin: 0; padding: 0; list-style: none; }
 .donut-legend li { display: flex; justify-content: space-between; gap: var(--space-4); }
+/* A donut tile is a stat tile drawn as a full ring filled by its share, its value in the middle; the fill's colour is the caller's. */
+.donut-tile { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.donut-tile .tile-label { align-self: stretch; }
+.donut-tile svg { width: 120px; max-width: 100%; margin-top: auto; }
+.donut-tile .donut-fill { fill: none; stroke-linecap: round; }
+.donut-tile .tick { fill: var(--text-secondary); font-size: 10px; }
 .sparkline { flex: none; width: 120px; height: 28px; }
 /* A gauge is a stat tile with a 270° ring beside its text; the arc's colour is the caller's. */
 .gauge { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
