@@ -455,15 +455,16 @@ body.logged-out main { margin-left: var(--space-2); }
 
 .page-head { display: grid; gap: var(--space-4); }
 .page-title { display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; }
-.page-title h1 { word-break: break-all; }
+.page-title h1 { overflow-wrap: anywhere; }
 .page-title.spread { justify-content: space-between; }
 .page-head p { margin: 0; }
 .head-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 /* A heading may open with a wide banner picture and put an avatar beside its title and subtitle. */
 .page-banner { display: block; width: 100%; aspect-ratio: 6 / 1; border-radius: var(--radius-default); object-fit: cover; background-color: var(--surface-secondary); }
-.page-identity { display: flex; flex: 1; align-items: center; gap: var(--space-5); min-width: 0; }
-.page-identity > div { display: grid; gap: var(--space-1); min-width: 0; }
-.page-subtitle { margin: 0; color: var(--text-secondary); font-size: var(--text-control); overflow-wrap: anywhere; }
+/* The title keeps the width it needs, so actions that do not fit beside it move below rather than squeezing it. */
+.page-identity { display: flex; flex: 1 1 auto; align-items: center; gap: var(--space-5); min-width: 0; }
+.page-identity > div { display: grid; flex: 1; gap: var(--space-1); min-width: 0; }
+.page-subtitle { margin: 0; color: var(--text-secondary); font-size: var(--text-control); overflow-wrap: anywhere; contain: inline-size; }
 /* An inline heading puts its title, subtitle and anything after them on one baseline, its actions at the far end. */
 .page-head.inline .page-title { align-items: baseline; }
 .page-head.inline .page-identity > div { display: flex; flex: 1; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-5); }
@@ -609,7 +610,7 @@ button.chip:hover { border-color: var(--border-default); color: var(--text-headi
   transition: border-color var(--duration-fast);
 }
 a.tile:hover { border-top-color: var(--border-hover); border-right-color: var(--border-hover); border-bottom-color: var(--border-hover); }
-.tile-value { font-size: var(--text-h2); font-weight: 600; line-height: 1.25; color: var(--text-heading); }
+.tile-value { font-size: var(--text-h2); font-weight: 600; line-height: 1.25; color: var(--text-heading); overflow-wrap: anywhere; }
 .tile-label { color: var(--text-secondary); font-size: var(--text-label); font-weight: 600; letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; line-height: var(--line-height-ui); }
 .tile-bad { border-left-color: var(--status-danger); }
 .tile-bad .tile-value { color: var(--status-danger); }
