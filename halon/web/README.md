@@ -61,7 +61,7 @@ css: [
 ```
 
 The site sheet lays out the article with its outline in a column beside it (folded above it on a narrower window), the
-landing page's hero, cards, asides, the previous and next links and the sidebar's folding groups, and colours code through
+landing page's hero, cards, asides, the previous and next links and the sidebar's groups, each folding from an arrow before its label and linking to its own page, and colours code through
 the `--shiki-*` variables Shiki's CSS-variables theme writes, so code follows the scheme.
 
 ## Publish
