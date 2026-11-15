@@ -200,7 +200,7 @@ const skin = () => ({
     description: "Slate and blue, one accent, hairline structure. A recessed frame and raised content.",
     version: VERSION,
 
-    github: { owner: "BeatLink", repo_name: "Halon" },
+    github: { owner: "x-tech-laboratories", repo_name: "X-Themes" },
     header_image: "https://raw.githubusercontent.com/x-tech-laboratories/X-Themes/main/halon/screenshots/demo-dark.png",
     splash_image: "https://raw.githubusercontent.com/x-tech-laboratories/X-Themes/main/halon/screenshots/demo-dark.png",
     tags: ["Dark", "Light", "Minimal", "Accessible"],

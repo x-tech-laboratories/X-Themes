@@ -37,8 +37,7 @@
     --native-titlebar-background: var(--surface-navigation) !important;
     --native-titlebar-foreground: var(--text-on-navigation) !important;
 
-    /* The native stack, not the bundled interface font — §4.5. Skipping this is
-       most of what separates the theme from a recolour. */
+    /* Noto Sans, not Trilium's bundled interface font — §4.5. */
     --main-font-family: var(--font-family-interface) !important;
     --center-pane-border-radius: var(--radius-default) !important;
 

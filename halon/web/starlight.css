@@ -59,13 +59,121 @@
   --sl-font-mono: var(--font-family-monospace);
 }
 
+/* ── Sizes ────────────────────────────────────────────────────────────────── */
+
+/* Declared outside Starlight's layers, so these hold at every width its own media queries set them for. */
+:root {
+  --sl-nav-height: var(--frame-height);
+  --sl-nav-pad-x: var(--space-6);
+  --sl-nav-pad-y: var(--space-4);
+  --sl-sidebar-width: var(--sidebar-width);
+  --sl-sidebar-pad-x: var(--space-4);
+  --sl-menu-button-size: var(--icon-button-size);
+
+  --sl-text-body: var(--text-prose);
+  --sl-text-code: var(--text-control);
+  --sl-line-height: var(--line-height-body);
+  --sl-text-h1: var(--text-h1);
+  --sl-text-h2: var(--text-h2);
+  --sl-text-h3: var(--text-h3);
+  --sl-text-h4: var(--text-prose);
+  --sl-text-h5: var(--text-prose);
+}
+
+/* Starlight leaves the body at the browser's size, so the prose size is set here. */
+body { font-size: var(--sl-text-body); }
+
 ::selection { background: var(--focus-ring); color: var(--text-heading); }
 
-/* ── Sidebar ──────────────────────────────────────────────────────────────── */
+/* ── The frame (§6.4) ─────────────────────────────────────────────────────── */
+
+@media (min-width: 50rem) {
+  /* The site's name fills the bar above the sidebar, ruled off, so the search starts in line with the page. */
+  header.header > .header { grid-template-columns: calc(var(--sl-sidebar-width) - var(--sl-nav-pad-x)) minmax(0, 1fr) auto; }
+  header.header .title-wrapper {
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    margin: calc(-1 * var(--sl-nav-pad-y)) 0 calc(-1 * var(--sl-nav-pad-y)) calc(-1 * var(--sl-nav-pad-x));
+    padding: 0 var(--sl-nav-pad-x);
+    border-inline-end: var(--border-width) solid var(--border-default);
+  }
+
+  /* The search opens from a field, hairline at rest and accent on hover. */
+  site-search button[data-open-modal] {
+    max-width: 640px;
+    height: var(--control-height);
+    border-color: var(--border-default);
+    border-radius: var(--radius-small);
+    background-color: var(--surface-default);
+    color: var(--text-tertiary);
+    font-size: var(--text-control);
+  }
+  site-search button[data-open-modal]:hover { border-color: var(--accent); color: var(--text-tertiary); }
+  site-search button[data-open-modal] > kbd { background-color: var(--surface-secondary); color: var(--text-secondary); }
+}
+
+/* The phone menu button is a default-weight frame button, not a floating disc. */
+.sl-menu-button,
+[data-theme] .sl-menu-button {
+  width: var(--icon-button-size);
+  height: var(--icon-button-size);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-small);
+  background-color: var(--surface-default);
+  color: var(--text-body);
+  box-shadow: none;
+}
+.sl-menu-button:hover,
+[data-theme] .sl-menu-button:has(~ :popover-open) { border-color: var(--accent); background-color: var(--surface-default); }
+
+.social-icons a { color: var(--text-on-navigation); }
+.social-icons a:hover { color: var(--text-heading); }
+.social-icons::after { border-color: var(--border-default); }
+
+/* ── Sidebar (§6.5) ───────────────────────────────────────────────────────── */
+
+.sidebar-content { padding: var(--space-6) var(--sl-sidebar-pad-x) 0; }
+
+.sidebar-content a,
+.sidebar-content summary {
+  min-height: var(--row-height);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-small);
+  color: var(--text-body);
+  font-size: var(--text-control);
+  font-weight: 400;
+  line-height: var(--line-height-ui);
+}
+
+/* Group names are tree rows, with the fold arrow before the name. */
+.sidebar-content summary { justify-content: flex-start; gap: var(--space-2); }
+.sidebar-content summary .caret { order: -1; width: var(--icon-size-small); height: var(--icon-size-small); color: var(--text-secondary); }
+.sidebar-content .large { color: inherit; font-size: var(--text-control); font-weight: 400; }
+
+/* A top-level group is a section headed by a small caps label and ruled off from its neighbours. */
+.sidebar-content .top-level > li > details > summary .large {
+  color: var(--text-secondary);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+}
+.sidebar-content .top-level > li + li { margin-top: var(--space-1); }
+.sidebar-content .top-level > li:has(> details) + li,
+.sidebar-content .top-level > li + li:has(> details) {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: var(--border-width) solid var(--border-default);
+}
+
+/* Nested rows indent without a guide line; a section's own rows sit under its label. */
+.sidebar-content ul ul li { margin-inline-start: 0; padding-inline-start: 0; border-inline-start: 0; }
+.sidebar-content details details > ul { margin-inline-start: var(--space-5); padding-inline-start: var(--space-2); }
 
 .sidebar-content a:hover,
 .sidebar-content a:focus-visible,
-.sidebar-content summary:hover {
+.sidebar-content details details > summary:hover {
   background-color: var(--surface-navigation-hover);
   color: var(--text-heading);
 }
@@ -77,9 +185,30 @@
   background-color: var(--surface-default);
   color: var(--text-heading);
   box-shadow: var(--shadow-item);
+  font-weight: 500;
 }
 
-.sidebar-content summary { border-radius: var(--radius-small); }
+/* ── Page and contents ────────────────────────────────────────────────────── */
+
+/* The title and the page under it read as one pane, with no rule between. */
+.content-panel + .content-panel { padding-top: 0; border-top: 0; }
+
+@media (min-width: 72rem) {
+  /* The page's contents are a side pane docked against it, edged with the stronger line. */
+  .right-sidebar { background-color: var(--surface-secondary); border-inline-start-color: var(--border-hover); }
+}
+
+#starlight__on-this-page {
+  color: var(--text-secondary);
+  font-family: var(--font-family-interface);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+}
+starlight-toc a { color: var(--text-secondary); font-size: var(--text-control); line-height: var(--line-height-ui); }
+starlight-toc a:hover { color: var(--text-heading); }
+starlight-toc a[aria-current='true'] { color: var(--accent); }
 
 /* ── Buttons ──────────────────────────────────────────────────────────────── */
 
