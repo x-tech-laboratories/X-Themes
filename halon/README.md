@@ -46,7 +46,6 @@ nowhere else.
 | LMMS | [lmms/](lmms/) | both schemes; generated |
 | Web pages | [web/](web/) | the X-apps' dashboards; tokens generated, published to npm |
 | Static sites | [web/site.css](web/site.css) | sites built with X-Libs' `x-libs-site`; ships in the web package |
-| Astro Starlight | [web/starlight.css](web/starlight.css) | the X-apps' documentation sites; ships in the web package |
 | LightDM | [lightdm/](lightdm/) | a [web-greeter](https://github.com/JezerM/web-greeter) login screen |
 | Plymouth | [plymouth/](plymouth/) | a boot splash on the dark scheme |
 
