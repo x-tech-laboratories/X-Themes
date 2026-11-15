@@ -19,7 +19,9 @@
             src = ./.;
             filter = path: type: !(builtins.elem (baseNameOf path) [ "node_modules" "dist" "publish" ]);
           };
-          npmDepsHash = "sha256-1JvL9sZpSmYICGWhueuY6p1L6QPQixNecDREjjB3vCE=";
+          # Read from package-lock.json, so there is no deps hash to keep in step with it.
+          npmDeps = pkgs.importNpmLock { npmRoot = ./.; };
+          npmConfigHook = pkgs.importNpmLock.npmConfigHook;
           npmBuildScript = "dist";
           # Webpack 4 hashes with MD4, which current OpenSSL only offers through its legacy provider.
           env.NODE_OPTIONS = "--openssl-legacy-provider";
