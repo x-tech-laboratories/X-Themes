@@ -98,8 +98,8 @@ function scheme(name) {
  * as a per-component local, redefining it a dozen times, so a root declaration
  * would read as a token the port honours and in fact be shadowed everywhere. */
 const METRICS = `    --font-family-interface:
-        system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Noto Sans", Cantarell, "Helvetica Neue", Arial, sans-serif,
+        "Noto Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Cantarell, "Helvetica Neue", Arial, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji";
 
     --space-1: 2px;

@@ -34,6 +34,16 @@ The dark scheme follows the system, and `data-theme="light"` or `data-theme="dar
 `"normal"` or `"comfortable"` on `<html>` or `.layout` sets the row height and table cell padding. The
 widgets in `@x-tech-laboratories/x-libs` build the markup these rules style.
 
+The font is Noto Sans, falling back to the system's interface font. Bundle it with the page so it shows where it is not
+installed, in the weights the sheets use:
+
+```ts
+import "@fontsource/noto-sans/400.css";
+import "@fontsource/noto-sans/500.css";
+import "@fontsource/noto-sans/600.css";
+import "@fontsource/noto-sans/700.css";
+```
+
 `follows-host-theme` on `<html>` swaps the tokens for the colours a host page hands over as `--sidebar-*`
 variables, such as the Linux sidebar. An item's own colour, such as a tag's, reaches `.chip.has-color`,
 `.has-tint` and `.color-dot` through `--item-color`.

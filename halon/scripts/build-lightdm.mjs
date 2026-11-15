@@ -82,8 +82,8 @@ function scheme(name) {
 
 /* §4.1, verbatim. Metrics do not flip with the scheme, so they are stated once. */
 const METRICS = `    --font-family-interface:
-        system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Noto Sans", Cantarell, "Helvetica Neue", Arial, sans-serif,
+        "Noto Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Cantarell, "Helvetica Neue", Arial, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji";
 
     --space-1: 2px;

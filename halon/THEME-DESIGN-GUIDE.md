@@ -496,8 +496,8 @@ wearing its colors.
 ```css
 :root {
   --font-family-interface:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Noto Sans", Cantarell, "Helvetica Neue", Arial, sans-serif,
+    "Noto Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Cantarell, "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji";
   --font-family-code: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
@@ -755,21 +755,23 @@ targets need more space, not bigger labels.
 
 ### 4.5 Typography notes
 
-- **System font stack, deliberately.** Many application frameworks ship a bundled interface font
-  (Inter is common). Overriding it back to the native stack is a large part of what distinguishes
-  this theme from a recolor. Skip it and the theme reads as "stock, but blue."
-- **Do not substitute a webfont for the native stack.** Naming a font that is not installed by
-  default — Noto Sans, Inter, anything — means shipping it, which costs a bundled binary or a remote
-  fetch, a flash of fallback text, and a hard failure under the strict content-security policies
-  common in desktop application shells. It also defeats the point of the previous bullet.
-- **Cover Linux explicitly.** `-apple-system` and `BlinkMacSystemFont` handle macOS, `Segoe UI`
-  handles Windows, and `Roboto` handles Android and ChromeOS — leaving Linux to fall through to
-  generic `sans-serif`, which fontconfig often resolves to DejaVu Sans: wide, loose, and visibly
-  foreign to this theme. `system-ui` leads the stack because it resolves to the platform interface
-  font everywhere including Linux; `Noto Sans` and `Cantarell` catch mainstream Linux desktops
-  before the generic fallback. The trailing emoji faces keep emoji in titles and badges consistent
-  across platforms. Broad script coverage needs no entry here — browsers fall back per glyph to
-  whatever the operating system provides.
+- **Noto Sans is the recommended font.** It is the one typeface for interface text, prose and
+  headings alike, in every port and both schemes; the design sets no display face of its own.
+  Many application frameworks ship a bundled interface font (Inter is common), and overriding it
+  is a large part of what distinguishes this theme from a recolor. Skip it and the theme reads as
+  "stock, but blue."
+- **Ship it where it is not installed.** Most Linux desktops have Noto Sans already. A web page or
+  desktop shell bundles it with the app, such as from `@fontsource/noto-sans` in the weights the
+  theme uses (400, 500, 600 and 700), rather than fetching it from a remote host: a bundled file
+  works offline and under the strict content-security policies common in desktop application
+  shells. On a desktop, set Noto Sans as the system interface font so GTK and Qt follow it.
+- **The native stack is the fallback.** Where Noto Sans is missing, `system-ui` resolves to the
+  platform interface font everywhere including Linux; `-apple-system` and `BlinkMacSystemFont`
+  handle macOS, `Segoe UI` handles Windows, `Roboto` handles Android and ChromeOS, and `Cantarell`
+  catches GNOME desktops before generic `sans-serif`, which fontconfig often resolves to DejaVu
+  Sans: wide, loose, and visibly foreign to this theme. The trailing emoji faces keep emoji in
+  titles and badges consistent across platforms. Broad script coverage needs no entry here —
+  browsers fall back per glyph to whatever the operating system provides.
 - **Interface text is 13px, prose is 14px.** Controls, menus, list rows, and tabs take
   `--text-control`; only running text takes `--text-prose`. Mixing the two is what makes an interface
   feel loose. The size token is `--text-prose`, not `--text-body`: that name is already the body
@@ -1211,7 +1213,7 @@ Hazards worth checking for in any implementation:
 1. Copy §3.1 verbatim, both blocks. **Change nothing here.**
 2. If your framework has its own theming variables, write the one-line-per-variable mapping from §2.
    Otherwise consume the tokens directly.
-3. Set the system font stack, an 8px radius, and one gutter unit — without these the result reads as
+3. Set the font stack, Noto Sans first, an 8px radius, and one gutter unit — without these the result reads as
    stock-with-new-colors.
 4. Make every non-primary button a bordered ghost with opacity-only hover.
 5. Give inputs the resting hairline, moving to accent on hover and focus; never change the fill on

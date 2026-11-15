@@ -18,8 +18,8 @@
 
 :root {
     --font-family-interface:
-        system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Noto Sans", Cantarell, "Helvetica Neue", Arial, sans-serif,
+        "Noto Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Cantarell, "Helvetica Neue", Arial, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji";
 
     --space-1: 2px;
@@ -175,8 +175,7 @@
     --native-titlebar-background: var(--surface-navigation) !important;
     --native-titlebar-foreground: var(--text-on-navigation) !important;
 
-    /* The native stack, not the bundled interface font — §4.5. Skipping this is
-       most of what separates the theme from a recolour. */
+    /* Noto Sans, not Trilium's bundled interface font — §4.5. */
     --main-font-family: var(--font-family-interface) !important;
     --center-pane-border-radius: var(--radius-default) !important;
 
