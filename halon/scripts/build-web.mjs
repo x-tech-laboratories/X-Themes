@@ -66,7 +66,7 @@ const body = source.slice(source.indexOf("*/") + 2);
 const body_dark_start = body.indexOf("@media");
 const contents = `${header}${fill(body.slice(0, body_dark_start), load_tokens("light"))}${fill(body.slice(body_dark_start), load_tokens("dark"))}`;
 
-let problems = audit_components("halon.css") + audit_components("starlight.css") + audit_components("site.css");
+let problems = audit_components("halon.css") + audit_components("site.css");
 const output_path = join(root, "web/halon-tokens.css");
 
 if (check) {

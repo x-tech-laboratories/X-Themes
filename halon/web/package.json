@@ -11,13 +11,11 @@
   "files": [
     "halon-tokens.css",
     "halon.css",
-    "starlight.css",
     "site.css"
   ],
   "exports": {
     "./halon-tokens.css": "./halon-tokens.css",
     "./halon.css": "./halon.css",
-    "./starlight.css": "./starlight.css",
     "./site.css": "./site.css"
   },
   "style": "./halon.css"
