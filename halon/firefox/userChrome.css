@@ -39,8 +39,8 @@
     /* §4.1: a 3px focus ring, the same width everywhere */
     --focus-outline-width: 3px;
 
-    /* §4.5: the native stack, not a bundled interface font */
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
+    /* §4.5: Noto Sans, then the native stack */
+    font-family: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto,
         Cantarell, "Helvetica Neue", Arial, sans-serif !important;
 }
 
