@@ -50,8 +50,10 @@ starlight({
 });
 ```
 
-The header and sidebar are the recessed frame, the page is the raised content, and the page you are on is a raised card
-in the sidebar. Starlight's theme picker drives the scheme through the same `data-theme` attribute.
+The sheet sets Halon's sizes as well as its colours: the 49px top bar with the site's name in a cell above the
+sidebar, the 248px sidebar of 13px tree rows under small caps section labels, the 14px prose with Halon's heading scale,
+and the page's contents as a side pane. The page you are on is a raised card in the sidebar. Starlight's theme picker
+drives the scheme through the same `data-theme` attribute.
 
 ## Publish
 
