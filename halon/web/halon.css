@@ -584,11 +584,9 @@ button.chip:hover { border-color: var(--border-default); color: var(--text-headi
 .chip:has(> button.icon) { gap: var(--space-1); padding-right: var(--space-1); }
 /* A dashed chip is one put there by a rule rather than by hand. */
 .chip.dashed { border: var(--border-width) dashed var(--border-hover); background-color: transparent; }
-/* A chip in an item's own colour, such as a tag's, is tinted and edged in it, keeping its text readable in either scheme. */
+/* A chip in an item's own colour, such as a tag's, is tinted and edged in it, keeping its text readable in either scheme; it looks the same in a table as in a list. */
 .chip.has-color { box-shadow: inset 0 0 0 var(--border-width) var(--item-color); background-color: color-mix(in srgb, var(--item-color) 18%, var(--surface-default)); color: var(--text-body); }
 .chip.dashed.has-color { border-color: var(--item-color); box-shadow: none; }
-/* In a table a coloured or dashed chip is its fill alone, without an outline. */
-.table-wrap .chip:is(.has-color, .dashed) { border: 0; box-shadow: none; }
 /* A dot in an item's own colour, set before its name. */
 .color-dot { display: inline-block; flex: none; width: 8px; height: 8px; margin-right: var(--space-3); border-radius: 50%; background-color: var(--item-color); vertical-align: 0.05em; }
 .verdicts { display: flex; gap: var(--space-5); flex-wrap: wrap; font-size: var(--text-caption); margin-top: var(--space-4); align-items: center; }
