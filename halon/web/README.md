@@ -9,11 +9,12 @@ web/
   halon-tokens.css   GENERATED. _tokens.css with every @name filled in, light and dark.
   halon.css          Layer 2 — SOURCE. Every component rule. No colours.
   starlight.css      SOURCE. Maps the tokens onto Astro Starlight's variables, for the X-apps' documentation sites. No colours.
+  site.css           SOURCE. The insides of a page built with X-Libs' `x-libs-site`: article, outline, hero, code. No colours.
 ```
 
 `halon-tokens.css` is written by `scripts/build-web.mjs` from `_tokens.css` and the same
 `gtk/Halon/shared/_tokens-*.css` that drives the other ports. The build also fails if a colour literal appears in
-`halon.css` or `starlight.css`.
+`halon.css`, `starlight.css` or `site.css`.
 
 ```sh
 node scripts/build-web.mjs           # regenerate halon-tokens.css
@@ -36,6 +37,23 @@ widgets in `@x-tech-laboratories/x-libs` build the markup these rules style.
 `follows-host-theme` on `<html>` swaps the tokens for the colours a host page hands over as `--sidebar-*`
 variables, such as the Linux sidebar. An item's own colour, such as a tag's, reaches `.chip.has-color`,
 `.has-tint` and `.color-dot` through `--item-color`.
+
+## Use with the X-Libs site framework
+
+A site built with `x-libs-site` from `@x-tech-laboratories/x-libs` is drawn in the apps' own `Shell`, so it takes the
+tokens, the widget sheet and the site sheet, in that order, through its `css` setting:
+
+```ts
+css: [
+  "@x-tech-laboratories/halon/halon-tokens.css",
+  "@x-tech-laboratories/halon/halon.css",
+  "@x-tech-laboratories/halon/site.css",
+],
+```
+
+The site sheet lays out the article with its outline in a column beside it (folded above it on a narrower window), the
+landing page's hero, cards, asides, the previous and next links and the sidebar's folding groups, and colours code through
+the `--shiki-*` variables Shiki's CSS-variables theme writes, so code follows the scheme.
 
 ## Use with Starlight
 
