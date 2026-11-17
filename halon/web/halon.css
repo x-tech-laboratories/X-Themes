@@ -23,6 +23,7 @@ html:root.follows-host-theme {
   --border-hover: color-mix(in srgb, var(--sidebar-fg) 40%, var(--sidebar-bg));
   --border-control: color-mix(in srgb, var(--sidebar-fg) 55%, var(--sidebar-bg));
   --accent: var(--sidebar-accent);
+  --row-selected: var(--sidebar-hover);
   --focus-ring: color-mix(in srgb, var(--sidebar-accent) 25%, transparent);
   --font-family-interface: var(--sidebar-font-family);
 }
@@ -391,6 +392,8 @@ body.contained .sidebar > :is(a, .sidebar-brand) { margin-right: var(--space-2);
   body.contained .sidebar { position: relative; top: auto; }
 }
 body.contained main { min-height: 0; overflow-y: auto; }
+/* A filled main stays still and its one child, such as a split or a list under its tools, fills it and scrolls by itself. */
+body.contained main.fill { display: grid; grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); padding-bottom: var(--space-5); overflow: hidden; }
 body.contained main.with-side-pane { grid-template-rows: minmax(0, 1fr); overflow: hidden; }
 body.contained main.with-side-pane > .main-pane { overflow-y: auto; }
 body.contained .side-pane { position: relative; top: auto; align-self: stretch; height: auto; }
@@ -449,6 +452,9 @@ body.logged-out main { margin-left: var(--space-2); }
 }
 .panel-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); flex-wrap: wrap; min-height: var(--control-height); }
 .panel-tools { display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; }
+/* A scroll pane fills the height it is given, its header staying put while the body under it scrolls. */
+.scroll-pane { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--space-2); min-width: 0; min-height: 0; height: 100%; }
+.scroll-pane-body { min-height: 0; overflow-y: auto; }
 .columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); align-content: start; }
 .stack.tight { gap: var(--space-5); }
@@ -704,6 +710,13 @@ button.card { width: 100%; height: auto; font-weight: 400; line-height: var(--li
   background-color: var(--surface-secondary);
 }
 .media-picture img, .media-blank { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* An empty picture centres its placeholder, such as an icon, in quiet text. */
+.media-blank { display: grid; place-items: center; color: var(--text-tertiary); }
+/* A cover is a square picture edged with a hairline, so an empty one still shows on a recessed surface; the sizes fix its width. */
+.cover { flex: none; --media-aspect: 1 / 1; box-shadow: inset 0 0 0 var(--border-width) var(--border-default); }
+.cover-small { width: 48px; }
+.cover-medium { width: 96px; }
+.cover-large { width: 160px; }
 .media-corner {
   position: absolute;
   right: var(--space-3);
@@ -1143,6 +1156,10 @@ body.has-status-bar:has(.selection-bar) .toasts { bottom: calc(var(--row-height)
 .table-wrap.fit > table { table-layout: fixed; }
 .table-wrap.fit :is(th, td) { overflow: hidden; text-overflow: ellipsis; }
 .table-wrap.fit th > button.sort { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* A single-line table or cell keeps each row one line high, cutting off what does not fit. */
+:is(.table-wrap.single-line td, td.single-line) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* A cell button is the whole cell's value, laid out like the cell's text. */
+td > button.cell-button { display: block; width: 100%; min-width: 0; overflow: hidden; font-weight: 400; text-align: left; text-overflow: ellipsis; }
 
 /* A header cell holds its sort button, a filter button and a grab bar on its right edge. */
 th { position: relative; }
@@ -1212,11 +1229,15 @@ tbody tr.now-playing > td:first-child { box-shadow: inset 3px 0 0 var(--accent);
 .has-tint:hover, tbody tr.has-tint:hover > td { background-color: color-mix(in srgb, var(--item-color) 20%, var(--surface-default)); }
 .has-tint.selected, tbody tr.has-tint[aria-selected="true"] > td { background-color: color-mix(in srgb, var(--item-color) 12%, var(--row-selected)); }
 
+/* A picked column, such as the record kept in a merge, takes a fainter wash and an accent bar along its heading. */
+:where(th, td).picked-column { background-color: color-mix(in srgb, var(--accent) 8%, var(--surface-default)); }
+thead th.picked-column { box-shadow: inset 0 3px 0 var(--accent); color: var(--text-heading); }
+
 /* A row picked for a bulk action takes an accent wash and a bar down its leading edge, never a tick, which reads as done. */
 .picked, .picked:hover, tbody tr.picked > td, tbody tr.picked:hover > td { background-color: color-mix(in srgb, var(--accent) 16%, var(--surface-default)); }
 .picked:not(tr), tbody tr.picked > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 
-/* A picked row is one step darker than a hovered one. */
+/* A selected row is one step further from the pane than a hovered one. */
 tbody tr[aria-selected="true"] > td { background-color: var(--row-selected); color: var(--text-heading); }
 
 /* A star rating lights its stars with the accent, and hovering previews the rating up to the pointer. */
@@ -1469,7 +1490,7 @@ button.menu-trigger { flex: none; background-color: var(--surface-default); colo
 .volume-popover { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2); }
 .volume-percent { min-width: 4ch; color: var(--text-secondary); font-size: var(--text-caption); font-variant-numeric: tabular-nums; text-align: right; }
 
-/* Streamed output in a box of fixed height, with the Follow switch and any tools above it. */
+/* Streamed output, as text or a table, in a box of fixed height, with the Follow switch and any tools above it. */
 .following { display: grid; gap: var(--space-3); min-width: 0; }
 .following-tools { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); flex-wrap: wrap; }
 .following-output { height: 320px; max-height: none; overflow: auto; }
