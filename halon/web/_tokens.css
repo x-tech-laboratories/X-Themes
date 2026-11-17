@@ -147,6 +147,8 @@
 
         --accent: @accent;
         --focus-ring: @focus-ring;
+        /* A picked row rises lighter than the pane, away from the darker hover, so the two never look alike. */
+        --row-selected: var(--border-default);
 
         --series-2: #c4b5fd;
         --series-3: #94a3b8;
@@ -191,6 +193,7 @@
 
     --accent: @accent;
     --focus-ring: @focus-ring;
+    --row-selected: var(--border-default);
 
     --series-2: #c4b5fd;
     --series-3: #94a3b8;
