@@ -694,8 +694,10 @@ button.card { width: 100%; height: auto; font-weight: 400; line-height: var(--li
 .avatar-large { width: 72px; height: 72px; font-size: var(--text-h2); }
 .avatar-initial { color: var(--accent); font-weight: 700; line-height: 1; }
 
-/* Tiles fill the width in columns, each a picture with its title and lines under it. */
-.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: var(--space-7) var(--space-6); }
+/* Tiles fill the width in columns, each a picture with its title and lines under it, about 240px wide unless small or large. */
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--media-tile-width, 240px), 100%), 1fr)); gap: var(--space-7) var(--space-6); }
+.media-grid.media-small { --media-tile-width: 160px; }
+.media-grid.media-large { --media-tile-width: 320px; }
 .media-tile { position: relative; display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; transition: opacity var(--duration-fast); }
 /* A dimmed tile, such as one already watched, fades until it is pointed at or focused. */
 .media-tile:is(.dimmed, .media-dimmed) { opacity: 0.45; }
