@@ -399,8 +399,6 @@ body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with
 body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills) { padding-bottom: var(--space-5); }
 body.contained :is(main, .main-pane, .fills):has(> .fills) > * { flex: none; }
 body.contained :is(main, .main-pane, .fills):has(> .fills) > .fills { flex: 1 1 auto; min-height: 0; }
-/* A filling board lines up with the page's heading instead of keeping a margin of its own. */
-body.contained .board.fills { padding: 0; }
 body.contained .board-phone.fills { overflow-y: auto; }
 body.contained main.with-side-pane { grid-template-rows: minmax(0, 1fr); overflow: hidden; }
 body.contained main.with-side-pane > .main-pane { overflow-y: auto; }
@@ -863,7 +861,9 @@ button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
 /* ── Boards ───────────────────────────────────────────────────────────────── */
 
 /* A board scrolls both ways inside itself, its columns a fixed width apart, set per board through --board-column-width. */
-.board { max-height: 100%; padding: var(--space-6); overflow: auto; }
+/* It lines up with the page's heading; one that is its own surface, such as a board filling a pane edge to edge, takes inset. */
+.board { max-height: 100%; overflow: auto; }
+.board.inset { padding: var(--space-6); }
 .board-grid {
   display: grid;
   grid-template-columns: repeat(var(--board-columns, 1), var(--board-column-width, 280px));
@@ -913,8 +913,8 @@ button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
 .board-cell:focus-visible, .board-card:focus-visible, .board-lane-head:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: calc(-1 * var(--focus-ring-width)); }
 /* The column a lane is at is outlined in the accent. */
 .board-cell.current { box-shadow: inset 0 0 0 2px var(--accent); }
-/* A cell that takes the card being dragged is outlined with an accent dash. */
-.board-cell.drop-inside { outline: 2px dashed var(--accent); outline-offset: -2px; }
+/* A cell that takes the card being dragged is outlined with an accent dash, on a phone too. */
+:is(.board-cell, .board-phone-column, .board-phone-cell).drop-inside { outline: 2px dashed var(--accent); outline-offset: -2px; }
 
 /* A lane's head stays in view while the board scrolls sideways; the corner above the heads stays put both ways. */
 .board-corner, .board-lane-head { position: sticky; left: 0; z-index: 1; background-color: var(--surface-default); }
@@ -969,6 +969,8 @@ button.board-group-toggle:hover:not(:disabled) { background: none; color: var(--
 .board-card.dragging { opacity: 0.3; }
 .board-card.drag-preview { box-shadow: var(--shadow-floating); transform: rotate(2deg); }
 .board-card-title { margin-bottom: var(--space-3); color: var(--text-heading); font-size: var(--text-prose); font-weight: 500; line-height: var(--line-height-ui); }
+/* A title with nothing shown after it keeps no gap under it. */
+.board-card-title:is(:last-child, :has(+ .board-card-meta:empty:last-child)) { margin-bottom: 0; }
 .board-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); color: var(--text-secondary); font-size: var(--text-label); }
 .board-card-meta:empty { display: none; }
 /* A card with a tone-edge class, such as tone-edge-bad for a failed run, gets an edge on its left in that tone, its text kept in line. */
