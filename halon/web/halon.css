@@ -394,6 +394,14 @@ body.contained .sidebar > :is(a, .sidebar-brand) { margin-right: var(--space-2);
 body.contained main { min-height: 0; overflow-y: auto; }
 /* A filled main stays still and its one child, such as a split or a list under its tools, fills it and scrolls by itself. */
 body.contained main.fill { display: grid; grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); padding-bottom: var(--space-5); overflow: hidden; }
+/* A child marked fills, such as a board under the page's heading and tools, takes the height left and scrolls by itself while the blocks above it stay put, spaced by the gap; a wrapper on the way to it is marked fills too. */
+body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills), body.contained .fills:has(> .fills) { display: flex; flex-direction: column; gap: var(--space-5); overflow: hidden; }
+body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills) { padding-bottom: var(--space-5); }
+body.contained :is(main, .main-pane, .fills):has(> .fills) > * { flex: none; }
+body.contained :is(main, .main-pane, .fills):has(> .fills) > .fills { flex: 1 1 auto; min-height: 0; }
+/* A filling board lines up with the page's heading instead of keeping a margin of its own. */
+body.contained .board.fills { padding: 0; }
+body.contained .board-phone.fills { overflow-y: auto; }
 body.contained main.with-side-pane { grid-template-rows: minmax(0, 1fr); overflow: hidden; }
 body.contained main.with-side-pane > .main-pane { overflow-y: auto; }
 body.contained .side-pane { position: relative; top: auto; align-self: stretch; height: auto; }
@@ -456,6 +464,9 @@ body.logged-out main { margin-left: var(--space-2); }
 .panel > .panel-head { position: sticky; top: var(--sticky-top, var(--frame-height)); z-index: 2; margin-block: calc(-1 * var(--space-4)); padding-block: var(--space-4); background-color: var(--surface-default); }
 /* A panel inside another keeps its title in place so the outer title stays on top. */
 .panel .panel > .panel-head { position: static; }
+/* A compact panel, such as a short list over a board, sits tight around its head and rows, its head scrolling with it. */
+.panel.compact { gap: var(--space-2); padding-block: var(--space-3); }
+.panel.compact > .panel-head { position: static; min-height: var(--row-height); margin-block: 0; padding-block: 0; }
 /* In a box that scrolls by itself, titles stick flush with that box's top edge instead of under the top bar. */
 body.contained main { --sticky-top: -28px; }
 .side-pane { --sticky-top: calc(-1 * var(--space-6)); }
@@ -535,6 +546,8 @@ body.contained main { --sticky-top: -28px; }
 .tab-row > :is(.toolbar, .panel-tools, .head-actions) { margin-left: auto; align-items: center; }
 
 .toolbar { display: flex; gap: var(--space-5); align-items: end; flex-wrap: wrap; }
+/* A switch in a toolbar is as tall as the controls beside it, so the row lines up. */
+.toolbar > .check { min-height: var(--control-height); }
 .stepper { display: flex; gap: var(--space-4); align-items: center; }
 
 /* Status regions are tinted, and the text in them stays ordinary body text (§6.7). */
@@ -958,6 +971,8 @@ button.board-group-toggle:hover:not(:disabled) { background: none; color: var(--
 .board-card-title { margin-bottom: var(--space-3); color: var(--text-heading); font-size: var(--text-prose); font-weight: 500; line-height: var(--line-height-ui); }
 .board-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); color: var(--text-secondary); font-size: var(--text-label); }
 .board-card-meta:empty { display: none; }
+/* A card with a tone-edge class, such as tone-edge-bad for a failed run, gets an edge on its left in that tone, its text kept in line. */
+.board-card:is(.tone-edge-bad, .tone-edge-warn, .tone-edge-good) { padding-left: calc(var(--space-5) - 3px); border-left: 3px solid; }
 
 /* On a phone a board is a list: a plain board's columns one under another, or a card per lane with its cells under their column names. */
 .board-phone { display: grid; gap: var(--space-5); font-size: var(--text-control); }
