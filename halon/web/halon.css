@@ -589,6 +589,8 @@ body.contained main { --sticky-top: -28px; }
 /* Warning is light in both schemes and takes near-black text (§3.5). */
 .badge.tone-warn { background-color: var(--fill-warning); color: var(--text-on-light); }
 .badge.tone-none { background-color: var(--surface-secondary); color: var(--text-secondary); }
+/* A small caps badge, such as a state on a board card. */
+.badge.caps { padding: var(--space-1) var(--space-3); font-size: var(--text-label); font-weight: 600; letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; }
 .chips { display: flex; gap: var(--space-3); flex-wrap: wrap; }
 .chips.inline-chips { gap: var(--space-2); }
 /* A chip that picks what it names, such as a tag on the Hosts page. */
@@ -843,6 +845,135 @@ button.tree-toggle:hover:not(:disabled) { color: var(--text-heading); }
   line-height: var(--line-height-ui);
   white-space: nowrap;
   pointer-events: none;
+}
+
+/* ── Boards ───────────────────────────────────────────────────────────────── */
+
+/* A board scrolls both ways inside itself, its columns a fixed width apart, set per board through --board-column-width. */
+.board { max-height: 100%; padding: var(--space-6); overflow: auto; }
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--board-columns, 1), var(--board-column-width, 280px));
+  column-gap: var(--space-5);
+  width: max-content;
+  font-size: var(--text-control);
+}
+/* A board with lanes puts a head column before the others, wide enough for a two-line name and a line under it. */
+.board-grid.has-lanes { grid-template-columns: var(--board-lane-width, 240px) repeat(var(--board-columns, 1), var(--board-column-width, 280px)); }
+/* A board without lanes fills its box, each column's cards scrolling on their own. */
+.board-grid:not(.has-lanes) { grid-template-rows: auto minmax(0, 1fr); height: 100%; }
+.board-row { display: contents; }
+
+/* A column is a tinted surface under a small caps head with its count at the far end, which stays in view. */
+.board-column-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) var(--space-3);
+  border-radius: var(--radius-default) var(--radius-default) 0 0;
+  background-color: var(--surface-secondary);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-caps);
+  line-height: var(--line-height-ui);
+  text-transform: uppercase;
+}
+/* Column names are muted unless the app gives the column a tone, such as tone-bad for late work. */
+:where(.board-column-head, .board-cell-label) { color: var(--text-secondary); }
+.board-column-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-column-head .group-count { color: inherit; }
+.board-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-4);
+  background-color: var(--surface-secondary);
+}
+.board-grid:not(.has-lanes) > .board-row > .board-cell { overflow-y: auto; border-radius: 0 0 var(--radius-default) var(--radius-default); }
+.board-grid.has-lanes .board-cell { min-height: calc(var(--row-height) * 2); border-top: var(--border-width) solid var(--border-default); }
+/* An empty cell is a low dashed placeholder rather than a box of its own height. */
+.board-cell:empty::after { content: ""; display: block; height: var(--space-7); border: var(--border-width) dashed var(--border-default); border-radius: var(--radius-small); }
+.board-cell:focus-visible, .board-card:focus-visible, .board-lane-head:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: calc(-1 * var(--focus-ring-width)); }
+/* The column a lane is at is outlined in the accent. */
+.board-cell.current { box-shadow: inset 0 0 0 2px var(--accent); }
+/* A cell that takes the card being dragged is outlined with an accent dash. */
+.board-cell.drop-inside { outline: 2px dashed var(--accent); outline-offset: -2px; }
+
+/* A lane's head stays in view while the board scrolls sideways; the corner above the heads stays put both ways. */
+.board-corner, .board-lane-head { position: sticky; left: 0; z-index: 1; background-color: var(--surface-default); }
+.board-corner { top: 0; z-index: 3; padding: var(--space-4) var(--space-5) var(--space-3) 0; color: var(--text-secondary); font-size: var(--text-caption); font-weight: 600; letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; }
+.board-lane-head {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  min-width: 0;
+  padding: var(--space-4) var(--space-5) var(--space-4) 0;
+  border-top: var(--border-width) solid var(--border-default);
+  color: var(--text-heading);
+  font-weight: 500;
+  line-height: var(--line-height-ui);
+  overflow-wrap: anywhere;
+}
+.board-lane-head .muted { font-weight: 400; }
+
+/* A group of lanes sits under a heading that folds it, its name kept in view while the board scrolls sideways. */
+.board-group-head { grid-column: 1 / -1; padding: var(--space-6) 0 var(--space-3); }
+button.board-group-toggle {
+  position: sticky;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: auto;
+  padding: var(--space-1) var(--space-2) var(--space-1) 0;
+  border: none;
+  background: none;
+  color: var(--text-heading);
+  font-size: var(--text-control);
+  font-weight: 600;
+}
+button.board-group-toggle:hover:not(:disabled) { background: none; color: var(--accent); }
+
+/* Cards stack at their own height; each is a raised surface that lifts and tilts while it is dragged and leaves a faint copy behind. */
+.board-cards { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+.board-card {
+  display: block;
+  padding: calc(var(--space-4) + var(--space-1)) var(--space-5);
+  border-radius: var(--radius-small);
+  background-color: var(--surface-default);
+  box-shadow: var(--shadow-item);
+  color: var(--text-body);
+  cursor: pointer;
+  transition: background-color var(--duration-fast);
+}
+.board-card[draggable="true"] { cursor: grab; }
+.board-card[draggable="true"]:active { cursor: grabbing; }
+.board-card:hover { background-color: color-mix(in srgb, var(--surface-default) 60%, var(--surface-secondary)); }
+.board-card.dragging { opacity: 0.3; }
+.board-card.drag-preview { box-shadow: var(--shadow-floating); transform: rotate(2deg); }
+.board-card-title { margin-bottom: var(--space-3); color: var(--text-heading); font-size: var(--text-prose); font-weight: 500; line-height: var(--line-height-ui); }
+.board-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); color: var(--text-secondary); font-size: var(--text-label); }
+.board-card-meta:empty { display: none; }
+
+/* On a phone a board is a list: a plain board's columns one under another, or a card per lane with its cells under their column names. */
+.board-phone { display: grid; gap: var(--space-5); font-size: var(--text-control); }
+.board-phone-column { padding-bottom: var(--space-4); border-radius: var(--radius-default); background-color: var(--surface-secondary); }
+.board-phone-column > .board-column-head { position: static; margin: 0; }
+.board-phone-column > :not(.board-column-head) { margin: 0 var(--space-4); }
+.board-lane-card { display: grid; gap: var(--space-4); padding: var(--space-5); border: var(--border-width) solid var(--border-default); border-radius: var(--radius-default); background-color: var(--surface-default); box-shadow: var(--shadow-card); }
+.board-lane-card > .board-lane-head { position: static; padding: 0; border: none; }
+.board-phone-cell { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-4); border-radius: var(--radius-small); background-color: var(--surface-secondary); }
+.board-phone-cell.current { box-shadow: inset 2px 0 0 var(--accent); }
+.board-cell-label { font-size: var(--text-label); font-weight: 600; letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; }
+.board-phone > .board-group-head { margin: 0; padding: var(--space-3) 0 0; }
+
+/* A tilted card stays straight for anyone who asks for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .board-card.drag-preview { transform: none; }
 }
 
 /* ── Forms and settings ───────────────────────────────────────────────────── */
