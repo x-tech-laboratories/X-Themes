@@ -63,6 +63,13 @@ not cover falls back to the system's interface font. Code, paths and other monos
 variables, such as the Linux sidebar. An item's own colour, such as a tag's, reaches `.chip.has-color`,
 `.has-tint` and `.color-dot` through `--item-color`.
 
+On a `body.contained` page, `fills` on one child of `main` (or of `.main-pane` beside a side pane), such as a board
+under the page's heading, toolbar and a short panel, makes it take the height left and scroll by itself while the blocks
+above it stay put, spaced by the gap; a wrapper between `main` and that child is marked `fills` too. `.panel.compact` sits
+tight around its head and rows, its head scrolling with it. A `.board-card` takes `tone-edge-bad`, `tone-edge-warn` or
+`tone-edge-good` as an edge on its left in that tone, and a `.check` switch in a `.toolbar` is as tall as the controls
+beside it.
+
 ## Use with the X-Libs site framework
 
 A site built with `x-libs-site` from `@x-tech-laboratories/x-libs` is drawn in the apps' own `Shell`, so it takes the
