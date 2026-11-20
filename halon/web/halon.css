@@ -1662,6 +1662,65 @@ button.menu-trigger { flex: none; background-color: var(--surface-default); colo
 .follow-toggle { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--text-secondary); font-size: var(--text-control); cursor: pointer; }
 .follow-toggle:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
 
+/* ── Diffs, file trees and transcripts ────────────────────────────────────── */
+
+/* A file's change in the fixed-width font, scrolling sideways when one column is long, line numbers kept out of a copy. */
+.diff-scroll { min-width: 0; overflow-x: auto; }
+.diff-lines { font-family: var(--font-family-monospace); font-size: var(--text-caption); }
+.diff-lines td { height: auto; padding: 0 var(--space-3); border-bottom: none; vertical-align: top; white-space: pre; }
+.diff-lines tbody tr:hover td { background-color: transparent; }
+.diff-lines code { padding: 0; background: none; font-size: inherit; white-space: pre; }
+.diff-number, .diff-mark { width: 1%; color: var(--text-tertiary); text-align: right; user-select: none; }
+/* Side by side, each half takes the same width and its long lines wrap rather than push the other half away. */
+.diff-split { table-layout: fixed; }
+.diff-number-column { width: 3.5rem; }
+.diff-split .diff-text, .diff-split .diff-text code { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* Removed lines are tinted red and added ones green, the words that changed in them tinted again, and a missing side greyed. */
+.diff-lines :is(tr, td).diff-removed { background-color: color-mix(in srgb, var(--status-danger) 15%, transparent); color: var(--text-body); }
+.diff-lines :is(tr, td).diff-added { background-color: color-mix(in srgb, var(--status-success) 15%, transparent); color: var(--text-body); }
+.diff-lines td.diff-empty { background-color: var(--surface-secondary); }
+.diff-word { border-radius: var(--radius-small); background-color: transparent; color: inherit; }
+.diff-removed .diff-word { background-color: color-mix(in srgb, var(--status-danger) 30%, transparent); }
+.diff-added .diff-word { background-color: color-mix(in srgb, var(--status-success) 30%, transparent); }
+.diff-lines .diff-removed .diff-number, .diff-lines .diff-added .diff-number, .diff-lines .diff-removed.diff-number, .diff-lines .diff-added.diff-number, .diff-lines :is(.diff-removed, .diff-added) .diff-mark { color: var(--text-secondary); }
+/* A hunk's heading and a folded stretch sit on a quiet band across every column. */
+.diff-lines :is(.diff-hunk, .diff-fold) > td { padding: var(--space-1) var(--space-3); background-color: var(--surface-secondary); color: var(--text-secondary); }
+.diff-fold button.link { font-family: var(--font-family-interface); }
+.diff-counts { font-size: var(--text-caption); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.diff-counts .diff-count-added { color: var(--status-success); }
+.diff-counts .diff-count-removed { color: var(--status-danger); }
+.diff-path { font-family: var(--font-family-monospace); font-size: var(--text-caption); overflow-wrap: anywhere; }
+.diff-note { color: var(--text-secondary); font-size: var(--text-caption); }
+/* A small diff of one edit, its path above it. */
+.edit-diff { display: grid; gap: var(--space-1); min-width: 0; margin-top: var(--space-2); }
+
+/* Files as a folder tree under its filter box, scrolling in its own box. */
+.file-tree { display: grid; align-content: start; gap: var(--space-3); max-height: 36rem; min-width: 0; overflow-y: auto; }
+.file-tree .tree-extra .badge { padding: 0 var(--space-2); }
+
+/* An agent's transcript: its steps scrolling in a box of their own, a button back to the latest, and the message box under it. */
+.transcript-frame { position: relative; min-width: 0; }
+.transcript { display: grid; align-content: start; gap: var(--space-3); max-height: 32rem; overflow-y: auto; padding: var(--space-2); }
+.transcript-step { min-width: 0; }
+.transcript-step > summary { display: flex; align-items: baseline; gap: var(--space-3); min-width: 0; cursor: pointer; }
+.transcript-head { display: flex; align-items: baseline; gap: var(--space-3); min-width: 0; flex-wrap: wrap; }
+/* One line of a folded step, cut with an ellipsis rather than wrapping. */
+.transcript-line { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.transcript-text { margin: var(--space-2) 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.transcript-code { max-height: 20rem; margin: var(--space-2) 0 0; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.transcript-code.failed { color: var(--status-danger); }
+/* The user's own messages sit on a quiet card, and a step that failed or waits gets an edge in its tone. */
+.transcript-user { padding: var(--space-3) var(--space-4); border-radius: var(--radius-default); background-color: var(--surface-secondary); color: var(--text-body); }
+.transcript-permission, .transcript-tool.failed { padding-left: var(--space-4); border-left: 3px solid var(--border-default); }
+.transcript-notice.tone-info { color: var(--status-info); }
+.transcript-jump { position: absolute; right: var(--space-4); bottom: var(--space-4); }
+.transcript-message { display: flex; align-items: flex-end; gap: var(--space-3); }
+.transcript-message > textarea { flex: 1; min-width: 0; }
+/* A permission request's reason box takes the row, its buttons under it. */
+.transcript-answer { display: grid; gap: var(--space-3); margin-top: var(--space-3); }
+.transcript-answer > input { width: 100%; }
+.transcript-answer > .transcript-head { gap: var(--space-4); }
+
 /* A path field with its Browse button beside it. */
 .path-row { display: flex; gap: var(--space-3); min-width: 0; }
 .path-row input:not([type="checkbox"]):not([type="radio"]) { flex: 1; min-width: 0; }
