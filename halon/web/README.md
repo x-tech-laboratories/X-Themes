@@ -9,6 +9,7 @@ web/
   halon-tokens.css   GENERATED. _tokens.css with every @name filled in, light and dark.
   halon.css          Layer 2 — SOURCE. Every component rule. No colours.
   site.css           SOURCE. The insides of a page built with X-Libs' `x-libs-site`: article, outline, hero, code. No colours.
+  fonts/             VENDORED. Noto Sans from Fontsource, its SIL Open Font License and the manifest the build reads.
 ```
 
 `halon-tokens.css` is written by `scripts/build-web.mjs` from `_tokens.css` and the same
@@ -22,6 +23,26 @@ node scripts/build-web.mjs --check   # fail if the output is stale
 
 The colours only the web uses, the chart series, the info status and the solid fills, are literal in `_tokens.css`.
 
+## Noto Sans
+
+`fonts/` holds Noto Sans from [`@fontsource-variable/noto-sans`](https://fontsource.org/fonts/noto-sans), copied
+unchanged: one variable file per script for upright and one for italic, each covering every weight from 100 to 900.
+The scripts are Latin, Latin Extended, Vietnamese, Greek, Greek Extended, Cyrillic and Cyrillic Extended, about 730 kB
+in all; a page downloads only the files for the characters it shows. Devanagari, CJK, Arabic, Hebrew and other scripts
+are not bundled and use the system's fonts. `font-display: fallback` waits a moment for the bundled file, which loads
+at once, so text neither flashes the fallback font nor stays hidden.
+
+The fonts are under the [SIL Open Font License 1.1](fonts/OFL.txt), which lets them ship inside this GPL package as
+separate files; the package's licence is `GPL-3.0-or-later AND OFL-1.1`. To take a newer release:
+
+```sh
+npm pack @fontsource-variable/noto-sans@<version> && tar xzf fontsource-variable-noto-sans-<version>.tgz
+node scripts/vendor-fonts.mjs package    # copy the files, the licence and noto-sans.json into web/fonts/
+node scripts/build-web.mjs               # rewrite the @font-face rules in halon-tokens.css
+```
+
+`build-web.mjs --check` fails when a font file no longer matches the checksum in `noto-sans.json`.
+
 ## Use
 
 ```ts
@@ -33,15 +54,10 @@ The dark scheme follows the system, and `data-theme="light"` or `data-theme="dar
 `"normal"` or `"comfortable"` on `<html>` or `.layout` sets the row height and table cell padding. The
 widgets in `@x-tech-laboratories/x-libs` build the markup these rules style.
 
-The font is Noto Sans, falling back to the system's interface font. Bundle it with the page so it shows where it is not
-installed, in the weights the sheets use:
-
-```ts
-import "@fontsource/noto-sans/400.css";
-import "@fontsource/noto-sans/500.css";
-import "@fontsource/noto-sans/600.css";
-import "@fontsource/noto-sans/700.css";
-```
+The font is Noto Sans, and it ships in this package: `halon-tokens.css` declares it from the files in `fonts/`, so a page
+that imports the tokens draws in Noto Sans with no font package of its own and no network. A bundler such as Vite copies
+the files into the build, and a plain `<link>` to `halon-tokens.css` finds them beside it. Text that the bundled files do
+not cover falls back to the system's interface font. Code, paths and other monospace text use the system's monospace font.
 
 `follows-host-theme` on `<html>` swaps the tokens for the colours a host page hands over as `--sidebar-*`
 variables, such as the Linux sidebar. An item's own colour, such as a tag's, reaches `.chip.has-color`,
