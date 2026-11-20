@@ -75,6 +75,16 @@ inside it. A `.board-card-title` with nothing after it, or only an empty `.board
 `tone-edge-good` as an edge on its left in that tone, and a `.check` switch in a `.toolbar` is as tall as the controls
 beside it.
 
+A file's change, as X-Libs' `FileDiff` and `EditDiff` draw it, is a `table.diff-lines` in a `.diff-scroll`, `diff-split`
+for old beside new or `diff-unified` for one column, with `.diff-number`, `.diff-mark` and `.diff-text` cells. A row or
+cell marked `diff-removed` or `diff-added` is tinted in the danger or success tone, a `.diff-word` inside it (a `<mark>`)
+tinted again for the words that changed, and `diff-empty` greys the side a line is missing from; `.diff-hunk` and
+`.diff-fold` rows are a quiet band across the table. `.diff-counts` colours its `.diff-count-added` and
+`.diff-count-removed`. `.file-tree` holds a filter box over a scrolling tree. An agent's transcript is a `.transcript`
+log in a `.transcript-frame`, with `.transcript-step` rows, `.transcript-user` messages on a quiet card,
+`.transcript-permission` and `.transcript-tool.failed` taking a `tone-edge-*` edge, `.transcript-code` for inputs and
+results, `.transcript-jump` back to the latest and the `.transcript-message` box under it.
+
 ## Use with the X-Libs site framework
 
 A site built with `x-libs-site` from `@x-tech-laboratories/x-libs` is drawn in the apps' own `Shell`, so it takes the
