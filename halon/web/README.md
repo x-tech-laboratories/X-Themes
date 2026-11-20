@@ -65,7 +65,10 @@ variables, such as the Linux sidebar. An item's own colour, such as a tag's, rea
 
 On a `body.contained` page, `fills` on one child of `main` (or of `.main-pane` beside a side pane), such as a board
 under the page's heading, toolbar and a short panel, makes it take the height left and scroll by itself while the blocks
-above it stay put, spaced by the gap; a wrapper between `main` and that child is marked `fills` too. `.panel.compact` sits
+above it stay put, spaced by the gap; a wrapper between `main` and that child is marked `fills` too. The block right
+under the page's heading keeps no gap above it, so the toolbar sits where it does on a page without `fills`. On a phone
+(640px wide or less) nothing is held still: the blocks keep their gap but the page scrolls as a whole and the child takes
+the height it needs. `.panel.compact` sits
 tight around its head and rows, its head scrolling with it. A `.board` lines up with the page's heading and keeps no
 margin of its own; one that is its own surface, such as a board filling a pane edge to edge, takes `inset` for a margin
 inside it. A `.board-card-title` with nothing after it, or only an empty `.board-card-meta`, keeps no gap under it. A `.board-card` takes `tone-edge-bad`, `tone-edge-warn` or
