@@ -138,4 +138,5 @@ sign a build whose manifest no longer matches its tokens.
 
 ## Licence
 
-GPL-3.0. See [LICENSE](LICENSE).
+GPL-3.0. See [LICENSE](LICENSE). The Noto Sans files in [web/fonts/](web/fonts/) are under the SIL Open Font
+License 1.1, in [web/fonts/OFL.txt](web/fonts/OFL.txt).
