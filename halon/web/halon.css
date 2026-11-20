@@ -395,11 +395,16 @@ body.contained main { min-height: 0; overflow-y: auto; }
 /* A filled main stays still and its one child, such as a split or a list under its tools, fills it and scrolls by itself. */
 body.contained main.fill { display: grid; grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); padding-bottom: var(--space-5); overflow: hidden; }
 /* A child marked fills, such as a board under the page's heading and tools, takes the height left and scrolls by itself while the blocks above it stay put, spaced by the gap; a wrapper on the way to it is marked fills too. */
-body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills), body.contained .fills:has(> .fills) { display: flex; flex-direction: column; gap: var(--space-5); overflow: hidden; }
-body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills) { padding-bottom: var(--space-5); }
+body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills), body.contained .fills:has(> .fills) { display: flex; flex-direction: column; gap: var(--space-5); }
 body.contained :is(main, .main-pane, .fills):has(> .fills) > * { flex: none; }
-body.contained :is(main, .main-pane, .fills):has(> .fills) > .fills { flex: 1 1 auto; min-height: 0; }
-body.contained .board-phone.fills { overflow-y: auto; }
+/* The heading keeps its usual place against the block under it, so the tools sit where they do on a page without fills. */
+body.contained :is(main, .main-pane, .fills):has(> .fills) > .page-head + * { margin-top: calc(-1 * var(--space-5)); }
+/* On a phone there is no room to keep blocks still, so the page scrolls as a whole and the child takes the height it needs. */
+@media (min-width: 641px) {
+  body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills), body.contained .fills:has(> .fills) { overflow: hidden; }
+  body.contained main:not(.with-side-pane):has(> .fills), body.contained main.with-side-pane > .main-pane:has(> .fills) { padding-bottom: var(--space-5); }
+  body.contained :is(main, .main-pane, .fills):has(> .fills) > .fills { flex: 1 1 auto; min-height: 0; }
+}
 body.contained main.with-side-pane { grid-template-rows: minmax(0, 1fr); overflow: hidden; }
 body.contained main.with-side-pane > .main-pane { overflow-y: auto; }
 body.contained .side-pane { position: relative; top: auto; align-self: stretch; height: auto; }
