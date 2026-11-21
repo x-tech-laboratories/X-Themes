@@ -470,6 +470,11 @@ body.logged-out main { margin-left: var(--space-2); }
 /* A compact panel, such as a short list over a board, sits tight around its head and rows, its head scrolling with it. */
 .panel.compact { gap: var(--space-2); padding-block: var(--space-3); }
 .panel.compact > .panel-head { position: static; min-height: var(--row-height); margin-block: 0; padding-block: 0; }
+/* A table's sticky headings and buttons inside a panel stay just under the panel's sticky title instead of behind it. */
+.panel:not(.compact, .panel .panel) { --panel-head-height: var(--control-height); }
+.panel:not(.compact, .panel .panel):has(> .panel-head > .panel-tools) { --panel-head-height: calc(var(--control-height) + 2 * var(--space-4)); }
+.panel:has(> .panel-head) .table-wrap.sticky-head thead th,
+.panel:has(> .panel-head) .table-wrap.sticky-head > .table-tools { top: calc(var(--sticky-top, var(--frame-height)) + var(--panel-head-height, 0px)); }
 /* In a box that scrolls by itself, titles stick flush with that box's top edge instead of under the top bar. */
 body.contained main { --sticky-top: -28px; }
 .side-pane { --sticky-top: calc(-1 * var(--space-6)); }
