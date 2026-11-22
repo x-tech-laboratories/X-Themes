@@ -94,6 +94,5 @@ the `--shiki-*` variables Shiki's CSS-variables theme writes, so code follows th
 
 ## Publish
 
-```sh
-cd halon/web && npm publish --access public
-```
+A release is a version bump in `package.json` merged into `main`: the Publish Halon workflow then publishes that version from CI with npm
+provenance, through npm's trusted publishing for this repository.
