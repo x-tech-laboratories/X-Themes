@@ -376,8 +376,8 @@ main.with-side-pane > .main-pane { min-width: 0; padding: 28px var(--space-8) 80
 .side-pane:has(.side-pane-body) { padding-bottom: 0; overflow: hidden; }
 .side-pane-body { display: flex; flex: 1; flex-direction: column; gap: var(--space-6); min-height: 0; margin: 0 calc(-1 * var(--space-6)); padding: 0 var(--space-6) var(--space-6); overflow-y: auto; }
 .side-pane-head { display: flex; flex: none; align-items: center; gap: var(--space-4); }
-/* Moved into the top bar, the header spans the pane below it and is bordered off like the pane. */
-.topbar > .side-pane-head { align-self: stretch; width: var(--side-pane-width, 360px); margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-6)) calc(-1 * var(--space-4)) auto; padding: 0 var(--space-6); border-left: var(--border-width) solid var(--border-hover); background-color: var(--surface-secondary); }
+/* Moved into the top bar, the header spans the pane below it and is bordered off like the pane, and stays last there, so tools the app adds later never land after it. */
+.topbar > .side-pane-head { order: 1; align-self: stretch; width: var(--side-pane-width, 360px); margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-6)) calc(-1 * var(--space-4)) auto; padding: 0 var(--space-6); border-left: var(--border-width) solid var(--border-hover); background-color: var(--surface-secondary); }
 /* The side pane's grab bar runs down its left edge. */
 .side-pane > .resize-handle { position: absolute; top: 0; bottom: 0; left: 0; }
 
