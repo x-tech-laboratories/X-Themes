@@ -75,6 +75,10 @@ inside it. A `.board-card-title` with nothing after it, or only an empty `.board
 `tone-edge-good` as an edge on its left in that tone, and a `.check` switch in a `.toolbar` is as tall as the controls
 beside it.
 
+A `.card-grid` holds X-Libs' `CardGrid`: each `.card-grid-item` is a card the reader moves by its `.card-grid-handle` and
+resizes from its corner, with react-grid-layout's placeholder drawn as a dashed accent outline; `.is-phone` lists the
+cards in a column.
+
 ## Use with the X-Libs site framework
 
 A site built with `x-libs-site` from `@x-tech-laboratories/x-libs` is drawn in the apps' own `Shell`, so it takes the
