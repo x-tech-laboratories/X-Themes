@@ -1003,6 +1003,78 @@ button.board-group-toggle:hover:not(:disabled) { background: none; color: var(--
   .board-card.drag-preview { transform: none; }
 }
 
+/* ── Card grids ───────────────────────────────────────────────────────────── */
+
+/* X-Libs' CardGrid: cards the reader arranges and resizes, laid out by react-grid-layout, which places each one itself. */
+.card-grid { position: relative; min-width: 0; }
+.card-grid .react-grid-layout { position: relative; transition: height var(--duration-slow); }
+.card-grid-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-default);
+  background-color: var(--surface-default);
+  box-shadow: var(--shadow-card);
+  color: var(--text-body);
+  overflow: hidden;
+}
+.card-grid .react-grid-item { transition: transform var(--duration-slow), width var(--duration-slow), height var(--duration-slow); }
+.card-grid .react-grid-item.resizing,
+.card-grid .react-grid-item.react-draggable-dragging { transition: none; z-index: 3; box-shadow: var(--shadow-floating); }
+.card-grid .react-grid-item.dropping { visibility: hidden; }
+/* Where the card will land, drawn as the accent's outline. */
+.card-grid .react-grid-placeholder {
+  border: var(--border-width) dashed var(--accent);
+  border-radius: var(--radius-default);
+  background-color: color-mix(in srgb, var(--accent) 12%, transparent);
+  box-shadow: none;
+  z-index: 2;
+  transition-duration: var(--duration-fast);
+  user-select: none;
+}
+.card-grid-body { flex: 1 1 auto; min-height: 0; padding: var(--space-5) var(--space-6); overflow: auto; }
+/* The handle sits in the card's top corner, quiet until the card is pointed at or the handle has focus. */
+button.card-grid-handle {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 1;
+  height: auto;
+  padding: var(--space-2);
+  border-color: transparent;
+  background: none;
+  color: var(--text-secondary);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+.card-grid-item:hover > button.card-grid-handle, button.card-grid-handle:focus-visible { opacity: 1; }
+.react-draggable-dragging > button.card-grid-handle { cursor: grabbing; }
+.card-grid-item > .react-resizable-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: var(--space-7);
+  height: var(--space-7);
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+.card-grid-item:hover > .react-resizable-handle { opacity: 1; }
+.card-grid-item > .react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  width: var(--space-3);
+  height: var(--space-3);
+  border-right: 2px solid var(--text-secondary);
+  border-bottom: 2px solid var(--text-secondary);
+}
+/* A phone lists the cards in a column, each as tall as its content. */
+.card-grid.is-phone { display: grid; gap: var(--space-5); margin: 0; padding: 0; list-style: none; }
+
 /* ── Forms and settings ───────────────────────────────────────────────────── */
 
 .form-group > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: var(--space-4); }
