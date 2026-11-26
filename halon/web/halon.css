@@ -1006,7 +1006,8 @@ button.board-group-toggle:hover:not(:disabled) { background: none; color: var(--
 /* ── Card grids ───────────────────────────────────────────────────────────── */
 
 /* X-Libs' CardGrid: cards the reader arranges and resizes, laid out by react-grid-layout, which places each one itself. */
-.card-grid { position: relative; min-width: 0; }
+/* The grid takes the width it is given and never widens its parent, whatever width its cards were last laid out at. */
+.card-grid { position: relative; min-width: 0; contain: inline-size; }
 .card-grid .react-grid-layout { position: relative; transition: height var(--duration-slow); }
 .card-grid-item {
   display: flex;
@@ -1932,6 +1933,13 @@ body.resizing.vertical { cursor: row-resize; }
 .dashboard-card-body > .chart > .muted { margin: auto 0; text-align: center; }
 .dashboard-card-body > .donut > .donut-body { flex: 1 1 auto; flex-wrap: nowrap; min-height: 0; }
 .dashboard-card-body > .donut svg { flex: 0 1 auto; width: auto; max-width: 50%; height: 100%; max-height: 100%; }
+/* In a narrow card the ring sits over its legend, so neither squeezes the other. */
+.dashboard-card { container-type: inline-size; }
+@container (max-width: 360px) {
+  .dashboard-card-body > .donut > .donut-body { flex-direction: column; justify-content: center; gap: var(--space-4); }
+  .dashboard-card-body > .donut svg { flex: 0 1 120px; width: 120px; max-width: 100%; height: auto; min-height: 0; }
+  .dashboard-card-body > .donut .donut-legend { flex: none; align-self: stretch; min-width: 0; }
+}
 .dashboard-card-body > .treemap { flex: 1 1 auto; height: auto; min-height: 120px; }
 .dashboard-card-body > .share-legend { flex: none; margin-top: var(--space-3); }
 .dashboard-card-body > :is(.empty, .failure, .skeleton) { margin-block: auto; }
