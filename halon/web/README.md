@@ -79,6 +79,16 @@ A `.card-grid` holds X-Libs' `CardGrid`: each `.card-grid-item` is a card the re
 resizes from its corner, with react-grid-layout's placeholder drawn as a dashed accent outline; `.is-phone` lists the
 cards in a column.
 
+X-Libs' `Dashboards` puts its tabs and buttons in a `.tab-row` and each card in a `.card-grid-item` as a
+`.dashboard-card`: a `.dashboard-card-head` with its `.dashboard-card-title` and menu over a `.dashboard-card-body` that
+takes the height left. A `.chart` in that body drops its own frame and caption and scales its drawing to the card's
+height as well as its width, a donut and a treemap fill it too, and on a phone each takes its own height again; a chart
+outside a dashboard card is unchanged. `.dashboard-number` shows one figure in `.dashboard-number-value`, sized by the
+card's width, over a `.tile-label`, and a `.share-legend` under a chart names its splits. The chart editor's
+`.dashboard-editor` puts its form beside a `.dashboard-preview` card, under it below 900px; a `.dashboard-editor-pair`
+lines the controls of one setting up in a row that wraps, and each `.dashboard-condition` in its `.dashboard-conditions`
+holds such a row with its remove button beside it.
+
 ## Use with the X-Libs site framework
 
 A site built with `x-libs-site` from `@x-tech-laboratories/x-libs` is drawn in the apps' own `Shell`, so it takes the

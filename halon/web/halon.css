@@ -1916,6 +1916,50 @@ body.resizing.vertical { cursor: row-resize; }
 .flow-swatch-critical { --swatch: var(--status-danger); }
 .flow-swatch-running { --swatch: var(--accent); }
 
+/* ── Dashboards ───────────────────────────────────────────────────────────── */
+
+/* X-Libs' Dashboards: a card fills its grid cell as a column, its title row over a body that takes the height left. */
+.dashboard-card { display: flex; flex-direction: column; gap: var(--space-4); height: 100%; min-height: 0; }
+.dashboard-card-head { display: flex; flex: none; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: var(--control-height); }
+/* While the card can be moved, its title row leaves the grid's handle its corner. */
+.card-grid-item:has(> .card-grid-handle) .dashboard-card-head { padding-right: var(--space-6); }
+.dashboard-card-title { min-width: 0; margin: 0; overflow: hidden; color: var(--text-heading); font-size: var(--text-control); font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.dashboard-card-body { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; overflow: auto; }
+/* A chart in a card scales to the card's height as well as its width, its title left to the card's own. */
+.dashboard-card-body > .chart { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; padding: 0; border: none; background: none; }
+.dashboard-card-body > .chart > figcaption { display: none; }
+.dashboard-card-body > .chart > svg { flex: 1 1 0; min-height: 0; height: 100%; }
+.dashboard-card-body > .chart > .muted { margin: auto 0; text-align: center; }
+.dashboard-card-body > .donut > .donut-body { flex: 1 1 auto; flex-wrap: nowrap; min-height: 0; }
+.dashboard-card-body > .donut svg { flex: 0 1 auto; width: auto; max-width: 50%; height: 100%; max-height: 100%; }
+.dashboard-card-body > .treemap { flex: 1 1 auto; height: auto; min-height: 120px; }
+.dashboard-card-body > .share-legend { flex: none; margin-top: var(--space-3); }
+.dashboard-card-body > :is(.empty, .failure, .skeleton) { margin-block: auto; }
+/* The number view: one large figure over what it measures, sized by the card's width. */
+.dashboard-number { display: flex; flex: 1 1 auto; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2); container-type: inline-size; text-align: center; }
+.dashboard-number-value { color: var(--text-heading); font-size: clamp(var(--text-h2), 18cqi, 64px); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; overflow-wrap: anywhere; }
+/* The chart editor: the form beside a live preview drawn as a card, then the preview under the form in a narrow window. */
+.dashboard-editor { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-7); align-items: start; }
+.dashboard-preview {
+  position: sticky;
+  top: 0;
+  height: 280px;
+  padding: var(--space-5) var(--space-6);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-default);
+  background-color: var(--surface-default);
+  box-shadow: var(--shadow-card);
+}
+/* A pair lines up the controls of one setting in a row that wraps; a condition is such a row with its remove button beside it. */
+.dashboard-conditions { display: grid; gap: var(--space-3); }
+.dashboard-editor-pair { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.dashboard-editor-pair > :is(select, input) { flex: 1 1 7em; min-width: 0; }
+.dashboard-condition { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: var(--space-3); }
+@media (max-width: 900px) {
+  .dashboard-editor { grid-template-columns: minmax(0, 1fr); }
+  .dashboard-preview { position: static; }
+}
+
 /* ── Scrollbars (§6.8) ────────────────────────────────────────────────────── */
 
 /* Only a browser without the webkit bar takes the standard properties, which would otherwise swap the thumb for the system's own bar. */
@@ -2001,6 +2045,11 @@ body.resizing.vertical { cursor: row-resize; }
   table.responsive tr[aria-selected="true"] > td { background-color: transparent; }
   table.responsive tr[aria-selected="true"] { background-color: var(--row-selected); }
   .dialog.full { width: 100vw; height: 100vh; border: none; border-radius: 0; }
+  /* A phone lists dashboard cards as tall as their content, so a chart takes its own height from its width again. */
+  .card-grid.is-phone .dashboard-card-body { overflow: visible; }
+  .card-grid.is-phone .dashboard-card-body > .chart > svg { flex: none; height: auto; }
+  .card-grid.is-phone .dashboard-card-body > .treemap { flex: none; height: 232px; }
+  .card-grid.is-phone .dashboard-card-body > .donut svg { width: 140px; height: auto; }
   .form-row { grid-template-columns: 1fr; }
   .form-row label { padding-top: 0; }
 }
